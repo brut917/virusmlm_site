@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 Virus MLM | Тест-драйв</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial; max-width: 800px; margin: 20px auto; padding: 0 20px; background: #0a0f1e; color: #e0e5f0; }
+        h1 { color: #7b9cff; border-bottom: 1px solid #2a3350; padding-bottom: 10px; }
+        .button { background: #2a3350; color: white; padding: 12px 24px; border: 1px solid #4a5a8c; border-radius: 8px; cursor: pointer; font-size: 16px; margin: 5px; transition: 0.3s; }
+        .button:hover { background: #3a4a7c; transform: translateY(-2px); }
+        .input { width: 100%; padding: 10px; margin: 8px 0; background: #1a1f30; border: 1px solid #3a4570; border-radius: 6px; color: white; }
+        .status { margin-top: 20px; padding: 15px; background: #1a2340; border-radius: 8px; border-left: 4px solid #7b9cff; }
+        h2 { color: #9bb3ff; margin-top: 30px; }
+        .success { background: #1a3a2a; border-left-color: #4caf50; }
+        .error { background: #3a1a2a; border-left-color: #ff6b6b; }
+        .warning { background: #3a3a1a; border-left-color: #ffd966; }
+    </style>
+</head>
+<body>
+    <h1>🧬 Virus MLM · Тестовая сеть</h1>
+    <p>Контракт: <code style="background:#2a3350; padding:4px 8px; border-radius:4px;">0x92f0aB895f7F6AB51DA1Da9b5435F62954Cd947c</code></p>
+    
+    <button class="button" onclick="connectWallet()">🔌 Подключить кошелёк</button>
+    <div class="status" id="status">⚡ Статус: ожидание подключения...</div>
+
+    <h2>💳 1. Разрешить тратить USDT</h2>
+    <input class="input" id="approveAmount" type="number" value="750" placeholder="Сумма USDT">
+    <button class="button" onclick="approve()">✅ Approve на 750 USDT</button>
+
+    <h2>👤 2. Регистрация</h2>
+    <input class="input" id="referrer" placeholder="Адрес того, кто вас пригласил">
+    <button class="button" onclick="register()">📝 Зарегистрироваться</button>
+
+    <h2>📦 3. Активация пакета</h2>
+    <input class="input" id="packetIndex" type="number" min="1" max="5" value="1" placeholder="1-5">
+    <button class="button" onclick="activatePacket()">⚡ Активировать</button>
+
+    <h2>⭐ 4. VIP статус</h2>
+    <input class="input" id="vipLevel" type="number" min="1" max="5" value="1">
+    <button class="button" onclick="requestVip()">📨 Запросить VIP</button>
+    <button class="button" onclick="confirmVip()">✅ Подтвердить VIP</button>
+
+    <h2>💰 5. Вывод средств</h2>
+    <button class="button" onclick="claimMatrix()">📤 Вывести матричный баланс</button>
+    <button class="button" onclick="claimPool()">💧 Вывести из пула</button>
+
+    <h2>🔍 6. Информация</h2>
+    <input class="input" id="userAddress" placeholder="Адрес пользователя">
+    <button class="button" onclick="getUserInfo()">📊 Показать данные</button>
+    <div id="info" class="status">📌 Здесь появится информация</div>
+
+    <h2>👥 7. Количество рефералов</h2>
+    <input class="input" id="referralAddress" placeholder="Адрес пользователя">
+    <button class="button" onclick="getDirectReferralsCount()">📊 Показать рефералов</button>
+    <div id="referralInfo" class="status">📌 Здесь появится количество</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script>
+        const CONTRACT_ADDRESS = '0x92f0aB895f7F6AB51DA1Da9b5435F62954Cd947c';
+        const TOKEN_ADDRESS = '0x3a0C8fF4D3aB0Eaa69dA925C026fB2C2172eB517';
+        let web3, contract, tokenContract, userAddress;
+
+        const abi = [{"inputs":[{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_reinvestFeeWallet","type":"address"},{"internalType":"address","name":"_gamePoolWallet","type":"address"},{"internalType":"address","name":"_reserveWallet","type":"address"},{"internalType":"address","name":"_rootId","type":"address"},{"internalType":"address","name":"_developmentFundWallet","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"AccessControlBadConfirmation","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"bytes32","name":"neededRole","type":"bytes32"}],"name":"AccessControlUnauthorizedAccount","type":"error"},{"inputs":[],"name":"ReentrancyGuardReentrantCall","type":"error"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"SafeERC20FailedOperation","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"}],"name":"AntiSybilVerified","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address[]","name":"users","type":"address[]"},{"indexed":false,"internalType":"uint256","name":"matrixCount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"poolCount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"totalUsers","type":"uint256"}],"name":"BatchClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address[]","name":"users","type":"address[]"},{"indexed":false,"internalType":"uint256","name":"starLevel","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"count","type":"uint256"}],"name":"BatchVipConfirmed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"matrixToWallet","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"poolToWallet","type":"uint256"}],"name":"ClaimAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"toWallet","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reinvested","type":"uint256"}],"name":"MatrixClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"MatrixPayout","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"packet","type":"uint256"}],"name":"PacketActivated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"toWallet","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reinvested","type":"uint256"}],"name":"PoolClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"totalAmount","type":"uint256"},{"indexed":false,"internalType":"uint256[5]","name":"distributedPerLevel","type":"uint256[5]"},{"indexed":false,"internalType":"uint256","name":"reserved","type":"uint256"}],"name":"PoolDistributed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"donor","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"PoolDonated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sponsor","type":"address"},{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"bool","name":"toPool","type":"bool"}],"name":"ReferralPayout","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"previousAdminRole","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"newAdminRole","type":"bytes32"}],"name":"RoleAdminChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"address","name":"account","type":"address"},{"indexed":true,"internalType":"address","name":"sender","type":"address"}],"name":"RoleGranted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"address","name":"account","type":"address"},{"indexed":true,"internalType":"address","name":"sender","type":"address"}],"name":"RoleRevoked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"placementId","type":"uint256"}],"name":"UserPlacedInMatrix","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referrer","type":"address"}],"name":"UserRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"starLevel","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"expiresAt","type":"uint256"}],"name":"VipConfirmed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"starLevel","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"expiresAt","type":"uint256"}],"name":"VipRenewed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"starLevel","type":"uint256"}],"name":"VipRequested","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"}],"name":"VipRevoked","type":"event"},{"stateMutability":"nonpayable","type":"fallback"},{"inputs":[],"name":"BATCH_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"BFS_QUEUE_SIZE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"DEFAULT_ADMIN_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_REFERRAL_DEPTH","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_VIP_CLEANUP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_WITHDRAW","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MULTISIG_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"OPERATOR_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"PACKETS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"POOL_DISTRIBUTION_INTERVAL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"POOL_SHARES","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"VIP_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"WITHDRAW_PERCENTAGES","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_packetIndex","type":"uint256"}],"name":"activatePacket","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address[]","name":"_users","type":"address[]"}],"name":"batchClaimAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address[]","name":"_users","type":"address[]"},{"internalType":"uint256","name":"_starLevel","type":"uint256"}],"name":"batchConfirmVip","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"claimAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"claimMatrix","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"claimPool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"uint256","name":"_starLevel","type":"uint256"}],"name":"confirmVip","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"developmentFundWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"distributePool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_level","type":"uint256"},{"internalType":"uint256","name":"_startIndex","type":"uint256"},{"internalType":"uint256","name":"_batchSize","type":"uint256"}],"name":"distributePoolBatch","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"donateToPool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"emergencyClaimExpiredPool","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"gamePoolWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getDirectReferralsCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_nodeId","type":"uint256"}],"name":"getMatrixNode","outputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"parent","type":"uint256"},{"internalType":"uint256","name":"leftChild","type":"uint256"},{"internalType":"uint256","name":"rightChild","type":"uint256"},{"internalType":"uint256","name":"depth","type":"uint256"},{"internalType":"uint256","name":"leftCount","type":"uint256"},{"internalType":"uint256","name":"rightCount","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getPoolInfo","outputs":[{"internalType":"uint256","name":"poolBalance","type":"uint256"},{"internalType":"uint256","name":"nextDistributionTime","type":"uint256"},{"internalType":"uint256[5]","name":"vipCounts","type":"uint256[5]"},{"internalType":"uint256[5]","name":"poolShares","type":"uint256[5]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getQueueInfo","outputs":[{"internalType":"uint256","name":"matrixQueueLength","type":"uint256"},{"internalType":"uint256","name":"poolQueueLength","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"}],"name":"getRoleAdmin","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserInfo","outputs":[{"internalType":"uint256","name":"currentPacket","type":"uint256"},{"internalType":"address","name":"referrer","type":"address"},{"internalType":"uint256","name":"placementId","type":"uint256"},{"internalType":"uint256","name":"matrixBalance","type":"uint256"},{"internalType":"uint256","name":"poolBalance","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getVipInfo","outputs":[{"internalType":"uint256","name":"starLevel","type":"uint256"},{"internalType":"uint256","name":"verifiedAt","type":"uint256"},{"internalType":"uint256","name":"expiresAt","type":"uint256"},{"internalType":"uint256","name":"daysLeft","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"},{"internalType":"bool","name":"antiSybilVerified","type":"bool"},{"internalType":"uint256","name":"requiredPacket","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_starLevel","type":"uint256"}],"name":"getVipList","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"grantOperator","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"grantRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"hasRole","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"isRegistered","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"isUserRegistered","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lastPoolDistribution","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"liquidityPool","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"matrixNodes","outputs":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"parent","type":"uint256"},{"internalType":"uint256","name":"leftChild","type":"uint256"},{"internalType":"uint256","name":"rightChild","type":"uint256"},{"internalType":"uint256","name":"depth","type":"uint256"},{"internalType":"uint256","name":"leftCount","type":"uint256"},{"internalType":"uint256","name":"rightCount","type":"uint256"},{"internalType":"uint256","name":"position","type":"uint256"},{"internalType":"bool","name":"exists","type":"bool"},{"internalType":"bool","name":"isLeftPriority","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_referrer","type":"address"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"reinvestFeeWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"renewVip","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"callerConfirmation","type":"address"}],"name":"renounceRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_starLevel","type":"uint256"}],"name":"requestVip","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"reserveWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"revokeOperator","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"revokeRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"revokeVip","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rootId","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"setAntiSybilVerified","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalMatrixPayouts","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalPoolPayouts","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalReferralPayouts","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalUsers","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_reinvestFeeWallet","type":"address"},{"internalType":"address","name":"_gamePoolWallet","type":"address"},{"internalType":"address","name":"_reserveWallet","type":"address"},{"internalType":"address","name":"_developmentFundWallet","type":"address"}],"name":"updateWallets","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"currentPacket","type":"uint256"},{"internalType":"address","name":"referrer","type":"address"},{"internalType":"uint256","name":"placementId","type":"uint256"},{"internalType":"uint256","name":"matrixBalance","type":"uint256"},{"internalType":"uint256","name":"poolBalance","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"},{"internalType":"uint256","name":"registrationTime","type":"uint256"},{"internalType":"uint256","name":"directReferralsCount","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"vipInfo","outputs":[{"internalType":"uint256","name":"starLevel","type":"uint256"},{"internalType":"uint256","name":"verifiedAt","type":"uint256"},{"internalType":"uint256","name":"expiresAt","type":"uint256"},{"internalType":"bool","name":"antiSybilVerified","type":"bool"},{"internalType":"bool","name":"isActive","type":"bool"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}];
+
+        const tokenAbi = [{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"type":"function"}];
+
+        async function connectWallet() {
+            if (!window.ethereum) return alert('❌ Установи MetaMask');
+            try {
+                web3 = new Web3(window.ethereum);
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                userAddress = accounts[0];
+                document.getElementById('status').innerHTML = `✅ Подключен: ${userAddress}`;
+                
+                const chainId = await web3.eth.getChainId();
+                if (chainId !== 97) {
+                    document.getElementById('status').innerHTML += `<br>⚠️ Переключись на BSC Testnet (chainId 97)`;
+                }
+                
+                contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+                tokenContract = new web3.eth.Contract(tokenAbi, TOKEN_ADDRESS);
+            } catch (error) {
+                document.getElementById('status').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+
+        async function approve() {
+            if (!tokenContract) return alert('Сначала подключи кошелек');
+            const amount = document.getElementById('approveAmount').value;
+            try {
+                await tokenContract.methods.approve(CONTRACT_ADDRESS, web3.utils.toWei(amount, 'ether')).send({from: userAddress});
+                document.getElementById('status').innerHTML = `✅ Approve на ${amount} USDT выполнен`;
+            } catch (error) {
+                document.getElementById('status').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+
+        async function register() {
+            if (!contract) return alert('Сначала подключи кошелек');
+            const referrer = document.getElementById('referrer').value;
+            if (!referrer) return alert('Введи адрес реферера');
+            try {
+                await contract.methods.register(referrer).send({ from: userAddress });
+                document.getElementById('status').innerHTML = '✅ Регистрация успешна';
+            } catch (error) {
+                document.getElementById('status').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+
+        async function activatePacket() {
+            if (!contract) return alert('Сначала подключи кошелек');
+            const index = document.getElementById('packetIndex').value;
+            try {
+                await contract.methods.activatePacket(index).send({ from: userAddress });
+                document.getElementById('status').innerHTML = `✅ Пакет ${index} активирован`;
+            } catch (error) {
+                document.getElementById('status').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+
+        async function requestVip() {
+            if (!contract) return alert('Сначала подключи кошелек');
+            const level = document.getElementById('vipLevel').value;
+            try {
+                await contract.methods.requestVip(level).send({ from: userAddress });
+                document.getElementById('status').innerHTML = `✅ Запрос VIP ${level} отправлен`;
+            } catch (error) {
+                document.getElementById('status').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+
+        async function confirmVip() {
+            if (!contract) return alert('Сначала подключи кошелек');
+            const level = document.getElementById('vipLevel').value;
+            try {
+                await contract.methods.confirmVip(userAddress, level).send({ from: userAddress });
+                document.getElementById('status').innerHTML = `✅ VIP ${level} подтвержден`;
+            } catch (error) {
+                document.getElementById('status').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+
+        async function claimMatrix() {
+            if (!contract) return alert('Сначала подключи кошелек');
+            try {
+                await contract.methods.claimMatrix().send({ from: userAddress });
+                document.getElementById('status').innerHTML = `✅ Вывод матричного баланса выполнен`;
+            } catch (error) {
+                document.getElementById('status').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+
+        async function claimPool() {
+            if (!contract) return alert('Сначала подключи кошелек');
+            try {
+                await contract.methods.claimPool().send({ from: userAddress });
+                document.getElementById('status').innerHTML = `✅ Вывод из пула выполнен`;
+            } catch (error) {
+                document.getElementById('status').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+
+        async function getUserInfo() {
+            if (!contract) return alert('Сначала подключи кошелек');
+            const user = document.getElementById('userAddress').value || userAddress;
+            try {
+                const info = await contract.methods.getUserInfo(user).call();
+                document.getElementById('info').innerHTML = `
+                    🎫 Пакет: ${info.currentPacket / 1e18} USDT<br>
+                    👥 Реферер: ${info.referrer}<br>
+                    📍 placementId: ${info.placementId}<br>
+                    📊 Матричный баланс: ${info.matrixBalance / 1e18} USDT<br>
+                    💧 Баланс пула: ${info.poolBalance / 1e18} USDT<br>
+                    💰 Всего заработано: ${info.totalEarned / 1e18} USDT
+                `;
+            } catch (error) {
+                document.getElementById('info').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+
+        async function getDirectReferralsCount() {
+            if (!contract) return alert('Сначала подключи кошелек');
+            const user = document.getElementById('referralAddress').value || userAddress;
+            try {
+                const count = await contract.methods.getDirectReferralsCount(user).call();
+                document.getElementById('referralInfo').innerHTML = `👥 Прямых рефералов: ${count}`;
+            } catch (error) {
+                document.getElementById('referralInfo').innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
