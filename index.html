@@ -169,7 +169,6 @@ async function connectWallet() {
       return;
     }
 
-    await loadAbis();
     contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
     tokenContract = new web3.eth.Contract(tokenAbi, TOKEN_ADDRESS);
 
