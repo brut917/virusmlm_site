@@ -34,24 +34,23 @@
     background: linear-gradient(180deg, #0f1e3a, #0a0e1a);
     position: sticky; top: 60px; z-index: 100;
   }
-  .logo { display: flex; align-items: center; gap: 4px; }
+  .logo { display: flex; align-items: center; gap: 2px; }
   .logo-text { font-weight: 800; font-size: 22px; letter-spacing: 2px; color: #fff; }
-  .logo-text span { color: #ffffff; }
-  .logo-bolt { font-size: 24px; filter: drop-shadow(0 0 8px #2196f3); margin: 0 2px; color: #2196f3; }
+  .logo-bolt { font-size: 22px; color: #2196f3; filter: drop-shadow(0 0 8px #2196f3); margin: 0 2px; }
 
-  /* ===== Профиль (в одну строку) ===== */
+  /* ===== Профиль (в одну строку, корона меньше) ===== */
   .profile-row {
     max-width: 560px; margin: 0 auto; padding: 20px;
     display: grid; grid-template-columns: auto 1fr; gap: 20px;
     align-items: center;
   }
   .vip-block {
-    display: flex; flex-direction: column; align-items: center;
-    gap: 2px;
+    display: flex; align-items: center; gap: 8px;
   }
-  .vip-crown { font-size: 40px; line-height: 1; filter: drop-shadow(0 2px 8px rgba(255,193,7,0.6)); }
-  .vip-level { font-size: 14px; font-weight: 700; color: #ffc107; }
-  .vip-stars { font-size: 13px; color: #ffc107; letter-spacing: 2px; }
+  .vip-crown { font-size: 24px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(255,193,7,0.6)); }
+  .vip-info { display: flex; flex-direction: column; gap: 1px; }
+  .vip-level { font-size: 14px; font-weight: 700; color: #ffc107; line-height: 1.2; }
+  .vip-stars { font-size: 12px; color: #ffc107; letter-spacing: 2px; line-height: 1.2; }
   .vip-duration { font-size: 11px; color: #9ca3af; }
 
   .wallet-block { text-align: right; }
@@ -72,7 +71,7 @@
     letter-spacing: 1px; margin-bottom: 12px; font-weight: 700;
   }
 
-  /* ===== Пакеты (зелёные кружки как Tron Thunder) ===== */
+  /* ===== Пакеты ===== */
   .packets-wrap {
     background: #ffffff; border-radius: 12px;
     padding: 14px 10px; margin: 12px 20px; max-width: 560px;
@@ -81,27 +80,25 @@
   }
   .packets {
     display: flex; justify-content: space-between; align-items: center;
-    position: relative;
   }
   .packet {
     width: 44px; height: 44px; border-radius: 50%;
     background: #e5e7eb; color: #9ca3af;
     display: flex; align-items: center; justify-content: center;
     font-size: 12px; font-weight: 700; flex-shrink: 0;
-    z-index: 2;
   }
   .packet.active {
     background: #00c853; color: #fff;
     box-shadow: 0 0 12px rgba(0,200,83,0.5);
   }
 
-  /* ===== Матрица (золотая) ===== */
+  /* ===== Матрица (индикатор зелёный, текст золотой) ===== */
   .matrix-bar {
     height: 10px; background: #e5e7eb; border-radius: 5px; overflow: hidden;
     margin-top: 8px;
   }
   .matrix-fill {
-    height: 100%; background: linear-gradient(90deg, #ffc107, #ffb300);
+    height: 100%; background: linear-gradient(90deg, #00c853, #4caf50);
     width: 10%;
   }
   .matrix-label {
@@ -110,7 +107,7 @@
   }
   .matrix-label .gold { color: #ffc107; font-weight: 700; }
 
-  /* ===== Реф-ссылка (синяя рамка) ===== */
+  /* ===== Реф-ссылка ===== */
   .ref-link {
     background: #ffffff; border: 2px solid #2196f3; border-radius: 8px;
     padding: 12px; display: flex; align-items: center; gap: 8px;
@@ -132,7 +129,7 @@
   .balance-label { font-size: 13px; color: #4b5563; }
   .balance-value { font-size: 16px; font-weight: 700; font-family: monospace; color: #1a1a1a; }
 
-  /* ===== Баланс на вывод (голубая полоса как Available TRX) ===== */
+  /* ===== Баланс на вывод (голубая полоса + красная иконка + красная кнопка) ===== */
   .balance-strip {
     background: #b3e5fc; border-radius: 10px;
     padding: 16px 20px; margin: 12px 20px; max-width: 560px;
@@ -142,19 +139,20 @@
   }
   .balance-strip-left { display: flex; align-items: center; gap: 10px; }
   .balance-strip-icon {
-    width: 32px; height: 32px; background: #1a1a1a; border-radius: 50%;
+    width: 34px; height: 34px; background: #e53935; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 700; font-size: 16px;
+    color: #fff; font-weight: 700; font-size: 17px;
+    box-shadow: 0 2px 8px rgba(229,57,53,0.4);
   }
   .balance-strip-text { font-size: 14px; color: #1a1a1a; font-weight: 600; }
   .balance-strip-text b { font-family: monospace; font-size: 16px; }
   .balance-strip-btn {
-    background: #2196f3; color: #fff; border: none; border-radius: 6px;
+    background: #e53935; color: #fff; border: none; border-radius: 6px;
     padding: 10px 20px; font-size: 13px; font-weight: 700;
     cursor: pointer; text-transform: uppercase;
   }
 
-  /* ===== Баланс-карточка (белая с разделением) ===== */
+  /* ===== Детализация баланса ===== */
   .balance-detail {
     background: #ffffff; border-radius: 12px;
     padding: 20px; margin: 12px 20px; max-width: 560px;
@@ -162,13 +160,8 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     text-align: center;
   }
-  .balance-total {
-    font-size: 36px; font-weight: 800; color: #1a1a1a;
-    font-family: monospace; letter-spacing: -1px;
-  }
-  .balance-total-label { font-size: 12px; color: #6b7280; margin-top: 4px; }
   .split-info {
-    display: flex; justify-content: center; gap: 24px; margin-top: 14px;
+    display: flex; justify-content: center; gap: 24px;
   }
   .split-item { text-align: center; }
   .split-item .val { color: #1a1a1a; font-weight: 700; font-size: 15px; }
@@ -180,16 +173,12 @@
     font-size: 15px; font-weight: 700; cursor: pointer;
     transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
   }
-  .btn-blue {
-    background: #2196f3; color: #fff;
-  }
+  .btn-blue { background: #2196f3; color: #fff; }
   .btn-blue:hover { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
-  .btn:disabled {
-    background: #e5e7eb; color: #9ca3af; cursor: not-allowed;
-  }
+  .btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
   .btn:disabled:hover { box-shadow: none; }
 
-  /* ===== Лидерский пул (тёмная карточка) ===== */
+  /* ===== Лидерский пул ===== */
   .pool-card {
     background: linear-gradient(135deg, #0a1f3a, #111827);
     border: 1px solid #2196f3; border-radius: 12px;
@@ -250,9 +239,7 @@
     font-weight: 700; cursor: pointer; text-transform: uppercase;
     background: #2196f3; color: #fff;
   }
-  .step-btn:disabled {
-    background: #e5e7eb; color: #9ca3af; cursor: not-allowed;
-  }
+  .step-btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
 
   .input {
     width: 100%; padding: 12px; background: #f9fafb;
@@ -263,11 +250,12 @@
   .input:focus { outline: none; border-color: #2196f3; }
   .input::placeholder { color: #9ca3af; font-family: sans-serif; }
 
-  /* ===== Регистрация ===== */
+  /* ===== РЕГИСТРАЦИЯ (старый вид) ===== */
   .reg-container { max-width: 420px; margin: 0 auto; padding: 40px 20px; }
   .reg-logo { text-align: center; margin-bottom: 32px; }
+  .reg-dna { font-size: 64px; filter: drop-shadow(0 0 15px #2196f3); margin-bottom: 12px; }
   .reg-title { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 8px; color: #fff; letter-spacing: 2px; }
-  .reg-bolt { font-size: 26px; color: #2196f3; filter: drop-shadow(0 0 10px #2196f3); margin: 0 4px; }
+  .reg-title span { color: #2e7d32; }
   .reg-subtitle { font-size: 13px; color: #9ca3af; text-align: center; margin-bottom: 32px; }
 
   .sponsor-card {
@@ -282,8 +270,8 @@
     display: flex; align-items: flex-start; gap: 10px; margin: 16px 0;
     font-size: 12px; color: #9ca3af; line-height: 1.5;
   }
-  .checkbox-row input { margin-top: 3px; accent-color: #2196f3; }
-  .checkbox-row a { color: #2196f3; }
+  .checkbox-row input { margin-top: 3px; accent-color: #2e7d32; }
+  .checkbox-row a { color: #2e7d32; }
   .captcha-box {
     background: #1f2937; border: 1px dashed #374151; border-radius: 8px;
     padding: 16px; text-align: center; font-size: 12px; color: #9ca3af;
@@ -312,8 +300,7 @@
 
   @media (max-width: 480px) {
     .profile-row { gap: 12px; padding: 16px; }
-    .vip-crown { font-size: 36px; }
-    .balance-total { font-size: 28px; }
+    .vip-crown { font-size: 22px; }
     .products-grid { grid-template-columns: repeat(2, 1fr); }
     .logo-text { font-size: 19px; }
   }
@@ -327,11 +314,12 @@
   <button onclick="showScreen('real', event)">3. Реальный кабинет</button>
 </div>
 
-<!-- ======================== РЕГИСТРАЦИЯ ======================== -->
+<!-- ======================== РЕГИСТРАЦИЯ (старый вид) ======================== -->
 <div id="reg" class="screen active bg-hero">
   <div class="reg-container">
     <div class="reg-logo">
-      <div class="reg-title">VIRUS<span class="reg-bolt">⚡</span>MLM</div>
+      <div class="reg-dna">🧬</div>
+      <div class="reg-title">VIRUS <span>MLM</span></div>
       <div class="reg-subtitle">Регистрация по приглашению</div>
     </div>
 
@@ -379,9 +367,11 @@
   <div class="profile-row">
     <div class="vip-block">
       <div class="vip-crown">👑</div>
-      <div class="vip-level">VIRTUAL VIP</div>
-      <div class="vip-stars">★★★★★</div>
-      <div class="vip-duration">Бессрочно</div>
+      <div class="vip-info">
+        <div class="vip-level">VIRTUAL VIP</div>
+        <div class="vip-stars">★★★★★</div>
+        <div class="vip-duration">Бессрочно</div>
+      </div>
     </div>
     <div class="wallet-block">
       <div class="wallet-label">User ID</div>
@@ -391,7 +381,6 @@
     </div>
   </div>
 
-  <!-- Пакеты (зелёные кружки) -->
   <div class="packets-wrap">
     <div class="packets">
       <div class="packet active">50</div>
@@ -402,7 +391,7 @@
     </div>
   </div>
 
-  <!-- Матрица (золотая) -->
+  <!-- Матрица: индикатор зелёный, текст золотой -->
   <div class="card">
     <div class="card-title">Заполнение матрицы</div>
     <div class="matrix-bar">
@@ -414,7 +403,6 @@
     </div>
   </div>
 
-  <!-- Реф-ссылка -->
   <div style="max-width:560px;margin:12px auto;padding:0 20px;">
     <div class="card-title" style="color:#9ca3af;padding-left:0;">Ваша реферальная ссылка</div>
     <div class="ref-link">
@@ -423,7 +411,6 @@
     </div>
   </div>
 
-  <!-- Баланс на вывод (голубая полоса) -->
   <div class="balance-strip">
     <div class="balance-strip-left">
       <div class="balance-strip-icon">₮</div>
@@ -432,7 +419,6 @@
     <button class="balance-strip-btn">ВЫВОД</button>
   </div>
 
-  <!-- Детализация (белая карточка) -->
   <div class="balance-detail">
     <div class="card-title">Разделение вывода</div>
     <div class="split-info">
@@ -469,7 +455,6 @@
     </div>
   </div>
 
-  <!-- Активация -->
   <div class="activate-box">
     <div class="activate-title">⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА</div>
 
@@ -506,7 +491,6 @@
     </div>
   </div>
 
-  <!-- Лидерский пул -->
   <div class="pool-card">
     <div class="pool-title">Лидерский пул</div>
     <div class="pool-amount">$12,450.00</div>
@@ -537,9 +521,11 @@
   <div class="profile-row">
     <div class="vip-block">
       <div class="vip-crown">👑</div>
-      <div class="vip-level">VIP 3</div>
-      <div class="vip-stars">★★★☆☆</div>
-      <div class="vip-duration">30 дней</div>
+      <div class="vip-info">
+        <div class="vip-level">VIP 3</div>
+        <div class="vip-stars">★★★☆☆</div>
+        <div class="vip-duration">30 дней</div>
+      </div>
     </div>
     <div class="wallet-block">
       <div class="wallet-label">Wallet</div>
@@ -549,7 +535,6 @@
     </div>
   </div>
 
-  <!-- Пакеты -->
   <div class="packets-wrap">
     <div class="packets">
       <div class="packet active">50</div>
@@ -572,16 +557,8 @@
     </div>
   </div>
 
-  <!-- Реф-ссылка -->
-  <div style="max-width:560px;margin:12px auto;padding:0 20px;">
-    <div class="card-title" style="color:#9ca3af;">Ваша реферальная ссылка</div>
-    <div class="ref-link">
-      <span style="flex:1;">virusmlm.com/join?ref=0x6152...dc85</span>
-      <button>📋</button>
-    </div>
-  </div>
+  <!-- Реф-ссылка УБРАНА -->
 
-  <!-- Баланс на вывод (голубая полоса) -->
   <div class="balance-strip">
     <div class="balance-strip-left">
       <div class="balance-strip-icon">₮</div>
@@ -590,7 +567,6 @@
     <button class="balance-strip-btn">ВЫВОД</button>
   </div>
 
-  <!-- Детализация -->
   <div class="balance-detail">
     <div class="card-title">Разделение вывода</div>
     <div class="split-info">
