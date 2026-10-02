@@ -3,532 +3,611 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧬 Virus MLM | Тест-драйв</title>
+<title>VIRUS MLM — Preview</title>
 <style>
-  body { font-family: 'Segoe UI', Arial; max-width: 900px; margin: 20px auto; padding: 0 20px; background: #0a0f1e; color: #e0e5f0; }
-  h1 { color: #7b9cff; border-bottom: 1px solid #2a3350; padding-bottom: 10px; }
-  h2 { color: #9bb3ff; margin-top: 30px; border-bottom: 1px dashed #2a3350; padding-bottom: 6px; }
-  h3 { color: #b0c0ff; margin: 15px 0 8px; font-size: 15px; }
-  .button { background: #2a3350; color: white; padding: 10px 18px; border: 1px solid #4a5a8c; border-radius: 8px; cursor: pointer; font-size: 14px; margin: 4px; transition: 0.2s; }
-  .button:hover { background: #3a4a7c; transform: translateY(-1px); }
-  .button.danger { background: #5c2a2a; border-color: #a05050; }
-  .button.danger:hover { background: #7c3a3a; }
-  .button.success { background: #2a5c3a; border-color: #50a070; }
-  .button.success:hover { background: #3a7c4a; }
-  .input { width: 100%; padding: 9px; margin: 6px 0; background: #1a1f30; border: 1px solid #3a4570; border-radius: 6px; color: white; box-sizing: border-box; }
-  .status { margin-top: 16px; padding: 14px; background: #1a2340; border-radius: 8px; border-left: 4px solid #7b9cff; word-break: break-all; }
-  .success-box { background: #1a3a2a; border-left-color: #4caf50; }
-  .error-box { background: #3a1a2a; border-left-color: #ff6b6b; }
-  .info-block { background: #141a2e; border: 1px solid #2a3350; border-radius: 8px; padding: 12px; margin-top: 10px; }
-  .info-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1a2340; font-size: 14px; }
-  .info-row:last-child { border-bottom: none; }
-  .info-label { color: #9bb3ff; }
-  .info-value { color: #e0e5f0; font-weight: 600; word-break: break-all; text-align: right; max-width: 60%; }
-  .small { font-size: 12px; color: #8a95b0; margin-top: 3px; }
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; }
+  body { background: #0a0e1a; color: #e8ecf4; min-height: 100vh; }
+
+  /* ===== Переключатель экранов (только для превью) ===== */
+  .preview-tabs {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: #111827; border-bottom: 1px solid #1f2937;
+    display: flex; gap: 4px; padding: 8px;
+  }
+  .preview-tabs button {
+    flex: 1; padding: 10px; background: #1f2937; color: #9ca3af;
+    border: none; border-radius: 6px; cursor: pointer; font-size: 13px;
+    transition: all 0.2s;
+  }
+  .preview-tabs button.active { background: #10b981; color: #fff; }
+  .preview-tabs button:hover { background: #374151; }
+
+  /* ===== Общий контейнер ===== */
+  .screen { display: none; padding-top: 60px; min-height: 100vh; }
+  .screen.active { display: block; }
+
+  /* ===== Фон с градиентом ===== */
+  .bg-hero {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f172a 50%, #0a1f1a 100%);
+    min-height: 100vh;
+  }
+
+  /* ===== Шапка ===== */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid #1f2937;
+    background: rgba(10,14,26,0.95); backdrop-filter: blur(10px);
+    position: sticky; top: 60px; z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .menu-btn {
+    width: 36px; height: 36px; background: #1f2937; border: none;
+    border-radius: 8px; color: #10b981; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo { display: flex; align-items: center; gap: 8px; }
+  .logo-icon {
+    width: 32px; height: 32px; background: #26a17b; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; color: #fff; font-size: 14px;
+  }
+  .logo-text { font-weight: 700; font-size: 18px; letter-spacing: 1px; }
+  .logo-text span { color: #10b981; }
+
+  /* ===== Профиль пользователя ===== */
+  .profile {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    padding: 16px 20px; max-width: 600px; margin: 0 auto;
+  }
+  .vip-badge {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .vip-crown {
+    width: 48px; height: 48px; background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: #78350f; font-weight: bold;
+    box-shadow: 0 0 20px rgba(251,191,36,0.4);
+  }
+  .vip-info { font-size: 12px; color: #9ca3af; }
+  .vip-info strong { color: #fbbf24; font-size: 14px; display: block; }
+  .stars { color: #fbbf24; font-size: 12px; letter-spacing: 2px; }
+
+  .user-id-box { text-align: right; }
+  .user-id-label { font-size: 11px; color: #6b7280; text-transform: uppercase; }
+  .user-id-value { font-size: 16px; font-weight: 700; color: #10b981; font-family: monospace; }
+  .pool-balance-label { font-size: 11px; color: #6b7280; text-transform: uppercase; margin-top: 8px; }
+  .pool-balance-value { font-size: 16px; font-weight: 700; color: #10b981; }
+
+  /* ===== Карточки ===== */
+  .card {
+    background: #111827; border: 1px solid #1f2937; border-radius: 12px;
+    padding: 16px; margin: 12px 20px; max-width: 560px;
+    margin-left: auto; margin-right: auto;
+  }
+  .card-title {
+    font-size: 12px; color: #6b7280; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 12px;
+  }
+
+  /* ===== Пакеты (зелёная полоса) ===== */
+  .packets {
+    display: flex; gap: 6px; justify-content: space-between;
+  }
+  .packet {
+    flex: 1; height: 36px; border-radius: 18px;
+    background: #1f2937; color: #4b5563;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; border: 1px solid #374151;
+  }
+  .packet.active {
+    background: #10b981; color: #fff; border-color: #10b981;
+    box-shadow: 0 0 15px rgba(16,185,129,0.4);
+  }
+
+  /* ===== Матрица заполнения ===== */
+  .matrix-bar {
+    height: 8px; background: #1f2937; border-radius: 4px; overflow: hidden;
+    margin-top: 8px;
+  }
+  .matrix-fill {
+    height: 100%; background: linear-gradient(90deg, #10b981, #34d399);
+    width: 10%; transition: width 0.5s;
+  }
+  .matrix-label {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: #6b7280; margin-top: 6px;
+  }
+
+  /* ===== Реф-ссылка ===== */
+  .ref-link {
+    background: #0a0e1a; border: 1px solid #1f2937; border-radius: 8px;
+    padding: 12px; display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #10b981; font-family: monospace;
+    word-break: break-all;
+  }
+  .ref-link button {
+    background: #1f2937; border: none; color: #9ca3af;
+    padding: 6px 10px; border-radius: 6px; cursor: pointer; flex-shrink: 0;
+  }
+
+  /* ===== Балансы ===== */
+  .balance-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid #1f2937;
+  }
+  .balance-row:last-child { border-bottom: none; }
+  .balance-label { font-size: 13px; color: #9ca3af; }
+  .balance-value { font-size: 16px; font-weight: 700; color: #e8ecf4; font-family: monospace; }
+  .balance-value.green { color: #10b981; }
+  .balance-value.gold { color: #fbbf24; }
+
+  /* ===== Большой баланс ===== */
+  .big-balance {
+    text-align: center; padding: 20px 0;
+  }
+  .big-balance-value {
+    font-size: 36px; font-weight: 800; color: #10b981;
+    font-family: monospace; letter-spacing: -1px;
+  }
+  .big-balance-label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+  .split-info {
+    display: flex; justify-content: center; gap: 24px; margin-top: 12px;
+    font-size: 12px;
+  }
+  .split-item { text-align: center; }
+  .split-item .val { color: #10b981; font-weight: 700; font-size: 14px; }
+  .split-item .lbl { color: #6b7280; margin-top: 2px; }
+
+  /* ===== Кнопка ===== */
+  .btn {
+    width: 100%; padding: 14px; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669); color: #fff;
+  }
+  .btn-primary:hover { box-shadow: 0 0 25px rgba(16,185,129,0.5); }
+  .btn-secondary {
+    background: #1f2937; color: #10b981; border: 1px solid #10b981;
+  }
+
+  /* ===== Таймер пула ===== */
+  .timer {
+    display: flex; justify-content: center; gap: 12px; margin-top: 12px;
+  }
+  .timer-box {
+    background: #0a0e1a; border: 1px solid #1f2937; border-radius: 8px;
+    padding: 8px 12px; text-align: center; min-width: 56px;
+  }
+  .timer-val { font-size: 20px; font-weight: 700; color: #10b981; font-family: monospace; }
+  .timer-lbl { font-size: 10px; color: #6b7280; text-transform: uppercase; }
+
+  /* ===== Блок активации ===== */
+  .activate-box {
+    background: linear-gradient(135deg, #0a1f1a, #111827);
+    border: 1px solid #10b981; border-radius: 12px;
+    padding: 20px; margin: 12px 20px; max-width: 560px;
+    margin-left: auto; margin-right: auto;
+  }
+  .activate-title {
+    font-size: 14px; font-weight: 700; color: #10b981;
+    margin-bottom: 12px; text-align: center;
+  }
+  .input {
+    width: 100%; padding: 12px; background: #0a0e1a;
+    border: 1px solid #1f2937; border-radius: 8px;
+    color: #e8ecf4; font-size: 13px; margin-bottom: 10px;
+    font-family: monospace;
+  }
+  .input:focus { outline: none; border-color: #10b981; }
+  .input::placeholder { color: #4b5563; font-family: sans-serif; }
+
+  /* ===== Страница регистрации ===== */
+  .reg-container {
+    max-width: 420px; margin: 0 auto; padding: 40px 20px;
+  }
+  .reg-logo { text-align: center; margin-bottom: 32px; }
+  .reg-logo-icon {
+    width: 64px; height: 64px; background: #26a17b; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: bold; color: #fff; font-size: 24px; margin-bottom: 12px;
+  }
+  .reg-title { font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 8px; }
+  .reg-subtitle { font-size: 13px; color: #6b7280; text-align: center; margin-bottom: 32px; }
+  .checkbox-row {
+    display: flex; align-items: flex-start; gap: 10px; margin: 16px 0;
+    font-size: 12px; color: #9ca3af; line-height: 1.5;
+  }
+  .checkbox-row input { margin-top: 3px; accent-color: #10b981; }
+  .captcha-box {
+    background: #1f2937; border: 1px dashed #374151; border-radius: 8px;
+    padding: 16px; text-align: center; font-size: 12px; color: #6b7280;
+    margin: 12px 0;
+  }
+
+  /* ===== Меню продуктов ===== */
+  .products-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    margin-top: 12px;
+  }
+  .product-card {
+    background: #0a0e1a; border: 1px solid #1f2937; border-radius: 10px;
+    padding: 14px; text-align: center; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .product-card:hover { border-color: #10b981; }
+  .product-icon { font-size: 24px; margin-bottom: 8px; }
+  .product-name { font-size: 12px; color: #9ca3af; }
+
+  /* ===== Уведомление ===== */
+  .notice {
+    background: #0a1f1a; border-left: 3px solid #10b981;
+    padding: 10px 14px; border-radius: 6px; font-size: 12px;
+    color: #10b981; margin: 12px 20px; max-width: 560px;
+    margin-left: auto; margin-right: auto;
+  }
+
+  /* ===== Адаптив ===== */
+  @media (max-width: 480px) {
+    .profile { grid-template-columns: 1fr; text-align: center; }
+    .user-id-box { text-align: center; }
+    .big-balance-value { font-size: 28px; }
+  }
 </style>
 </head>
 <body>
-<h1>🧬 Virus MLM · Тестовая сеть</h1>
-<p>Контракт: <code style="background:#2a3350;padding:4px 8px;border-radius:4px;">0xDCf607BaCF0e34e7fF141Eb94b9D2B9A54727a61</code></p>
 
-<button class="button" onclick="connectWallet()">🔌 Подключить кошелёк</button>
-<div class="status" id="status">⚡ Статус: ожидание подключения...</div>
+<!-- ===== Переключатель (только для превью) ===== -->
+<div class="preview-tabs">
+  <button class="active" onclick="showScreen('reg')">1. Регистрация</button>
+  <button onclick="showScreen('virtual')">2. Виртуальный кабинет</button>
+  <button onclick="showScreen('real')">3. Реальный кабинет</button>
+</div>
 
-<h2>💳 Шаг 0. Разрешить тратить USDT (Approve)</h2>
-<input class="input" id="approveAmount" type="number" value="750" placeholder="Сумма USDT">
-<button class="button" onclick="approve()">✅ Approve на указанную сумму</button>
-<div class="small">Разрешает контракту списать USDT с твоего кошелька. Нужно сделать 1 раз.</div>
+<!-- ============================================================ -->
+<!-- ЭКРАН 1: СТРАНИЦА РЕГИСТРАЦИИ -->
+<!-- ============================================================ -->
+<div id="reg" class="screen active bg-hero">
+  <div class="reg-container">
+    <div class="reg-logo">
+      <div class="reg-logo-icon">₮</div>
+      <div class="reg-title">VIRUS <span style="color:#10b981">MLM</span></div>
+      <div class="reg-subtitle">Регистрация по приглашению</div>
+    </div>
 
-<h2>👤 Шаг 1. Регистрация</h2>
-<input class="input" id="referrer" placeholder="Адрес реферера (кто пригласил)">
-<button class="button" onclick="register()">📝 Зарегистрироваться</button>
-<div class="small">После регистрации нужно активировать пакет 1.</div>
+    <div class="card" style="margin: 0 0 16px 0;">
+      <div class="card-title">Ваш спонсор</div>
+      <div class="ref-link" style="color:#fbbf24;">VIR-000123</div>
+    </div>
 
-<h2>📦 Шаг 2. Активация пакета</h2>
-<input class="input" id="packetIndex" type="number" min="1" max="5" value="1" placeholder="1-5">
-<button class="button" onclick="activatePacket()">⚡ Активировать пакет</button>
-<div class="small">1 = 50 USDT · 2 = 100 · 3 = 150 · 4 = 200 · 5 = 250. Строго последовательно.</div>
+    <input type="email" class="input" placeholder="Введите email" id="email">
+    <button class="btn btn-secondary" style="margin-bottom:12px;" onclick="sendCode()">Получить код на email</button>
 
-<h2>⭐ Шаг 3. VIP-статус</h2>
-<input class="input" id="vipUser" placeholder="Адрес пользователя для подтверждения">
-<input class="input" id="vipLevel" type="number" min="1" max="5" value="1">
-<button class="button" onclick="requestVip()">📨 Запросить VIP (себе)</button>
-<button class="button success" onclick="confirmVip()">✅ Подтвердить VIP (для адреса выше)</button>
-<button class="button" onclick="renewVip()">🔄 Продлить VIP</button>
-<button class="button danger" onclick="revokeVip()">❌ Отозвать VIP</button>
-<div class="small">⚠️ «Подтвердить VIP» требует роль VIP_ADMIN. Адрес вводи вручную.</div>
+    <input type="text" class="input" placeholder="Введите код из письма" id="code">
 
-<h2>💰 Шаг 4. Вывод средств</h2>
-<button class="button" onclick="claimMatrix()">📤 Вывести матричный баланс</button>
-<button class="button" onclick="claimPool()">💧 Вывести из пула</button>
-<button class="button" onclick="claimAll()">💎 Вывести всё одной транзакцией</button>
-<div class="small">Минимум 10 USDT. Матричный вывод: 50/60/70/80/90% (по пакету). Пул: 90% на кошелёк.</div>
+    <div class="captcha-box">
+      ☁️ Cloudflare Turnstile (защита от ботов)
+    </div>
 
-<h2>💵 Шаг 5. Донат в пул ликвидности</h2>
-<input class="input" id="donateAmount" type="number" value="100" placeholder="Сумма USDT">
-<button class="button" onclick="donateToPool()">💧 Донат в пул</button>
-<div class="small">Донат увеличивает общий пул. Доступно всем.</div>
+    <label class="checkbox-row">
+      <input type="checkbox" checked>
+      <span>
+        Я принимаю <a href="#" style="color:#10b981;">договор оферты</a> и становлюсь
+        аффилированным партнёром платформы Virus MLM. Согласен с правилами клуба
+        и маркетинговой программой.
+      </span>
+    </label>
 
-<h2>🔄 Шаг 6. Batch-round (распределение пула)</h2>
-<button class="button" onclick="startPoolBatchRound()">🚀 Начать раунд (фиксирует снимок пула)</button>
-<button class="button" onclick="distributePoolBatchLevel(1)">💰 Выплатить VIP уровня 1</button>
-<button class="button" onclick="distributePoolBatchLevel(2)">💰 Выплатить VIP уровня 2</button>
-<button class="button" onclick="distributePoolBatchLevel(3)">💰 Выплатить VIP уровня 3</button>
-<button class="button" onclick="distributePoolBatchLevel(4)">💰 Выплатить VIP уровня 4</button>
-<button class="button" onclick="distributePoolBatchLevel(5)">💰 Выплатить VIP уровня 5</button>
-<button class="button danger" onclick="cancelPoolBatchRound()">⛔ Отменить раунд (MULTISIG)</button>
-<div class="small">Раунд стартует раз в 24 часа. Обработай все 5 уровней — раунд завершится автоматически.</div>
+    <button class="btn btn-primary" onclick="showScreen('virtual')">ПОДТВЕРДИТЬ</button>
 
-<h2>🔐 Шаг 7. Управление ролями (MULTISIG)</h2>
-<input class="input" id="roleAddress" placeholder="Адрес для выдачи/отзыва роли">
-<button class="button" onclick="grantOperator()">⚙️ Выдать OPERATOR</button>
-<button class="button" onclick="revokeOperator()">⚙️ Отозвать OPERATOR</button>
-<button class="button" onclick="grantVipAdmin()">⭐ Выдать VIP_ADMIN</button>
-<button class="button" onclick="revokeVipAdmin()">⭐ Отозвать VIP_ADMIN</button>
+    <div class="notice" style="margin-top:20px;">
+      После регистрации вы получите доступ к бесплатному виртуальному кабинету —
+      симулятору системы Virus MLM на виртуальные деньги.
+    </div>
+  </div>
+</div>
 
-<h2>📊 Информация о пользователе</h2>
-<input class="input" id="userAddress" placeholder="Адрес пользователя (оставь пустым = свой)">
-<button class="button" onclick="getUserInfo()">🔍 Показать все данные пользователя</button>
-<div id="userInfoBlock" class="info-block" style="display:none;"></div>
+<!-- ============================================================ -->
+<!-- ЭКРАН 2: ВИРТУАЛЬНЫЙ КАБИНЕТ -->
+<!-- ============================================================ -->
+<div id="virtual" class="screen bg-hero">
 
-<h2>📊 Информация о пуле и VIP</h2>
-<button class="button" onclick="getPoolFullInfo()">🔍 Показать пул + VIP + раунд + счётчики</button>
-<div id="poolInfoBlock" class="info-block" style="display:none;"></div>
+  <!-- Шапка -->
+  <div class="header">
+    <div class="header-left">
+      <button class="menu-btn">☰</button>
+      <div class="logo">
+        <div class="logo-icon">₮</div>
+        <div class="logo-text">VIRUS<span>MLM</span></div>
+      </div>
+    </div>
+  </div>
 
-<h2>🌳 Информация о матрице</h2>
-<input class="input" id="matrixNodeId" type="number" placeholder="ID узла (1 = root, 2, 3, ...)">
-<button class="button" onclick="getMatrixNode()">🔍 Показать узел</button>
-<div id="matrixInfoBlock" class="info-block" style="display:none;"></div>
+  <!-- Профиль -->
+  <div class="profile">
+    <div class="vip-badge">
+      <div class="vip-crown">👑</div>
+      <div class="vip-info">
+        <strong>VIRTUAL VIP</strong>
+        <div class="stars">★★★★★</div>
+        <div style="font-size:10px;color:#6b7280;margin-top:2px;">Бессрочно</div>
+      </div>
+    </div>
+    <div class="user-id-box">
+      <div class="user-id-label">User ID</div>
+      <div class="user-id-value">VIR-000123</div>
+      <div class="pool-balance-label">Моя доля в пуле</div>
+      <div class="pool-balance-value">$0.00</div>
+    </div>
+  </div>
 
-<h2>🔑 Информация о ролях</h2>
-<input class="input" id="roleCheckAddress" placeholder="Адрес для проверки ролей">
-<button class="button" onclick="checkRoles()">🔍 Проверить роли</button>
-<div id="roleInfoBlock" class="info-block" style="display:none;"></div>
+  <!-- Пакеты -->
+  <div class="card">
+    <div class="card-title">Пакеты</div>
+    <div class="packets">
+      <div class="packet active">50</div>
+      <div class="packet">100</div>
+      <div class="packet">150</div>
+      <div class="packet">200</div>
+      <div class="packet">250</div>
+    </div>
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+  <!-- Матрица -->
+  <div class="card">
+    <div class="card-title">Заполнение матрицы</div>
+    <div class="matrix-bar">
+      <div class="matrix-fill" style="width: 10%;"></div>
+    </div>
+    <div class="matrix-label">
+      <span>819 / 8190 мест</span>
+      <span style="color:#10b981;font-weight:700;">10%</span>
+    </div>
+  </div>
+
+  <!-- Реферальная ссылка -->
+  <div class="card">
+    <div class="card-title">Ваша реферальная ссылка</div>
+    <div class="ref-link">
+      <span style="flex:1;">virusmlm.com/join?ref=VIR-000123</span>
+      <button>📋</button>
+    </div>
+  </div>
+
+  <!-- Общий баланс -->
+  <div class="card">
+    <div class="card-title">Баланс на вывод</div>
+    <div class="big-balance">
+      <div class="big-balance-value">$0.00</div>
+      <div class="big-balance-label">USDT BEP20</div>
+      <div class="split-info">
+        <div class="split-item">
+          <div class="val">50%</div>
+          <div class="lbl">На кошелёк</div>
+        </div>
+        <div class="split-item">
+          <div class="val">50%</div>
+          <div class="lbl">В маркетинг</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Балансы -->
+  <div class="card">
+    <div class="balance-row">
+      <span class="balance-label">Реферальный баланс</span>
+      <span class="balance-value green">$0.00</span>
+    </div>
+    <div class="balance-row">
+      <span class="balance-label">Матричный баланс</span>
+      <span class="balance-value green">$0.00</span>
+    </div>
+    <div class="balance-row">
+      <span class="balance-label">Лидерский пул</span>
+      <span class="balance-value gold">$0.00</span>
+    </div>
+  </div>
+
+  <!-- ИИ-рекрутер -->
+  <div class="card">
+    <div class="card-title">ИИ-рекрутер</div>
+    <div style="text-align:center;padding:20px 0;color:#6b7280;font-size:13px;">
+      🤖 Скоро — интеллектуальный помощник для рекрутинга
+    </div>
+  </div>
+
+  <!-- Блок активации -->
+  <div class="activate-box">
+    <div class="activate-title">⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА</div>
+    <button class="btn btn-secondary" style="margin-bottom:10px;">🔗 Подключить MetaMask</button>
+    <input type="text" class="input" placeholder="Адрес кошелька спонсора (0x...)">
+    <button class="btn btn-primary">АКТИВИРОВАТЬ 50 USDT</button>
+    <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:10px;">
+      3 транзакции: approve 750 USDT → register → activatePacket
+    </div>
+  </div>
+
+  <!-- Таймер пула -->
+  <div class="card">
+    <div class="card-title" style="text-align:center;">Лидерский пул</div>
+    <div style="text-align:center;font-size:24px;font-weight:700;color:#10b981;font-family:monospace;">
+      $12,450.00
+    </div>
+    <div style="text-align:center;font-size:11px;color:#6b7280;margin-top:4px;">
+      До следующего распределения
+    </div>
+    <div class="timer">
+      <div class="timer-box"><div class="timer-val">23</div><div class="timer-lbl">час</div></div>
+      <div class="timer-box"><div class="timer-val">45</div><div class="timer-lbl">мин</div></div>
+      <div class="timer-box"><div class="timer-val">12</div><div class="timer-lbl">сек</div></div>
+    </div>
+  </div>
+
+  <div style="height: 40px;"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ЭКРАН 3: РЕАЛЬНЫЙ КАБИНЕТ -->
+<!-- ============================================================ -->
+<div id="real" class="screen bg-hero">
+
+  <div class="header">
+    <div class="header-left">
+      <button class="menu-btn">☰</button>
+      <div class="logo">
+        <div class="logo-icon">₮</div>
+        <div class="logo-text">VIRUS<span>MLM</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice" style="border-left-color:#26a17b;color:#26a17b;background:#0a1f1a;">
+    ✅ Вы активированы в BSC Mainnet. Данные в реальном времени.
+  </div>
+
+  <!-- Профиль -->
+  <div class="profile">
+    <div class="vip-badge">
+      <div class="vip-crown">👑</div>
+      <div class="vip-info">
+        <strong>VIP 3</strong>
+        <div class="stars">★★★☆☆</div>
+        <div style="font-size:10px;color:#6b7280;margin-top:2px;">30 дней</div>
+      </div>
+    </div>
+    <div class="user-id-box">
+      <div class="user-id-label">Wallet</div>
+      <div class="user-id-value">0x6152...dc85</div>
+      <div class="pool-balance-label">Моя доля в пуле</div>
+      <div class="pool-balance-value">$124.50</div>
+    </div>
+  </div>
+
+  <!-- Пакеты -->
+  <div class="card">
+    <div class="card-title">Пакеты</div>
+    <div class="packets">
+      <div class="packet active">50</div>
+      <div class="packet active">100</div>
+      <div class="packet active">150</div>
+      <div class="packet">200</div>
+      <div class="packet">250</div>
+    </div>
+  </div>
+
+  <!-- Матрица -->
+  <div class="card">
+    <div class="card-title">Заполнение матрицы</div>
+    <div class="matrix-bar">
+      <div class="matrix-fill" style="width: 34%;"></div>
+    </div>
+    <div class="matrix-label">
+      <span>2785 / 8190 мест</span>
+      <span style="color:#10b981;font-weight:700;">34%</span>
+    </div>
+  </div>
+
+  <!-- Реферальная ссылка -->
+  <div class="card">
+    <div class="card-title">Ваша реферальная ссылка</div>
+    <div class="ref-link">
+      <span style="flex:1;">virusmlm.com/join?ref=0x6152...dc85</span>
+      <button>📋</button>
+    </div>
+  </div>
+
+  <!-- Баланс -->
+  <div class="card">
+    <div class="card-title">Баланс на вывод</div>
+    <div class="big-balance">
+      <div class="big-balance-value">$1,248.75</div>
+      <div class="big-balance-label">USDT BEP20</div>
+      <div class="split-info">
+        <div class="split-item">
+          <div class="val">70%</div>
+          <div class="lbl">На кошелёк</div>
+        </div>
+        <div class="split-item">
+          <div class="val">30%</div>
+          <div class="lbl">В маркетинг</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:16px;">ВЫВЕСТИ</button>
+    </div>
+  </div>
+
+  <!-- Балансы -->
+  <div class="card">
+    <div class="balance-row">
+      <span class="balance-label">Реферальный баланс</span>
+      <span class="balance-value green">$845.20</span>
+    </div>
+    <div class="balance-row">
+      <span class="balance-label">Матричный баланс</span>
+      <span class="balance-value green">$279.05</span>
+    </div>
+    <div class="balance-row">
+      <span class="balance-label">Лидерский пул</span>
+      <span class="balance-value gold">$124.50</span>
+    </div>
+  </div>
+
+  <!-- Продукты -->
+  <div class="card">
+    <div class="card-title">Продукты и сервисы</div>
+    <div class="products-grid">
+      <div class="product-card"><div class="product-icon">🔍</div><div class="product-name">Аудит кошелька</div></div>
+      <div class="product-card"><div class="product-icon">🤖</div><div class="product-name">ИИ-рекрутер</div></div>
+      <div class="product-card"><div class="product-icon">🎮</div><div class="product-name">Игры</div></div>
+      <div class="product-card"><div class="product-icon">💰</div><div class="product-name">Обменник</div></div>
+      <div class="product-card"><div class="product-icon">📊</div><div class="product-name">Налоги</div></div>
+      <div class="product-card"><div class="product-icon">🎯</div><div class="product-name">Развлечения</div></div>
+    </div>
+  </div>
+
+  <!-- Таймер пула -->
+  <div class="card">
+    <div class="card-title" style="text-align:center;">Лидерский пул</div>
+    <div style="text-align:center;font-size:24px;font-weight:700;color:#10b981;font-family:monospace;">
+      $45,230.00
+    </div>
+    <div style="text-align:center;font-size:11px;color:#6b7280;margin-top:4px;">
+      До следующего распределения
+    </div>
+    <div class="timer">
+      <div class="timer-box"><div class="timer-val">12</div><div class="timer-lbl">час</div></div>
+      <div class="timer-box"><div class="timer-val">34</div><div class="timer-lbl">мин</div></div>
+      <div class="timer-box"><div class="timer-val">56</div><div class="timer-lbl">сек</div></div>
+    </div>
+  </div>
+
+  <div style="height: 40px;"></div>
+</div>
+
 <script>
-const CONTRACT_ADDRESS = '0xDCf607BaCF0e34e7fF141Eb94b9D2B9A54727a61';
-const TOKEN_ADDRESS = '0x3a0C8fF4D3aB0Eaa69dA925C026fB2C2172eB517';
-
-// ========== ABI КОНТРАКТА ==========
-const ABI = [
-  {"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"uint256","name":"_starLevel","type":"uint256"}],"name":"confirmVip","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[],"name":"distributePool","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"uint256","name":"_level","type":"uint256"},{"internalType":"uint256","name":"_startIndex","type":"uint256"},{"internalType":"uint256","name":"_batchSize","type":"uint256"}],"name":"distributePoolBatch","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"donateToPool","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"emergencyClaimExpiredPool","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"grantOperator","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"grantVipAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"revokeVipAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_referrer","type":"address"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"renewVip","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"uint256","name":"_starLevel","type":"uint256"}],"name":"requestVip","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"revokeOperator","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"revokeVip","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"setAntiSybilVerified","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"uint256","name":"_packetIndex","type":"uint256"}],"name":"activatePacket","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address[]","name":"_users","type":"address[]"}],"name":"batchClaimAll","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address[]","name":"_users","type":"address[]"},{"internalType":"uint256","name":"_starLevel","type":"uint256"}],"name":"batchConfirmVip","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[],"name":"claimAll","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[],"name":"claimMatrix","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[],"name":"claimPool","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_reinvestFeeWallet","type":"address"},{"internalType":"address","name":"_gamePoolWallet","type":"address"},{"internalType":"address","name":"_reserveWallet","type":"address"},{"internalType":"address","name":"_developmentFundWallet","type":"address"}],"name":"updateWallets","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[],"name":"startPoolBatchRound","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[],"name":"cancelPoolBatchRound","outputs":[],"stateMutability":"nonpayable","type":"function"},
-  {"inputs":[],"name":"BATCH_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"DEFAULT_ADMIN_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"developmentFundWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"gamePoolWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getDirectReferralsCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[{"internalType":"uint256","name":"_nodeId","type":"uint256"}],"name":"getMatrixNode","outputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"parent","type":"uint256"},{"internalType":"uint256","name":"leftChild","type":"uint256"},{"internalType":"uint256","name":"rightChild","type":"uint256"},{"internalType":"uint256","name":"depth","type":"uint256"},{"internalType":"uint256","name":"leftCount","type":"uint256"},{"internalType":"uint256","name":"rightCount","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"getPoolInfo","outputs":[{"internalType":"uint256","name":"poolBalance","type":"uint256"},{"internalType":"uint256","name":"nextDistributionTime","type":"uint256"},{"internalType":"uint256[5]","name":"vipCounts","type":"uint256[5]"},{"internalType":"uint256[5]","name":"poolShares","type":"uint256[5]"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"getQueueInfo","outputs":[{"internalType":"uint256","name":"matrixQueueLength","type":"uint256"},{"internalType":"uint256","name":"poolQueueLength","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserInfo","outputs":[{"internalType":"uint256","name":"currentPacket","type":"uint256"},{"internalType":"address","name":"referrer","type":"address"},{"internalType":"uint256","name":"placementId","type":"uint256"},{"internalType":"uint256","name":"matrixBalance","type":"uint256"},{"internalType":"uint256","name":"poolBalance","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getVipInfo","outputs":[{"internalType":"uint256","name":"starLevel","type":"uint256"},{"internalType":"uint256","name":"verifiedAt","type":"uint256"},{"internalType":"uint256","name":"expiresAt","type":"uint256"},{"internalType":"uint256","name":"daysLeft","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"},{"internalType":"bool","name":"antiSybilVerified","type":"bool"},{"internalType":"uint256","name":"requiredPacket","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[{"internalType":"uint256","name":"_starLevel","type":"uint256"}],"name":"getVipList","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},
-  {"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"hasRole","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
-  {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"isUserRegistered","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"lastPoolDistribution","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"liquidityPool","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"MAX_REFERRAL_DEPTH","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"MIN_WITHDRAW","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"MULTISIG_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"OPERATOR_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"VIP_ADMIN_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"POOL_DISTRIBUTION_INTERVAL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"reinvestFeeWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"reserveWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"rootId","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"totalMatrixPayouts","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"totalPoolPayouts","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"totalReferralPayouts","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"totalUsers","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"usdtToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"VIP_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"getRoundInfo","outputs":[{"internalType":"uint256","name":"roundId","type":"uint256"},{"internalType":"uint256","name":"snapshot","type":"uint256"},{"internalType":"uint256","name":"totalDistributed","type":"uint256"},{"internalType":"bool","name":"active","type":"bool"},{"internalType":"uint256","name":"completedLevels","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"roundActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"roundPoolSnapshot","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}
-];
-
-const TOKEN_ABI = [{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"type":"function"}];
-
-let web3, contract, tokenContract, userAddress;
-
-// ========== УТИЛИТЫ ==========
-function fmtUsdt(wei) {
-  if (!wei) return '0';
-  return (Number(wei) / 1e18).toLocaleString('ru-RU', {maximumFractionDigits: 4});
-}
-function fmtAddr(a) {
-  if (!a || a === '0x0000000000000000000000000000000000000000') return '—';
-  return a.slice(0,6) + '...' + a.slice(-4);
-}
-function fmtDate(ts) {
-  if (!ts || Number(ts) === 0) return '—';
-  return new Date(Number(ts) * 1000).toLocaleString('ru-RU');
-}
-function setStatus(msg, cls = '') {
-  const el = document.getElementById('status');
-  el.className = 'status ' + cls;
-  el.innerHTML = msg;
-}
-function row(label, value) {
-  return `<div class="info-row"><span class="info-label">${label}</span><span class="info-value">${value}</span></div>`;
-}
-
-// ========== ПОДКЛЮЧЕНИЕ ==========
-async function connectWallet() {
-  if (!window.ethereum) return alert('❌ Установи MetaMask');
-  try {
-    web3 = new Web3(window.ethereum);
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-    const accounts = await web3.eth.getAccounts();
-    userAddress = accounts[0];
-
-    const chainId = await web3.eth.getChainId();
-    if (Number(chainId) !== 97) {
-      setStatus(`⚠️ Переключись на BSC Testnet (chainId 97). Сейчас: ${chainId}`, 'error-box');
-      return;
-    }
-
-    contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
-    tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-
-    setStatus(`✅ Подключен: <b>${userAddress}</b>`, 'success-box');
-  } catch (error) {
-    setStatus(`❌ Ошибка: ${error.message}`, 'error-box');
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.preview-tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo(0, 0);
   }
-}
-
-// ========== WRITE ==========
-async function approve() {
-  if (!tokenContract) return alert('Сначала подключи кошелёк');
-  const amount = document.getElementById('approveAmount').value;
-  try {
-    await tokenContract.methods.approve(CONTRACT_ADDRESS, web3.utils.toWei(amount, 'ether')).send({from: userAddress});
-    setStatus(`✅ Approve на ${amount} USDT выполнен`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function register() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const referrer = document.getElementById('referrer').value.trim();
-  if (!referrer) return alert('Введи адрес реферера');
-  try {
-    await contract.methods.register(referrer).send({ from: userAddress });
-    setStatus('✅ Регистрация успешна', 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function activatePacket() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const index = document.getElementById('packetIndex').value;
-  try {
-    await contract.methods.activatePacket(index).send({ from: userAddress });
-    setStatus(`✅ Пакет ${index} активирован`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function requestVip() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const level = document.getElementById('vipLevel').value;
-  try {
-    await contract.methods.requestVip(level).send({ from: userAddress });
-    setStatus(`✅ Запрос VIP ${level} отправлен`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function confirmVip() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const user = document.getElementById('vipUser').value.trim();
-  const level = document.getElementById('vipLevel').value;
-  if (!user) return alert('Введи адрес пользователя');
-  try {
-    await contract.methods.confirmVip(user, level).send({ from: userAddress });
-    setStatus(`✅ VIP ${level} подтверждён для ${user}`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function renewVip() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const user = document.getElementById('vipUser').value.trim();
-  if (!user) return alert('Введи адрес');
-  try {
-    await contract.methods.renewVip(user).send({ from: userAddress });
-    setStatus(`✅ VIP продлён для ${user}`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function revokeVip() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const user = document.getElementById('vipUser').value.trim();
-  if (!user) return alert('Введи адрес');
-  try {
-    await contract.methods.revokeVip(user).send({ from: userAddress });
-    setStatus(`✅ VIP отозван у ${user}`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function claimMatrix() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  try {
-    await contract.methods.claimMatrix().send({ from: userAddress });
-    setStatus(`✅ Матричный баланс выведен`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function claimPool() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  try {
-    await contract.methods.claimPool().send({ from: userAddress });
-    setStatus(`✅ Пул выведен`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function claimAll() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  try {
-    await contract.methods.claimAll().send({ from: userAddress });
-    setStatus(`✅ Всё выведено`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function donateToPool() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const amount = document.getElementById('donateAmount').value;
-  try {
-    await contract.methods.donateToPool(web3.utils.toWei(amount, 'ether')).send({ from: userAddress });
-    setStatus(`✅ Донат ${amount} USDT отправлен`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function startPoolBatchRound() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  try {
-    await contract.methods.startPoolBatchRound().send({ from: userAddress });
-    setStatus(`✅ Раунд начат`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function distributePoolBatchLevel(level) {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  try {
-    await contract.methods.distributePoolBatch(level, 0, 200).send({ from: userAddress });
-    setStatus(`✅ Уровень ${level} обработан`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function cancelPoolBatchRound() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  try {
-    await contract.methods.cancelPoolBatchRound().send({ from: userAddress });
-    setStatus(`✅ Раунд отменён`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function grantOperator() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const addr = document.getElementById('roleAddress').value.trim();
-  if (!addr) return alert('Введи адрес');
-  try {
-    await contract.methods.grantOperator(addr).send({ from: userAddress });
-    setStatus(`✅ OPERATOR выдан ${addr}`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function revokeOperator() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const addr = document.getElementById('roleAddress').value.trim();
-  if (!addr) return alert('Введи адрес');
-  try {
-    await contract.methods.revokeOperator(addr).send({ from: userAddress });
-    setStatus(`✅ OPERATOR отозван у ${addr}`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function grantVipAdmin() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const addr = document.getElementById('roleAddress').value.trim();
-  if (!addr) return alert('Введи адрес');
-  try {
-    await contract.methods.grantVipAdmin(addr).send({ from: userAddress });
-    setStatus(`✅ VIP_ADMIN выдан ${addr}`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-async function revokeVipAdmin() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const addr = document.getElementById('roleAddress').value.trim();
-  if (!addr) return alert('Введи адрес');
-  try {
-    await contract.methods.revokeVipAdmin(addr).send({ from: userAddress });
-    setStatus(`✅ VIP_ADMIN отозван у ${addr}`, 'success-box');
-  } catch (e) { setStatus(`❌ Ошибка: ${e.message}`, 'error-box'); }
-}
-
-// ========== READ ==========
-async function getUserInfo() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const user = document.getElementById('userAddress').value.trim() || userAddress;
-  const block = document.getElementById('userInfoBlock');
-  try {
-    const u = await contract.methods.getUserInfo(user).call();
-    const refCount = await contract.methods.getDirectReferralsCount(user).call();
-    const vip = await contract.methods.getVipInfo(user).call();
-    const isReg = await contract.methods.isUserRegistered(user).call();
-
-    // Роли отдельными вызовами через hasRole
-    const opRole = web3.utils.keccak256("OPERATOR_ROLE");
-    const vipRole = web3.utils.keccak256("VIP_ADMIN_ROLE");
-    const multiRole = web3.utils.keccak256("MULTISIG_ROLE");
-
-    const isOp = await contract.methods.hasRole(opRole, user).call();
-    const isVip = await contract.methods.hasRole(vipRole, user).call();
-    const isMulti = await contract.methods.hasRole(multiRole, user).call();
-
-    block.innerHTML = `
-      <h3>👤 Пользователь: ${user}</h3>
-      ${row('✅ Зарегистрирован', isReg ? 'Да' : 'Нет')}
-      ${row('🎫 Пакет', fmtUsdt(u.currentPacket) + ' USDT')}
-      ${row('👥 Реферер', fmtAddr(u.referrer))}
-      ${row('📍 ID в матрице', u.placementId == 0 ? '—' : u.placementId)}
-      ${row('📊 Матричный баланс', fmtUsdt(u.matrixBalance) + ' USDT')}
-      ${row('💧 Баланс пула', fmtUsdt(u.poolBalance) + ' USDT')}
-      ${row('💰 Всего заработано', fmtUsdt(u.totalEarned) + ' USDT')}
-      ${row('👥 Прямых рефералов', refCount)}
-      <h3>⭐ VIP-статус</h3>
-      ${row('Уровень', vip.starLevel == 0 ? '—' : vip.starLevel)}
-      ${row('Активен', vip.isActive ? '✅ Да' : '❌ Нет')}
-      ${row('Истекает', fmtDate(vip.expiresAt))}
-      ${row('Дней осталось', vip.daysLeft)}
-      ${row('Anti-Sybil', vip.antiSybilVerified ? '✅' : '❌')}
-      <h3>🔐 Роли</h3>
-      ${row('OPERATOR (распределение)', isOp ? '✅ Есть' : '—')}
-      ${row('VIP_ADMIN (VIP)', isVip ? '✅ Есть' : '—')}
-      ${row('MULTISIG (управление)', isMulti ? '✅ Есть' : '—')}
-    `;
-    block.style.display = 'block';
-  } catch (e) {
-    block.innerHTML = `<span style="color:#ff6b6b">❌ Ошибка: ${e.message}</span>`;
-    block.style.display = 'block';
+  function sendCode() {
+    const email = document.getElementById('email').value;
+    if (email) alert('Код отправлен на ' + email + '\n(демо)');
+    else alert('Введите email');
   }
-}
-
-async function getPoolFullInfo() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const block = document.getElementById('poolInfoBlock');
-  try {
-    const pool = await contract.methods.liquidityPool().call();
-    const totalUsers = await contract.methods.totalUsers().call();
-    const totalMatrix = await contract.methods.totalMatrixPayouts().call();
-    const totalReferral = await contract.methods.totalReferralPayouts().call();
-    const totalPool = await contract.methods.totalPoolPayouts().call();
-    const poolInfo = await contract.methods.getPoolInfo().call();
-    const round = await contract.methods.getRoundInfo().call();
-    const queue = await contract.methods.getQueueInfo().call();
-    const lastDist = await contract.methods.lastPoolDistribution().call();
-    const nextDist = BigInt(lastDist) + 86400n;
-
-    const vipCounts = poolInfo.vipCounts;
-    const vipList1 = await contract.methods.getVipList(1).call();
-    const vipList2 = await contract.methods.getVipList(2).call();
-    const vipList3 = await contract.methods.getVipList(3).call();
-    const vipList4 = await contract.methods.getVipList(4).call();
-    const vipList5 = await contract.methods.getVipList(5).call();
-
-    block.innerHTML = `
-      <h3>💧 Пул ликвидности</h3>
-      ${row('Общий пул', fmtUsdt(pool) + ' USDT')}
-      ${row('Последнее распределение', fmtDate(lastDist))}
-      ${row('Следующее доступно', fmtDate(nextDist))}
-      <h3>📊 Общие счётчики</h3>
-      ${row('Всего пользователей', totalUsers)}
-      ${row('Матричных выплат', fmtUsdt(totalMatrix) + ' USDT')}
-      ${row('Реферальных выплат', fmtUsdt(totalReferral) + ' USDT')}
-      ${row('Пуловых выплат', fmtUsdt(totalPool) + ' USDT')}
-      <h3>⭐ VIP по уровням</h3>
-      ${row('Уровень 1 (21%)', vipCounts[0] + ' — ' + vipList1.map(fmtAddr).join(', '))}
-      ${row('Уровень 2 (33%)', vipCounts[1] + ' — ' + vipList2.map(fmtAddr).join(', '))}
-      ${row('Уровень 3 (15%)', vipCounts[2] + ' — ' + vipList3.map(fmtAddr).join(', '))}
-      ${row('Уровень 4 (12%)', vipCounts[3] + ' — ' + vipList4.map(fmtAddr).join(', '))}
-      ${row('Уровень 5 (9%)', vipCounts[4] + ' — ' + vipList5.map(fmtAddr).join(', '))}
-      <h3>🔄 Текущий раунд</h3>
-      ${row('Активен', round.active ? '✅ Да' : '❌ Нет')}
-      ${row('Снимок пула', fmtUsdt(round.snapshot) + ' USDT')}
-      ${row('ID раунда', round.roundId)}
-      ${row('Завершено уровней', round.completedLevels)}
-      ${row('Распределено в раунде', fmtUsdt(round.totalDistributed) + ' USDT')}
-      <h3>📋 Очереди</h3>
-      ${row('Матричных выводов', queue[0])}
-      ${row('Пуловых выводов', queue[1])}
-      <h3>🏦 Кошельки</h3>
-      ${row('reinvestFeeWallet', fmtAddr(await contract.methods.reinvestFeeWallet().call()))}
-      ${row('gamePoolWallet', fmtAddr(await contract.methods.gamePoolWallet().call()))}
-      ${row('reserveWallet', fmtAddr(await contract.methods.reserveWallet().call()))}
-      ${row('developmentFundWallet', fmtAddr(await contract.methods.developmentFundWallet().call()))}
-      ${row('rootId', fmtAddr(await contract.methods.rootId().call()))}
-    `;
-    block.style.display = 'block';
-  } catch (e) {
-    block.innerHTML = `<span style="color:#ff6b6b">❌ Ошибка: ${e.message}</span>`;
-    block.style.display = 'block';
-  }
-}
-
-async function getMatrixNode() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const id = document.getElementById('matrixNodeId').value;
-  if (!id) return alert('Введи ID узла');
-  const block = document.getElementById('matrixInfoBlock');
-  try {
-    const n = await contract.methods.getMatrixNode(id).call();
-    block.innerHTML = `
-      <h3>🌳 Узел #${id}</h3>
-      ${row('Пользователь', fmtAddr(n.user))}
-      ${row('Родитель', n.parent == 0 ? '—' : n.parent)}
-      ${row('Левый ребёнок', n.leftChild == 0 ? '—' : n.leftChild)}
-      ${row('Правый ребёнок', n.rightChild == 0 ? '—' : n.rightChild)}
-      ${row('Глубина', n.depth)}
-      ${row('Левых узлов', n.leftCount)}
-      ${row('Правых узлов', n.rightCount)}
-    `;
-    block.style.display = 'block';
-  } catch (e) {
-    block.innerHTML = `<span style="color:#ff6b6b">❌ Ошибка: ${e.message}</span>`;
-    block.style.display = 'block';
-  }
-}
-
-async function checkRoles() {
-  if (!contract) return alert('Сначала подключи кошелёк');
-  const addr = document.getElementById('roleCheckAddress').value.trim();
-  if (!addr) return alert('Введи адрес');
-  const block = document.getElementById('roleInfoBlock');
-  try {
-    const opRole = web3.utils.keccak256("OPERATOR_ROLE");
-    const vipRole = web3.utils.keccak256("VIP_ADMIN_ROLE");
-    const multiRole = web3.utils.keccak256("MULTISIG_ROLE");
-
-    const op = await contract.methods.hasRole(opRole, addr).call();
-    const vip = await contract.methods.hasRole(vipRole, addr).call();
-    const multi = await contract.methods.hasRole(multiRole, addr).call();
-
-    block.innerHTML = `
-      <h3>🔑 Роли: ${addr}</h3>
-      ${row('OPERATOR (распределение)', op ? '✅ Есть' : '❌ Нет')}
-      ${row('VIP_ADMIN (VIP)', vip ? '✅ Есть' : '❌ Нет')}
-      ${row('MULTISIG (управление)', multi ? '✅ Есть' : '❌ Нет')}
-    `;
-    block.style.display = 'block';
-  } catch (e) {
-    block.innerHTML = `<span style="color:#ff6b6b">❌ Ошибка: ${e.message}</span>`;
-    block.style.display = 'block';
-  }
-}
+  // Демо: обновление таймера
+  setInterval(() => {
+    document.querySelectorAll('.timer-val').forEach(el => {
+      let v = parseInt(el.textContent) || 0;
+      // просто для визуализации
+    });
+  }, 1000);
 </script>
+
 </body>
 </html>
