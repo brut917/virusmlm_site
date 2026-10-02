@@ -623,4 +623,43 @@
 
   /* ===== 3 ШАГА АКТИВАЦИИ (демо) ===== */
   function step1() {
-    document.getElementById('step1-num').className = 'step-num
+    document.getElementById('step1-num').className = 'step-num done';
+    document.getElementById('step1-num').textContent = '✓';
+    document.getElementById('step1-btn').textContent = '✓ ПОДКЛЮЧЕНО, АПРУВ ВЫПОЛНЕН';
+    document.getElementById('step1-btn').disabled = true;
+
+    document.getElementById('step2-num').className = 'step-num active';
+    document.getElementById('sponsor-input').disabled = false;
+    document.getElementById('step2-btn').disabled = false;
+  }
+
+  function step2() {
+    const sponsor = document.getElementById('sponsor-input').value;
+    if (!sponsor || !sponsor.startsWith('0x')) {
+      alert('Введите корректный адрес спонсора (0x...)');
+      return;
+    }
+    document.getElementById('step2-num').className = 'step-num done';
+    document.getElementById('step2-num').textContent = '✓';
+    document.getElementById('step2-btn').textContent = '✓ ЗАРЕГИСТРИРОВАН';
+    document.getElementById('step2-btn').disabled = true;
+    document.getElementById('sponsor-input').disabled = true;
+
+    document.getElementById('step3-num').className = 'step-num active';
+    document.getElementById('step3-btn').disabled = false;
+  }
+
+  function step3() {
+    document.getElementById('step3-num').className = 'step-num done';
+    document.getElementById('step3-num').textContent = '✓';
+    document.getElementById('step3-btn').textContent = '✓ ПАКЕТ АКТИВИРОВАН';
+    document.getElementById('step3-btn').disabled = true;
+
+    setTimeout(() => {
+      showScreen('real', { target: document.querySelectorAll('.preview-tabs button')[2] });
+    }, 800);
+  }
+</script>
+
+</body>
+</html>
