@@ -20,15 +20,13 @@
   }
   .preview-tabs button.active { background: #1565c0; color: #fff; }
 
-  /* ===== ЕДИНАЯ ВЫСОТА ВСЕХ ЭКРАНОВ ===== */
+  /* ===== ЭКРАНЫ (простое переключение, без flex) ===== */
   .screen { display: none; padding-top: 60px; min-height: 100vh; }
   .screen.active { display: block; }
 
   .bg-hero {
     background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%);
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
   }
 
   /* ===== Шапка: лого по центру, RU/EN справа ===== */
@@ -59,10 +57,6 @@
   }
   .lang-switch button.active {
     background: #2196f3; color: #fff; border-color: #2196f3;
-  }
-
-  .content-wrap {
-    flex: 1;
   }
 
   .profile-row {
@@ -340,39 +334,37 @@
 
 <!-- ======================== РЕГИСТРАЦИЯ ======================== -->
 <div id="reg" class="screen active bg-hero">
-  <div class="content-wrap">
-    <div class="reg-container">
-      <div class="reg-logo">
-        <div class="reg-title">VIRUS<span class="reg-bolt">⚡</span>MLM</div>
-        <div class="reg-subtitle" data-i18n="reg_subtitle">Регистрация по приглашению</div>
-      </div>
+  <div class="reg-container">
+    <div class="reg-logo">
+      <div class="reg-title">VIRUS<span class="reg-bolt">⚡</span>MLM</div>
+      <div class="reg-subtitle" data-i18n="reg_subtitle">Регистрация по приглашению</div>
+    </div>
 
-      <div class="sponsor-card">
-        <div class="sponsor-label" data-i18n="reg_sponsor">Ваш спонсор</div>
-        <div class="sponsor-value">VIR-000123</div>
-      </div>
+    <div class="sponsor-card">
+      <div class="sponsor-label" data-i18n="reg_sponsor">Ваш спонсор</div>
+      <div class="sponsor-value">VIR-000123</div>
+    </div>
 
-      <input type="email" class="input" placeholder="Введите email" id="email">
-      <button class="btn btn-blue" style="margin-bottom:12px;" onclick="sendCode()" data-i18n="reg_get_code">Получить код на email</button>
+    <input type="email" class="input" placeholder="Введите email" id="email">
+    <button class="btn btn-blue" style="margin-bottom:12px;" onclick="sendCode()" data-i18n="reg_get_code">Получить код на email</button>
 
-      <input type="text" class="input" placeholder="Введите код из письма" id="code">
+    <input type="text" class="input" placeholder="Введите код из письма" id="code">
 
-      <div class="captcha-box">
-        ☁️ Cloudflare Turnstile (защита от ботов)
-      </div>
+    <div class="captcha-box">
+      ☁️ Cloudflare Turnstile (защита от ботов)
+    </div>
 
-      <label class="checkbox-row">
-        <input type="checkbox" checked>
-        <span data-i18n="reg_offer">
-          Я принимаю договор оферты и становлюсь аффилированным партнёром платформы Virus MLM.
-        </span>
-      </label>
+    <label class="checkbox-row">
+      <input type="checkbox" checked>
+      <span data-i18n="reg_offer">
+        Я принимаю договор оферты и становлюсь аффилированным партнёром платформы Virus MLM.
+      </span>
+    </label>
 
-      <button class="btn btn-green" onclick="showScreen('virtual', event)" data-i18n="reg_confirm">ПОДТВЕРДИТЬ</button>
+    <button class="btn btn-green" onclick="showScreen('virtual', event)" data-i18n="reg_confirm">ПОДТВЕРДИТЬ</button>
 
-      <div class="notice" style="margin-top:20px;" data-i18n="reg_notice">
-        После регистрации вы получите доступ к бесплатному виртуальному кабинету.
-      </div>
+    <div class="notice" style="margin-top:20px;" data-i18n="reg_notice">
+      После регистрации вы получите доступ к бесплатному виртуальному кабинету.
     </div>
   </div>
 </div>
@@ -390,158 +382,148 @@
     </div>
   </div>
 
-  <div class="content-wrap">
-    <div class="profile-row">
-      <div class="vip-block">
-        <div class="vip-crown">👑</div>
-        <div class="vip-level" data-i18n="virt_vip">VIRTUAL VIP</div>
-        <div class="vip-stars">★★★★★</div>
-        <div class="vip-duration" data-i18n="virt_vip_dur">Бессрочно</div>
-      </div>
-      <div class="wallet-block">
-        <div class="wallet-label" data-i18n="virt_uid">User ID</div>
-        <div class="wallet-value">VIR-000123</div>
-        <div class="pool-share-label" data-i18n="virt_pool_share">Моя доля в пуле</div>
-        <div class="pool-share-value">$0.00</div>
-      </div>
+  <div class="profile-row">
+    <div class="vip-block">
+      <div class="vip-crown">👑</div>
+      <div class="vip-level" data-i18n="virt_vip">VIRTUAL VIP</div>
+      <div class="vip-stars">★★★★★</div>
+      <div class="vip-duration" data-i18n="virt_vip_dur">Бессрочно</div>
     </div>
-
-    <!-- 1. ПАКЕТЫ -->
-    <div class="packets-wrap">
-      <div class="packets">
-        <div class="packet active">50</div>
-        <div class="packet">100</div>
-        <div class="packet">150</div>
-        <div class="packet">200</div>
-        <div class="packet">250</div>
-      </div>
+    <div class="wallet-block">
+      <div class="wallet-label" data-i18n="virt_uid">User ID</div>
+      <div class="wallet-value">VIR-000123</div>
+      <div class="pool-share-label" data-i18n="virt_pool_share">Моя доля в пуле</div>
+      <div class="pool-share-value">$0.00</div>
     </div>
-
-    <!-- 2. МАТРИЦА -->
-    <div class="card">
-      <div class="card-title" data-i18n="virt_matrix">Заполнение матрицы</div>
-      <div class="matrix-bar">
-        <div class="matrix-fill" style="width: 10%;"></div>
-      </div>
-      <div class="matrix-label">
-        <span>819 / 8190 мест</span>
-        <span class="gold">10%</span>
-      </div>
-    </div>
-
-    <!-- 3. РЕФ-ССЫЛКА -->
-    <div style="max-width:560px;margin:12px auto;padding:0 20px;">
-      <div class="card-title" style="color:#9ca3af;padding-left:0;" data-i18n="virt_ref">Ваша реферальная ссылка</div>
-      <div class="ref-link">
-        <span style="flex:1;">virusmlm.com/join?ref=VIR-000123</span>
-        <button>📋</button>
-      </div>
-    </div>
-
-    <!-- 4. БАЛАНСЫ -->
-    <div class="card">
-      <div class="balance-row thick">
-        <span class="balance-label" data-i18n="b_ref">Реферальный баланс</span>
-        <span class="balance-value">$0.00</span>
-      </div>
-      <div class="balance-row thick">
-        <span class="balance-label" data-i18n="b_mat">Матричный баланс</span>
-        <span class="balance-value">$0.00</span>
-      </div>
-      <div class="balance-row">
-        <span class="balance-label" data-i18n="b_pool">Лидерский пул</span>
-        <span class="balance-value">$0.00</span>
-      </div>
-    </div>
-
-    <!-- 5. БАЛАНС НА ВЫВОД -->
-    <div class="withdraw-block">
-      <div class="withdraw-strip">
-        <div class="withdraw-strip-left">
-          <div class="withdraw-icon">₮</div>
-          <div class="withdraw-text"><span data-i18n="b_withdraw">Баланс на вывод:</span> <b>$0.00</b></div>
-        </div>
-        <button class="withdraw-btn" data-i18n="b_withdraw_btn">ВЫВОД</button>
-      </div>
-      <div class="withdraw-detail">
-        <div class="split-item">
-          <div class="val">50%</div>
-          <div class="lbl" data-i18n="s_wallet">На кошелёк</div>
-        </div>
-        <div class="split-item">
-          <div class="val">50%</div>
-          <div class="lbl" data-i18n="s_market">В маркетинг</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6. ИИ-РЕКРУТЕР -->
-    <div class="card">
-      <div class="card-title" data-i18n="virt_ai">ИИ-рекрутер</div>
-      <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;" data-i18n="virt_ai_soon">
-        🤖 Скоро — интеллектуальный помощник для рекрутинга
-      </div>
-    </div>
-
-    <!-- 7. VIP-ЗАДАНИЯ -->
-    <div class="card">
-      <div class="card-title" data-i18n="virt_vip_tasks">VIP-задания</div>
-      <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;" data-i18n="virt_vip_tasks_soon">
-        🎯 Скоро — задания для подтверждения VIP-статуса
-      </div>
-    </div>
-
-    <!-- 8. БЛОК АКТИВАЦИИ -->
-    <div class="activate-box">
-      <div class="activate-title" data-i18n="virt_act">⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА</div>
-
-      <div class="step">
-        <div class="step-num active" id="step1-num">1</div>
-        <div class="step-body">
-          <div class="step-title" data-i18n="s1_title">Подключить кошелёк</div>
-          <div class="step-desc" data-i18n="s1_desc">Разрешить платформе работать с токеном USDT BEP20 на вашем кошельке.</div>
-          <button class="step-btn" id="step1-btn" onclick="step1()" data-i18n="s1_btn">ПОДКЛЮЧИТЬ METAMASK</button>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num" id="step2-num">2</div>
-        <div class="step-body">
-          <div class="step-title" data-i18n="s2_title">Регистрация под спонсора</div>
-          <div class="step-desc" data-i18n="s2_desc">Укажите адрес кошелька вашего спонсора в системе Virus MLM.</div>
-          <input type="text" class="input" id="sponsor-input" placeholder="Адрес кошелька спонсора (0x...)" disabled style="margin-top:8px;">
-          <button class="step-btn" id="step2-btn" onclick="step2()" disabled data-i18n="s2_btn">ЗАРЕГИСТРИРОВАТЬСЯ</button>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num" id="step3-num">3</div>
-        <div class="step-body">
-          <div class="step-title" data-i18n="s3_title">Активировать пакет 50 USDT</div>
-          <div class="step-desc" data-i18n="s3_desc">Единоразовый вход в клуб. Спишется 50 USDT BEP20.</div>
-          <button class="step-btn" id="step3-btn" onclick="step3()" disabled data-i18n="s3_btn">АКТИВИРОВАТЬ 50 USDT</button>
-        </div>
-      </div>
-
-      <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.5;" data-i18n="virt_need">
-        Нужно: BNB для газа + 50 USDT BEP20 на кошельке.
-      </div>
-    </div>
-
-    <!-- 9. ЛИДЕРСКИЙ ПУЛ (внизу) -->
-    <div class="pool-card">
-      <div class="pool-title" data-i18n="virt_pool">Лидерский пул</div>
-      <div class="pool-amount">$12,450.00</div>
-      <div class="pool-sub" data-i18n="virt_pool_sub">До следующего распределения</div>
-      <div class="timer">
-        <div class="timer-box"><div class="timer-val">23</div><div class="timer-lbl" data-i18n="t_hour">час</div></div>
-        <div class="timer-box"><div class="timer-val">45</div><div class="timer-lbl" data-i18n="t_min">мин</div></div>
-        <div class="timer-box"><div class="timer-val">12</div><div class="timer-lbl" data-i18n="t_sec">сек</div></div>
-      </div>
-    </div>
-
-    <div style="height: 40px;"></div>
   </div>
+
+  <!-- 1. ПАКЕТЫ -->
+  <div class="packets-wrap">
+    <div class="packets">
+      <div class="packet active">50</div>
+      <div class="packet">100</div>
+      <div class="packet">150</div>
+      <div class="packet">200</div>
+      <div class="packet">250</div>
+    </div>
+  </div>
+
+  <!-- 2. МАТРИЦА -->
+  <div class="card">
+    <div class="card-title" data-i18n="virt_matrix">Заполнение матрицы</div>
+    <div class="matrix-bar">
+      <div class="matrix-fill" style="width: 10%;"></div>
+    </div>
+    <div class="matrix-label">
+      <span>819 / 8190 мест</span>
+      <span class="gold">10%</span>
+    </div>
+  </div>
+
+  <!-- 3. РЕФ-ССЫЛКА -->
+  <div style="max-width:560px;margin:12px auto;padding:0 20px;">
+    <div class="card-title" style="color:#9ca3af;padding-left:0;" data-i18n="virt_ref">Ваша реферальная ссылка</div>
+    <div class="ref-link">
+      <span style="flex:1;">virusmlm.com/join?ref=VIR-000123</span>
+      <button>📋</button>
+    </div>
+  </div>
+
+  <!-- 4. БАЛАНСЫ -->
+  <div class="card">
+    <div class="balance-row thick">
+      <span class="balance-label" data-i18n="b_ref">Реферальный баланс</span>
+      <span class="balance-value">$0.00</span>
+    </div>
+    <div class="balance-row thick">
+      <span class="balance-label" data-i18n="b_mat">Матричный баланс</span>
+      <span class="balance-value">$0.00</span>
+    </div>
+    <div class="balance-row">
+      <span class="balance-label" data-i18n="b_pool">Лидерский пул</span>
+      <span class="balance-value">$0.00</span>
+    </div>
+  </div>
+
+  <!-- 5. БАЛАНС НА ВЫВОД -->
+  <div class="withdraw-block">
+    <div class="withdraw-strip">
+      <div class="withdraw-strip-left">
+        <div class="withdraw-icon">₮</div>
+        <div class="withdraw-text"><span data-i18n="b_withdraw">Баланс на вывод:</span> <b>$0.00</b></div>
+      </div>
+      <button class="withdraw-btn" data-i18n="b_withdraw_btn">ВЫВОД</button>
+    </div>
+    <div class="withdraw-detail">
+      <div class="split-item">
+        <div class="val">50%</div>
+        <div class="lbl" data-i18n="s_wallet">На кошелёк</div>
+      </div>
+      <div class="split-item">
+        <div class="val">50%</div>
+        <div class="lbl" data-i18n="s_market">В маркетинг</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. ЛИДЕРСКИЙ ПУЛ -->
+  <div class="pool-card">
+    <div class="pool-title" data-i18n="virt_pool">Лидерский пул</div>
+    <div class="pool-amount">$12,450.00</div>
+    <div class="pool-sub" data-i18n="virt_pool_sub">До следующего распределения</div>
+    <div class="timer">
+      <div class="timer-box"><div class="timer-val">23</div><div class="timer-lbl" data-i18n="t_hour">час</div></div>
+      <div class="timer-box"><div class="timer-val">45</div><div class="timer-lbl" data-i18n="t_min">мин</div></div>
+      <div class="timer-box"><div class="timer-val">12</div><div class="timer-lbl" data-i18n="t_sec">сек</div></div>
+    </div>
+  </div>
+
+  <!-- 7. ИИ-РЕКРУТЕР -->
+  <div class="card">
+    <div class="card-title" data-i18n="virt_ai">ИИ-рекрутер</div>
+    <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;" data-i18n="virt_ai_soon">
+      🤖 Скоро — интеллектуальный помощник для рекрутинга
+    </div>
+  </div>
+
+  <!-- 8. БЛОК АКТИВАЦИИ -->
+  <div class="activate-box">
+    <div class="activate-title" data-i18n="virt_act">⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА</div>
+
+    <div class="step">
+      <div class="step-num active" id="step1-num">1</div>
+      <div class="step-body">
+        <div class="step-title" data-i18n="s1_title">Подключить кошелёк</div>
+        <div class="step-desc" data-i18n="s1_desc">Разрешить платформе работать с токеном USDT BEP20 на вашем кошельке.</div>
+        <button class="step-btn" id="step1-btn" onclick="step1()" data-i18n="s1_btn">ПОДКЛЮЧИТЬ METAMASK</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" id="step2-num">2</div>
+      <div class="step-body">
+        <div class="step-title" data-i18n="s2_title">Регистрация под спонсора</div>
+        <div class="step-desc" data-i18n="s2_desc">Укажите адрес кошелька вашего спонсора в системе Virus MLM.</div>
+        <input type="text" class="input" id="sponsor-input" placeholder="Адрес кошелька спонсора (0x...)" disabled style="margin-top:8px;">
+        <button class="step-btn" id="step2-btn" onclick="step2()" disabled data-i18n="s2_btn">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" id="step3-num">3</div>
+      <div class="step-body">
+        <div class="step-title" data-i18n="s3_title">Активировать пакет 50 USDT</div>
+        <div class="step-desc" data-i18n="s3_desc">Единоразовый вход в клуб. Спишется 50 USDT BEP20.</div>
+        <button class="step-btn" id="step3-btn" onclick="step3()" disabled data-i18n="s3_btn">АКТИВИРОВАТЬ 50 USDT</button>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.5;" data-i18n="virt_need">
+      Нужно: BNB для газа + 50 USDT BEP20 на кошельке.
+    </div>
+  </div>
+
+  <div style="height: 40px;"></div>
 </div>
 
 <!-- ======================== РЕАЛЬНЫЙ ======================== -->
@@ -557,113 +539,119 @@
     </div>
   </div>
 
-  <div class="content-wrap">
-    <div class="notice" data-i18n="real_notice">
-      ✅ Вы активированы в BSC Mainnet. Данные в реальном времени.
-    </div>
-
-    <div class="profile-row">
-      <div class="vip-block">
-        <div class="vip-crown">👑</div>
-        <div class="vip-level">VIP 3</div>
-        <div class="vip-stars">★★★☆☆</div>
-        <div class="vip-duration" data-i18n="real_vip_dur">30 дней</div>
-      </div>
-      <div class="wallet-block">
-        <div class="wallet-label" data-i18n="real_wallet">Wallet</div>
-        <div class="wallet-value">0x6152...dc85</div>
-        <div class="pool-share-label" data-i18n="virt_pool_share">Моя доля в пуле</div>
-        <div class="pool-share-value">$124.50</div>
-      </div>
-    </div>
-
-    <!-- 1. ПАКЕТЫ -->
-    <div class="packets-wrap">
-      <div class="packets">
-        <div class="packet active">50</div>
-        <div class="packet active">100</div>
-        <div class="packet active">150</div>
-        <div class="packet">200</div>
-        <div class="packet">250</div>
-      </div>
-    </div>
-
-    <!-- 2. МАТРИЦА -->
-    <div class="card">
-      <div class="card-title" data-i18n="virt_matrix">Заполнение матрицы</div>
-      <div class="matrix-bar">
-        <div class="matrix-fill" style="width: 34%;"></div>
-      </div>
-      <div class="matrix-label">
-        <span>2785 / 8190 мест</span>
-        <span class="gold">34%</span>
-      </div>
-    </div>
-
-    <!-- 3. ПРОДУКТЫ -->
-    <div class="card">
-      <div class="card-title" data-i18n="real_products">Продукты и сервисы</div>
-      <div class="products-grid">
-        <div class="product-card"><div class="product-icon">🔍</div><div class="product-name" data-i18n="p_audit">Аудит кошелька</div></div>
-        <div class="product-card"><div class="product-icon">🤖</div><div class="product-name" data-i18n="p_ai">ИИ-рекрутер</div></div>
-        <div class="product-card"><div class="product-icon">🎮</div><div class="product-name" data-i18n="p_games">Игры</div></div>
-        <div class="product-card"><div class="product-icon">💰</div><div class="product-name" data-i18n="p_exchange">Обменник</div></div>
-        <div class="product-card"><div class="product-icon">📊</div><div class="product-name" data-i18n="p_tax">Налоги</div></div>
-        <div class="product-card"><div class="product-icon">🎯</div><div class="product-name" data-i18n="p_fun">Развлечения</div></div>
-      </div>
-    </div>
-
-    <!-- 4. БАЛАНСЫ -->
-    <div class="card">
-      <div class="balance-row thick">
-        <span class="balance-label" data-i18n="b_ref">Реферальный баланс</span>
-        <span class="balance-value">$845.20</span>
-      </div>
-      <div class="balance-row thick">
-        <span class="balance-label" data-i18n="b_mat">Матричный баланс</span>
-        <span class="balance-value">$279.05</span>
-      </div>
-      <div class="balance-row">
-        <span class="balance-label" data-i18n="b_pool">Лидерский пул</span>
-        <span class="balance-value">$124.50</span>
-      </div>
-    </div>
-
-    <!-- 5. БАЛАНС НА ВЫВОД -->
-    <div class="withdraw-block">
-      <div class="withdraw-strip">
-        <div class="withdraw-strip-left">
-          <div class="withdraw-icon">₮</div>
-          <div class="withdraw-text"><span data-i18n="b_withdraw">Баланс на вывод:</span> <b>$1,248.75</b></div>
-        </div>
-        <button class="withdraw-btn" data-i18n="b_withdraw_btn">ВЫВОД</button>
-      </div>
-      <div class="withdraw-detail">
-        <div class="split-item">
-          <div class="val">70%</div>
-          <div class="lbl" data-i18n="s_wallet">На кошелёк</div>
-        </div>
-        <div class="split-item">
-          <div class="val">30%</div>
-          <div class="lbl" data-i18n="s_market">В маркетинг</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6. ЛИДЕРСКИЙ ПУЛ (внизу) -->
-    <div class="pool-card">
-      <div class="pool-title" data-i18n="virt_pool">Лидерский пул</div>
-      <div class="pool-amount">$45,230.00</div>
-      <div class="pool-sub" data-i18n="virt_pool_sub">До следующего распределения</div>
-      <div class="timer">
-        <div class="timer-box"><div class="timer-val">12</div><div class="timer-lbl" data-i18n="t_hour">час</div></div>
-        <div class="timer-box"><div class="timer-val">34</div><div class="timer-lbl" data-i18n="t_min">мин</div></div>
-        <div class="timer-box"><div class="timer-val">56</div><div class="timer-lbl" data-i18n="t_sec">сек</div></div>
-      </div>
-    </div>
-
-    <div style="height: 40px;"></div>
+  <div class="notice" data-i18n="real_notice">
+    ✅ Вы активированы в BSC Mainnet. Данные в реальном времени.
   </div>
+
+  <div class="profile-row">
+    <div class="vip-block">
+      <div class="vip-crown">👑</div>
+      <div class="vip-level">VIP 3</div>
+      <div class="vip-stars">★★★☆☆</div>
+      <div class="vip-duration" data-i18n="real_vip_dur">30 дней</div>
+    </div>
+    <div class="wallet-block">
+      <div class="wallet-label" data-i18n="real_wallet">Wallet</div>
+      <div class="wallet-value">0x6152...dc85</div>
+      <div class="pool-share-label" data-i18n="virt_pool_share">Моя доля в пуле</div>
+      <div class="pool-share-value">$124.50</div>
+    </div>
+  </div>
+
+  <!-- 1. ПАКЕТЫ -->
+  <div class="packets-wrap">
+    <div class="packets">
+      <div class="packet active">50</div>
+      <div class="packet active">100</div>
+      <div class="packet active">150</div>
+      <div class="packet">200</div>
+      <div class="packet">250</div>
+    </div>
+  </div>
+
+  <!-- 2. МАТРИЦА -->
+  <div class="card">
+    <div class="card-title" data-i18n="virt_matrix">Заполнение матрицы</div>
+    <div class="matrix-bar">
+      <div class="matrix-fill" style="width: 34%;"></div>
+    </div>
+    <div class="matrix-label">
+      <span>2785 / 8190 мест</span>
+      <span class="gold">34%</span>
+    </div>
+  </div>
+
+  <!-- 3. БАЛАНСЫ -->
+  <div class="card">
+    <div class="balance-row thick">
+      <span class="balance-label" data-i18n="b_ref">Реферальный баланс</span>
+      <span class="balance-value">$845.20</span>
+    </div>
+    <div class="balance-row thick">
+      <span class="balance-label" data-i18n="b_mat">Матричный баланс</span>
+      <span class="balance-value">$279.05</span>
+    </div>
+    <div class="balance-row">
+      <span class="balance-label" data-i18n="b_pool">Лидерский пул</span>
+      <span class="balance-value">$124.50</span>
+    </div>
+  </div>
+
+  <!-- 4. БАЛАНС НА ВЫВОД -->
+  <div class="withdraw-block">
+    <div class="withdraw-strip">
+      <div class="withdraw-strip-left">
+        <div class="withdraw-icon">₮</div>
+        <div class="withdraw-text"><span data-i18n="b_withdraw">Баланс на вывод:</span> <b>$1,248.75</b></div>
+      </div>
+      <button class="withdraw-btn" data-i18n="b_withdraw_btn">ВЫВОД</button>
+    </div>
+    <div class="withdraw-detail">
+      <div class="split-item">
+        <div class="val">70%</div>
+        <div class="lbl" data-i18n="s_wallet">На кошелёк</div>
+      </div>
+      <div class="split-item">
+        <div class="val">30%</div>
+        <div class="lbl" data-i18n="s_market">В маркетинг</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ПРОДУКТЫ -->
+  <div class="card">
+    <div class="card-title" data-i18n="real_products">Продукты и сервисы</div>
+    <div class="products-grid">
+      <div class="product-card"><div class="product-icon">🔍</div><div class="product-name" data-i18n="p_audit">Аудит кошелька</div></div>
+      <div class="product-card"><div class="product-icon">🤖</div><div class="product-name" data-i18n="p_ai">ИИ-рекрутер</div></div>
+      <div class="product-card"><div class="product-icon">🎮</div><div class="product-name" data-i18n="p_games">Игры</div></div>
+      <div class="product-card"><div class="product-icon">💰</div><div class="product-name" data-i18n="p_exchange">Обменник</div></div>
+      <div class="product-card"><div class="product-icon">📊</div><div class="product-name" data-i18n="p_tax">Налоги</div></div>
+      <div class="product-card"><div class="product-icon">🎯</div><div class="product-name" data-i18n="p_fun">Развлечения</div></div>
+    </div>
+  </div>
+
+  <!-- 6. VIP-ЗАДАНИЯ -->
+  <div class="card">
+    <div class="card-title" data-i18n="virt_vip_tasks">VIP-задания</div>
+    <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;" data-i18n="virt_vip_tasks_soon">
+      🎯 Скоро — задания для подтверждения VIP-статуса
+    </div>
+  </div>
+
+  <!-- 7. ЛИДЕРСКИЙ ПУЛ -->
+  <div class="pool-card">
+    <div class="pool-title" data-i18n="virt_pool">Лидерский пул</div>
+    <div class="pool-amount">$45,230.00</div>
+    <div class="pool-sub" data-i18n="virt_pool_sub">До следующего распределения</div>
+    <div class="timer">
+      <div class="timer-box"><div class="timer-val">12</div><div class="timer-lbl" data-i18n="t_hour">час</div></div>
+      <div class="timer-box"><div class="timer-val">34</div><div class="timer-lbl" data-i18n="t_min">мин</div></div>
+      <div class="timer-box"><div class="timer-val">56</div><div class="timer-lbl" data-i18n="t_sec">сек</div></div>
+    </div>
+  </div>
+
+  <div style="height: 40px;"></div>
 </div>
 
 <script>
