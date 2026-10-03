@@ -12,6 +12,7 @@
     position: fixed; top: 0; left: 0; right: 0; z-index: 999;
     background: #0d1117; border-bottom: 1px solid #1f2937;
     display: flex; gap: 4px; padding: 8px;
+    height: 60px;
   }
   .preview-tabs button {
     flex: 1; padding: 10px; background: #1f2937; color: #9ca3af;
@@ -19,12 +20,12 @@
   }
   .preview-tabs button.active { background: #1565c0; color: #fff; }
 
-  .screen { display: none; padding-top: 60px; min-height: 100vh; }
+  .screen { display: none; padding-top: 60px; min-height: calc(100vh - 60px); }
   .screen.active { display: block; }
 
   .bg-hero {
     background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%);
-    min-height: 100vh;
+    min-height: calc(100vh - 60px);
   }
 
   .header {
@@ -386,7 +387,16 @@
     </div>
   </div>
 
-  <!-- 2. ПАКЕТЫ -->
+  <!-- 2. РЕФ-ССЫЛКА -->
+  <div style="max-width:560px;margin:12px auto;padding:0 20px;">
+    <div class="card-title" style="color:#9ca3af;padding-left:0;">Ваша реферальная ссылка</div>
+    <div class="ref-link">
+      <span style="flex:1;">virusmlm.com/join?ref=VIR-000123</span>
+      <button>📋</button>
+    </div>
+  </div>
+
+  <!-- 3. ПАКЕТЫ -->
   <div class="packets-wrap">
     <div class="packets">
       <div class="packet active">50</div>
@@ -397,7 +407,7 @@
     </div>
   </div>
 
-  <!-- 3. МАТРИЦА -->
+  <!-- 4. МАТРИЦА -->
   <div class="card">
     <div class="card-title">Заполнение матрицы</div>
     <div class="matrix-bar">
@@ -409,16 +419,7 @@
     </div>
   </div>
 
-  <!-- 4. РЕФ-ССЫЛКА -->
-  <div style="max-width:560px;margin:12px auto;padding:0 20px;">
-    <div class="card-title" style="color:#9ca3af;padding-left:0;">Ваша реферальная ссылка</div>
-    <div class="ref-link">
-      <span style="flex:1;">virusmlm.com/join?ref=VIR-000123</span>
-      <button>📋</button>
-    </div>
-  </div>
-
-  <!-- 5. ИИ-РЕКРУТЕР (выше) -->
+  <!-- 5. ИИ-РЕКРУТЕР -->
   <div class="card">
     <div class="card-title">ИИ-рекрутер</div>
     <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;">
@@ -426,44 +427,7 @@
     </div>
   </div>
 
-  <!-- 6. БАЛАНСЫ -->
-  <div class="card">
-    <div class="balance-row thick">
-      <span class="balance-label">Реферальный баланс</span>
-      <span class="balance-value">$0.00</span>
-    </div>
-    <div class="balance-row thick">
-      <span class="balance-label">Матричный баланс</span>
-      <span class="balance-value">$0.00</span>
-    </div>
-    <div class="balance-row">
-      <span class="balance-label">Лидерский пул</span>
-      <span class="balance-value">$0.00</span>
-    </div>
-  </div>
-
-  <!-- 7. БАЛАНС НА ВЫВОД (ниже) -->
-  <div class="withdraw-block">
-    <div class="withdraw-strip">
-      <div class="withdraw-strip-left">
-        <div class="withdraw-icon">₮</div>
-        <div class="withdraw-text">Баланс на вывод: <b>$0.00</b></div>
-      </div>
-      <button class="withdraw-btn">ВЫВОД</button>
-    </div>
-    <div class="withdraw-detail">
-      <div class="split-item">
-        <div class="val">50%</div>
-        <div class="lbl">На кошелёк</div>
-      </div>
-      <div class="split-item">
-        <div class="val">50%</div>
-        <div class="lbl">В маркетинг</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 8. АКТИВАЦИЯ -->
+  <!-- 6. АКТИВАЦИЯ -->
   <div class="activate-box">
     <div class="activate-title">⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА</div>
 
@@ -497,6 +461,43 @@
 
     <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.5;">
       Нужно: BNB для газа + 50 USDT BEP20 на кошельке.
+    </div>
+  </div>
+
+  <!-- 7. БАЛАНСЫ -->
+  <div class="card">
+    <div class="balance-row thick">
+      <span class="balance-label">Реферальный баланс</span>
+      <span class="balance-value">$0.00</span>
+    </div>
+    <div class="balance-row thick">
+      <span class="balance-label">Матричный баланс</span>
+      <span class="balance-value">$0.00</span>
+    </div>
+    <div class="balance-row">
+      <span class="balance-label">Лидерский пул</span>
+      <span class="balance-value">$0.00</span>
+    </div>
+  </div>
+
+  <!-- 8. БАЛАНС НА ВЫВОД -->
+  <div class="withdraw-block">
+    <div class="withdraw-strip">
+      <div class="withdraw-strip-left">
+        <div class="withdraw-icon">₮</div>
+        <div class="withdraw-text">Баланс на вывод: <b>$0.00</b></div>
+      </div>
+      <button class="withdraw-btn">ВЫВОД</button>
+    </div>
+    <div class="withdraw-detail">
+      <div class="split-item">
+        <div class="val">50%</div>
+        <div class="lbl">На кошелёк</div>
+      </div>
+      <div class="split-item">
+        <div class="val">50%</div>
+        <div class="lbl">В маркетинг</div>
+      </div>
     </div>
   </div>
 
@@ -566,7 +567,7 @@
     </div>
   </div>
 
-  <!-- 4. ПРОДУКТЫ (выше) -->
+  <!-- 4. ПРОДУКТЫ -->
   <div class="card">
     <div class="card-title">Продукты и сервисы</div>
     <div class="products-grid">
@@ -595,7 +596,7 @@
     </div>
   </div>
 
-  <!-- 6. БАЛАНС НА ВЫВОД (ниже) -->
+  <!-- 6. БАЛАНС НА ВЫВОД -->
   <div class="withdraw-block">
     <div class="withdraw-strip">
       <div class="withdraw-strip-left">
