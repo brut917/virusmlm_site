@@ -573,3 +573,98 @@
       <div class="product-card"><div class="product-icon">🔍</div><div class="product-name">Аудит кошелька</div></div>
       <div class="product-card"><div class="product-icon">🤖</div><div class="product-name">ИИ-рекрутер</div></div>
       <div class="product-card"><div class="product-icon">🎮</div><div class="product-name">Игры</div></div>
+      <div class="product-card"><div class="product-icon">💰</div><div class="product-name">Обменник</div></div>
+      <div class="product-card"><div class="product-icon">📊</div><div class="product-name">Налоги</div></div>
+      <div class="product-card"><div class="product-icon">🎯</div><div class="product-name">Развлечения</div></div>
+    </div>
+  </div>
+
+  <!-- 5. БАЛАНСЫ -->
+  <div class="card">
+    <div class="balance-row thick">
+      <span class="balance-label">Реферальный баланс</span>
+      <span class="balance-value">$845.20</span>
+    </div>
+    <div class="balance-row thick">
+      <span class="balance-label">Матричный баланс</span>
+      <span class="balance-value">$279.05</span>
+    </div>
+    <div class="balance-row">
+      <span class="balance-label">Лидерский пул</span>
+      <span class="balance-value">$124.50</span>
+    </div>
+  </div>
+
+  <!-- 6. БАЛАНС НА ВЫВОД (ниже) -->
+  <div class="withdraw-block">
+    <div class="withdraw-strip">
+      <div class="withdraw-strip-left">
+        <div class="withdraw-icon">₮</div>
+        <div class="withdraw-text">Баланс на вывод: <b>$1,248.75</b></div>
+      </div>
+      <button class="withdraw-btn">ВЫВОД</button>
+    </div>
+    <div class="withdraw-detail">
+      <div class="split-item">
+        <div class="val">70%</div>
+        <div class="lbl">На кошелёк</div>
+      </div>
+      <div class="split-item">
+        <div class="val">30%</div>
+        <div class="lbl">В маркетинг</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height: 40px;"></div>
+</div>
+
+<script>
+  function showScreen(id, event) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.preview-tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (event && event.target) event.target.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  function sendCode() {
+    const email = document.getElementById('email').value;
+    if (email) alert('Код отправлен на ' + email + '\n(демо)');
+    else alert('Введите email');
+  }
+  function step1() {
+    document.getElementById('step1-num').className = 'step-num done';
+    document.getElementById('step1-num').textContent = '✓';
+    document.getElementById('step1-btn').textContent = '✓ ПОДКЛЮЧЕНО';
+    document.getElementById('step1-btn').disabled = true;
+    document.getElementById('step2-num').className = 'step-num active';
+    document.getElementById('sponsor-input').disabled = false;
+    document.getElementById('step2-btn').disabled = false;
+  }
+  function step2() {
+    const sponsor = document.getElementById('sponsor-input').value;
+    if (!sponsor || !sponsor.startsWith('0x')) {
+      alert('Введите корректный адрес спонсора (0x...)');
+      return;
+    }
+    document.getElementById('step2-num').className = 'step-num done';
+    document.getElementById('step2-num').textContent = '✓';
+    document.getElementById('step2-btn').textContent = '✓ ЗАРЕГИСТРИРОВАН';
+    document.getElementById('step2-btn').disabled = true;
+    document.getElementById('sponsor-input').disabled = true;
+    document.getElementById('step3-num').className = 'step-num active';
+    document.getElementById('step3-btn').disabled = false;
+  }
+  function step3() {
+    document.getElementById('step3-num').className = 'step-num done';
+    document.getElementById('step3-num').textContent = '✓';
+    document.getElementById('step3-btn').textContent = '✓ ПАКЕТ АКТИВИРОВАН';
+    document.getElementById('step3-btn').disabled = true;
+    setTimeout(() => {
+      showScreen('real', { target: document.querySelectorAll('.preview-tabs button')[2] });
+    }, 800);
+  }
+</script>
+
+</body>
+</html>
