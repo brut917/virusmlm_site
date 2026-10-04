@@ -28,6 +28,7 @@
     min-height: 100vh;
   }
 
+  /* ===== Шапка: лого по центру, RU/EN справа ===== */
   .header {
     position: relative;
     display: flex; align-items: center; justify-content: center;
@@ -267,6 +268,7 @@
   .input:focus { outline: none; border-color: #2196f3; }
   .input::placeholder { color: #9ca3af; font-family: sans-serif; }
 
+  /* ===== РЕГИСТРАЦИЯ ===== */
   .reg-container { max-width: 560px; margin: 0 auto; padding: 40px 20px; }
   .reg-logo { text-align: center; margin-bottom: 32px; }
   .reg-title {
@@ -336,6 +338,17 @@
 
 <!-- ======================== РЕГИСТРАЦИЯ ======================== -->
 <div id="reg" class="screen active bg-hero">
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-text">VIRUS<span class="logo-bolt">⚡</span>MLM</div>
+    </div>
+    <div class="lang-switch">
+      <button class="active" onclick="setLang('ru')">RU</button>
+      <button onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+
   <div class="reg-container">
     <div class="reg-logo">
       <div class="reg-title">VIRUS<span class="reg-bolt">⚡</span>MLM</div>
@@ -359,14 +372,14 @@
     <label class="checkbox-row">
       <input type="checkbox" checked>
       <span data-i18n="reg_offer">
-        Я принимаю условия договора оферты и подтверждаю, что бесплатная регистрация присваивает мне статус аффилированного партнёра платформы Virus MLM. Регистрация бесплатна и не требует активации смарт-контракта. Я также получаю право на вознаграждение за рекламу и продвижение продуктов системы. Все начисления производятся согласно маркетинговой программе Virus MLM.
+        Я принимаю условия договора оферты и подтверждаю, что бесплатная регистрация даёт мне статус аффилированного партнёра Virus MLM. Регистрация является бесплатной и не к чему меня не обязывает. У меня есть право участвовать в партнёрской программе и получать вознаграждение за продвижение продуктов и сервисов платформы. Все начисления и выплаты осуществляются в соответствии с действующей маркетинговой программой Virus MLM и её условиями.
       </span>
     </label>
 
     <button class="btn btn-green" onclick="showScreen('virtual', event)" data-i18n="reg_confirm">ПОДТВЕРДИТЬ</button>
 
     <div class="notice" style="margin-top:20px;" data-i18n="reg_notice">
-      После бесплатной регистрации, вы получите ранний доступ к виртуальному кабинету - симулятору системы Virus MLM. Вы увидите, как работает матрица, реферальные выплаты и лидерский пул. С помощью ИИ-рекрутера быстро соберёте большую команду. И сможете присоединиться к клубу, чтобы начать получать реальные вознаграждение прямо на свой крипто кошелёк.
+      После бесплатной регистрации мне предоставляется ранний доступ к виртуальному кабинету — симулятору экосистемы Virus MLM. В виртуальном кабинете можно ознакомиться с принципами работы матрицы, реферальной программы и лидерского пула в формате реального времени на тестовые деньги. ИИ-рекрутер поможет изучить возможности платформы и инструменты построения партнёрской команды. Просто поговорите с ним. Для участия в реальной программе и получения выплат на крипто кошелёк требуется отдельная активация и соблюдение установленных условий.
     </div>
   </div>
 </div>
@@ -647,9 +660,9 @@
       reg_subtitle: "Регистрация по приглашению",
       reg_sponsor: "Ваш спонсор",
       reg_get_code: "Получить код на email",
-      reg_offer: "Я принимаю условия договора оферты и подтверждаю, что бесплатная регистрация присваивает мне статус аффилированного партнёра платформы Virus MLM. Регистрация бесплатна и не требует активации смарт-контракта. Я также получаю право на вознаграждение за рекламу и продвижение продуктов системы. Все начисления производятся согласно маркетинговой программе Virus MLM.",
+      reg_offer: "Я принимаю условия договора оферты и подтверждаю, что бесплатная регистрация даёт мне статус аффилированного партнёра Virus MLM. Регистрация является бесплатной и не к чему меня не обязывает. У меня есть право участвовать в партнёрской программе и получать вознаграждение за продвижение продуктов и сервисов платформы. Все начисления и выплаты осуществляются в соответствии с действующей маркетинговой программой Virus MLM и её условиями.",
       reg_confirm: "ПОДТВЕРДИТЬ",
-      reg_notice: "После бесплатной регистрации, вы получите ранний доступ к виртуальному кабинету - симулятору системы Virus MLM. Вы увидите, как работает матрица, реферальные выплаты и лидерский пул. С помощью ИИ-рекрутера быстро соберёте большую команду. И сможете присоединиться к клубу, чтобы начать получать реальные вознаграждение прямо на свой крипто кошелёк.",
+      reg_notice: "После бесплатной регистрации мне предоставляется ранний доступ к виртуальному кабинету — симулятору экосистемы Virus MLM. В виртуальном кабинете можно ознакомиться с принципами работы матрицы, реферальной программы и лидерского пула в формате реального времени на тестовые деньги. ИИ-рекрутер поможет изучить возможности платформы и инструменты построения партнёрской команды. Просто поговорите с ним. Для участия в реальной программе и получения выплат на крипто кошелёк требуется отдельная активация и соблюдение установленных условий.",
       virt_vip: "VIRTUAL VIP",
       virt_vip_dur: "Бессрочно",
       virt_uid: "User ID",
@@ -692,9 +705,9 @@
       reg_subtitle: "Registration by invitation",
       reg_sponsor: "Your sponsor",
       reg_get_code: "Get code by email",
-      reg_offer: "I accept the terms of the offer agreement and confirm that free registration assigns me the status of an affiliate partner of the Virus MLM platform. Registration is free and does not require smart contract activation. I also receive the right to rewards for advertising and promoting the system's products. All accruals are made according to the Virus MLM marketing program.",
+      reg_offer: "I accept the terms of the offer agreement and confirm that free registration gives me the status of an affiliate partner of Virus MLM. Registration is free and does not obligate me to anything. I have the right to participate in the partner program and receive rewards for promoting the platform's products and services. All accruals and payouts are made in accordance with the current Virus MLM marketing program and its terms.",
       reg_confirm: "CONFIRM",
-      reg_notice: "After free registration, you will get early access to the virtual cabinet - a simulator of the Virus MLM system. You will see how the matrix, referral payouts and leader pool work. With the AI Recruiter you will quickly build a large team. And you will be able to join the club to start receiving real rewards directly to your crypto wallet.",
+      reg_notice: "After free registration I get early access to the virtual cabinet — a simulator of the Virus MLM ecosystem. In the virtual cabinet you can learn how the matrix, referral program and leader pool work in real time using test money. The AI Recruiter will help you study the platform's capabilities and tools for building a partner team. Just talk to it. To participate in the real program and receive payouts to your crypto wallet, separate activation and compliance with the established conditions are required.",
       virt_vip: "VIRTUAL VIP",
       virt_vip_dur: "Indefinite",
       virt_uid: "User ID",
