@@ -3,25 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIRUS MLM</title>
+<title>VIRUS MLM — Регистрация</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; }
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
-
-  .preview-tabs {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-    background: #0d1117; border-bottom: 1px solid #1f2937;
-    display: flex; gap: 4px; padding: 8px;
-    height: 60px;
-  }
-  .preview-tabs button {
-    flex: 1; padding: 10px; background: #1f2937; color: #9ca3af;
-    border: none; border-radius: 6px; cursor: pointer; font-size: 13px;
-  }
-  .preview-tabs button.active { background: #1565c0; color: #fff; }
-
-  .screen { display: none; padding-top: 60px; min-height: 100vh; }
-  .screen.active { display: block; }
 
   .bg-hero {
     background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%);
@@ -33,7 +18,6 @@
     display: flex; align-items: center; justify-content: center;
     padding: 18px 20px; border-bottom: 1px solid #1f2937;
     background: linear-gradient(180deg, #0f1e3a, #0a0e1a);
-    position: sticky; top: 60px; z-index: 100;
     min-height: 62px;
     max-width: 640px;
     margin: 0 auto;
@@ -59,214 +43,6 @@
     background: #2196f3; color: #fff; border-color: #2196f3;
   }
 
-  .profile-row {
-    max-width: 560px; margin: 0 auto; padding: 20px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-    align-items: center;
-  }
-  .vip-block {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; text-align: center; gap: 2px;
-    min-height: 90px;
-  }
-  .vip-crown { font-size: 26px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(255,193,7,0.6)); }
-  .vip-level { font-size: 14px; font-weight: 700; color: #ffc107; line-height: 1.3; }
-  .vip-stars { font-size: 12px; color: #ffc107; letter-spacing: 2px; line-height: 1.3; }
-  .vip-duration { font-size: 11px; color: #9ca3af; line-height: 1.3; }
-
-  .wallet-block {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; text-align: center; gap: 2px;
-    min-height: 90px;
-  }
-  .wallet-label { font-size: 11px; color: #6b7280; text-transform: uppercase; line-height: 1.3; }
-  .wallet-value { font-size: 15px; font-weight: 700; color: #ffffff; font-family: monospace; line-height: 1.3; }
-  .pool-share-label { font-size: 11px; color: #6b7280; text-transform: uppercase; margin-top: 8px; line-height: 1.3; }
-  .pool-share-value { font-size: 15px; font-weight: 700; color: #ffffff; font-family: monospace; line-height: 1.3; }
-
-  .card {
-    background: #ffffff; border-radius: 12px;
-    padding: 16px; margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-  .card-title {
-    font-size: 11px; color: #6b7280; text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 12px; font-weight: 700;
-  }
-
-  .packets-wrap {
-    background: #ffffff; border-radius: 12px;
-    padding: 14px 10px; margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-  .packets { display: flex; justify-content: space-between; align-items: center; }
-  .packet {
-    width: 44px; height: 44px; border-radius: 50%;
-    background: #e5e7eb; color: #9ca3af;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; flex-shrink: 0;
-  }
-  .packet.active {
-    background: #00c853; color: #fff;
-    box-shadow: 0 0 12px rgba(0,200,83,0.5);
-  }
-
-  .matrix-bar {
-    height: 10px; background: #e5e7eb; border-radius: 5px; overflow: hidden;
-    margin-top: 8px;
-  }
-  .matrix-fill {
-    height: 100%; background: linear-gradient(90deg, #00c853, #4caf50);
-    width: 10%;
-  }
-  .matrix-label {
-    display: flex; justify-content: space-between;
-    font-size: 11px; color: #6b7280; margin-top: 8px;
-  }
-  .matrix-label .gold { color: #ffc107; font-weight: 700; }
-
-  .ref-link {
-    background: #ffffff; border: 2px solid #2196f3; border-radius: 8px;
-    padding: 12px; display: flex; align-items: center; gap: 8px;
-    font-size: 13px; color: #2196f3; font-family: monospace;
-    word-break: break-all;
-  }
-  .ref-link button {
-    background: #2196f3; border: none; color: #fff;
-    padding: 6px 12px; border-radius: 6px; cursor: pointer; flex-shrink: 0;
-    font-size: 14px;
-  }
-
-  .balance-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 0; border-bottom: 1px solid #f3f4f6;
-  }
-  .balance-row.thick { border-bottom: 3px solid #e5e7eb; padding-bottom: 16px; margin-bottom: 4px; }
-  .balance-row:last-child { border-bottom: none; }
-  .balance-label { font-size: 13px; color: #4b5563; }
-  .balance-label.bold { font-weight: 700; color: #1a1a1a; }
-  .balance-value { font-size: 16px; font-weight: 400; font-family: monospace; color: #1a1a1a; }
-
-  .withdraw-block {
-    background: #ffffff; border-radius: 12px;
-    margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    overflow: hidden;
-  }
-  .withdraw-strip {
-    background: #b3e5fc;
-    padding: 16px 20px;
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  }
-  .withdraw-strip-left { display: flex; align-items: center; gap: 10px; }
-  .withdraw-icon {
-    width: 34px; height: 34px; background: #ff1744; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 700; font-size: 17px;
-    box-shadow: 0 2px 8px rgba(255,23,68,0.5);
-  }
-  .withdraw-text { font-size: 14px; color: #1a1a1a; font-weight: 600; }
-  .withdraw-text b { font-family: monospace; font-size: 16px; }
-  .withdraw-btn {
-    background: #ff1744; color: #fff; border: none; border-radius: 6px;
-    padding: 10px 20px; font-size: 13px; font-weight: 700;
-    cursor: pointer; text-transform: uppercase;
-    box-shadow: 0 2px 8px rgba(255,23,68,0.4);
-  }
-  .withdraw-detail {
-    padding: 16px 20px;
-    display: flex; justify-content: center; gap: 32px;
-    background: #ffffff;
-  }
-  .split-item { text-align: center; }
-  .split-item .val { color: #1a1a1a; font-weight: 700; font-size: 16px; font-family: monospace; }
-  .split-item .lbl { color: #6b7280; font-size: 11px; margin-top: 2px; }
-
-  .btn {
-    width: 100%; padding: 14px; border: none; border-radius: 10px;
-    font-size: 15px; font-weight: 700; cursor: pointer;
-    transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
-  }
-  .btn-blue { background: #2196f3; color: #fff; }
-  .btn-blue:hover { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
-  .btn-green { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #fff; }
-  .btn-green:hover { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
-  .btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
-  .btn:disabled:hover { box-shadow: none; }
-
-  .pool-card {
-    background: linear-gradient(135deg, #0a1f3a, #111827);
-    border: 1px solid #2196f3; border-radius: 12px;
-    padding: 20px; margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    text-align: center;
-  }
-  .pool-card .pool-title {
-    font-size: 11px; color: #9ca3af; text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 8px;
-  }
-  .pool-card .pool-amount {
-    font-size: 32px; font-weight: 800; color: #2196f3;
-    font-family: monospace; letter-spacing: -1px;
-    text-shadow: 0 0 20px rgba(33,150,243,0.6);
-  }
-  .pool-card .pool-sub {
-    font-size: 11px; color: #9ca3af; margin-top: 6px;
-  }
-  .pool-card .timer { display: flex; justify-content: center; gap: 12px; margin-top: 14px; }
-  .pool-card .timer-box {
-    background: #0a0e1a; border: 1px solid #1f2937; border-radius: 8px;
-    padding: 10px 14px; text-align: center; min-width: 60px;
-  }
-  .pool-card .timer-val { font-size: 20px; font-weight: 700; color: #ffffff; font-family: monospace; }
-  .pool-card .timer-lbl { font-size: 10px; color: #6b7280; text-transform: uppercase; }
-
-  .activate-box {
-    background: #ffffff; border: 2px solid #2196f3; border-radius: 12px;
-    padding: 20px; margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    box-shadow: 0 4px 12px rgba(33,150,243,0.2);
-  }
-  .activate-title {
-    font-size: 14px; font-weight: 700; color: #2196f3;
-    margin-bottom: 16px; text-align: center;
-  }
-  .step {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 12px 0; border-bottom: 1px solid #f3f4f6;
-  }
-  .step:last-of-type { border-bottom: none; }
-  .step-num {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: #e5e7eb; color: #9ca3af;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; flex-shrink: 0;
-  }
-  .step-num.done { background: #2196f3; color: #fff; }
-  .step-num.active { background: #2196f3; color: #fff; }
-  .step-body { flex: 1; }
-  .step-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
-  .step-desc { font-size: 11px; color: #6b7280; line-height: 1.4; }
-  .step-btn {
-    width: 100%; padding: 10px; margin-top: 8px;
-    border: none; border-radius: 8px; font-size: 12px;
-    font-weight: 700; cursor: pointer; text-transform: uppercase;
-    background: #2196f3; color: #fff;
-  }
-  .step-btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
-
-  .input {
-    width: 100%; padding: 12px; background: #f9fafb;
-    border: 1px solid #e5e7eb; border-radius: 8px;
-    color: #1a1a1a; font-size: 13px; margin-bottom: 10px;
-    font-family: monospace;
-  }
-  .input:focus { outline: none; border-color: #2196f3; }
-  .input::placeholder { color: #9ca3af; font-family: sans-serif; }
-
   .reg-container { max-width: 560px; margin: 0 auto; padding: 40px 20px; }
   .reg-logo { text-align: center; margin-bottom: 32px; }
   .reg-subtitle { font-size: 14px; color: #9ca3af; text-align: center; margin-bottom: 32px; }
@@ -279,30 +55,39 @@
   .sponsor-label { font-size: 11px; color: #6b7280; text-transform: uppercase; margin-bottom: 8px; }
   .sponsor-value { font-size: 20px; font-weight: 700; color: #ffc107; font-family: monospace; }
 
-  .checkbox-row {
-    display: flex; align-items: flex-start; gap: 10px; margin: 16px 0;
-    font-size: 12px; color: #9ca3af; line-height: 1.6;
+  .input {
+    width: 100%; padding: 12px; background: #f9fafb;
+    border: 1px solid #e5e7eb; border-radius: 8px;
+    color: #1a1a1a; font-size: 13px; margin-bottom: 10px;
+    font-family: monospace;
   }
-  .checkbox-row input { margin-top: 3px; accent-color: #2e7d32; }
-  .checkbox-row a { color: #2e7d32; }
+  .input:focus { outline: none; border-color: #2196f3; }
+  .input::placeholder { color: #9ca3af; font-family: sans-serif; }
+
+  .btn {
+    width: 100%; padding: 14px; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .btn-blue { background: #2196f3; color: #fff; }
+  .btn-blue:hover { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
+  .btn-blue:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; }
+  .btn-green { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #fff; }
+  .btn-green:hover { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
+  .btn-green:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; }
+
   .captcha-box {
     background: #1f2937; border: 1px dashed #374151; border-radius: 8px;
     padding: 16px; text-align: center; font-size: 12px; color: #9ca3af;
     margin: 12px 0;
   }
 
-  .products-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-    margin-top: 12px;
+  .checkbox-row {
+    display: flex; align-items: flex-start; gap: 10px; margin: 16px 0;
+    font-size: 12px; color: #9ca3af; line-height: 1.6;
   }
-  .product-card {
-    background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px;
-    padding: 14px 8px; text-align: center; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .product-card:hover { border-color: #2196f3; background: #e3f2fd; }
-  .product-icon { font-size: 24px; margin-bottom: 6px; }
-  .product-name { font-size: 11px; color: #4b5563; font-weight: 600; }
+  .checkbox-row input { margin-top: 3px; accent-color: #2e7d32; }
+  .checkbox-row a { color: #2e7d32; }
 
   .notice {
     background: #e3f2fd; border-left: 4px solid #2196f3;
@@ -312,490 +97,276 @@
     line-height: 1.6;
   }
 
+  .alert {
+    padding: 12px 16px; border-radius: 8px; font-size: 13px;
+    margin: 12px 0; line-height: 1.5; display: none;
+  }
+  .alert.error { background: #7f1d1d; color: #fecaca; display: block; }
+  .alert.success { background: #14532d; color: #bbf7d0; display: block; }
+  .alert.info { background: #1e3a8a; color: #bfdbfe; display: block; }
+
+  .login-link {
+    text-align: center; margin-top: 20px; font-size: 13px;
+    color: #9ca3af;
+  }
+  .login-link a { color: #2196f3; text-decoration: none; }
+  .login-link a:hover { text-decoration: underline; }
+
+  .spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 8px; vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   @media (max-width: 480px) {
-    .profile-row { gap: 12px; padding: 16px; }
-    .vip-crown { font-size: 24px; }
-    .products-grid { grid-template-columns: repeat(2, 1fr); }
     .logo-text { font-size: 19px; }
   }
 </style>
 </head>
 <body>
 
-<div class="preview-tabs">
-  <button class="active" onclick="showScreen('reg', event)">1. Регистрация</button>
-  <button onclick="showScreen('virtual', event)">2. Виртуальный кабинет</button>
-  <button onclick="showScreen('real', event)">3. Реальный кабинет</button>
-</div>
-
-<!-- ======================== РЕГИСТРАЦИЯ ======================== -->
-<div id="reg" class="screen active bg-hero">
+<div class="bg-hero">
 
   <div class="header">
     <div class="logo">
       <div class="logo-text">VIRUS<span class="logo-bolt">⚡</span>MLM</div>
     </div>
     <div class="lang-switch">
-      <button class="active" onclick="setLang('ru')">RU</button>
-      <button onclick="setLang('en')">EN</button>
+      <button class="active" id="lang-ru" onclick="setLang('ru')">RU</button>
+      <button id="lang-en" onclick="setLang('en')">EN</button>
     </div>
   </div>
 
   <div class="reg-container">
     <div class="reg-logo">
-      <div class="reg-subtitle" data-i18n="reg_subtitle">Регистрация по приглашению</div>
+      <div class="reg-subtitle" id="subtitle">Регистрация по приглашению</div>
     </div>
 
     <div class="sponsor-card">
-      <div class="sponsor-label" data-i18n="reg_sponsor">Ваш спонсор</div>
-      <div class="sponsor-value">VIR-000123</div>
+      <div class="sponsor-label" id="sponsor-label">Ваш спонсор</div>
+      <div class="sponsor-value" id="sponsor-value">VIR-000001</div>
     </div>
 
-    <input type="email" class="input" placeholder="Введите email" id="email">
-    <button class="btn btn-blue" style="margin-bottom:12px;" onclick="sendCode()" data-i18n="reg_get_code">Получить код на email</button>
+    <div id="alert-box" class="alert"></div>
 
-    <input type="text" class="input" placeholder="Введите код из письма" id="code">
+    <input type="email" class="input" placeholder="Введите email" id="email">
+    <button class="btn btn-blue" id="btn-send" onclick="handleSendCode()">Получить код на email</button>
+
+    <input type="text" class="input" placeholder="Введите код из письма" id="code" style="margin-top:12px;">
 
     <div class="captcha-box">
       ☁️ Cloudflare Turnstile (защита от ботов)
     </div>
 
     <label class="checkbox-row">
-      <input type="checkbox" checked>
-      <span data-i18n="reg_offer">
+      <input type="checkbox" id="accept-offer" checked>
+      <span id="offer-text">
         Я принимаю условия договора оферты и подтверждаю, что бесплатная регистрация даёт мне статус аффилированного партнёра Virus MLM. Регистрация является бесплатной и не к чему меня не обязывает. У меня есть право участвовать в партнёрской программе и получать вознаграждение за продвижение продуктов и сервисов платформы. Все начисления и выплаты осуществляются в соответствии с действующей маркетинговой программой Virus MLM и её условиями.
       </span>
     </label>
 
-    <button class="btn btn-green" onclick="showScreen('virtual', event)" data-i18n="reg_confirm">ПОДТВЕРДИТЬ</button>
+    <button class="btn btn-green" id="btn-register" onclick="handleRegister()">ПОДТВЕРДИТЬ</button>
 
-    <div class="notice" style="margin-top:20px;" data-i18n="reg_notice">
-      Бесплатная регистрация предоставляет мне, ранний доступ к виртуальному кабинету — симулятору экосистемы Virus MLM. В котором, можно ознакомиться с принципами работы матрицы, реферальной программы и лидерского пула в формате реального времени на тестовые деньги. Для участия в реальной программе и получения реферальных выплат на крипто кошелёк, требуется реальная активация смарт контракта с соблюдением установленных условий.
+    <div class="login-link">
+      Уже есть аккаунт? <a href="login.html">Войти</a>
+    </div>
+
+    <div class="notice" id="notice-text" style="margin-top:20px;">
+      После бесплатной регистрации мне предоставляется ранний доступ к виртуальному кабинету — симулятору экосистемы Virus MLM. В виртуальном кабинете можно ознакомиться с принципами работы матрицы, реферальной программы и лидерского пула в формате реального времени на тестовые деньги. Для участия в реальной программе и получения реферальных выплат на крипто кошелёк, требуется реальная активация смарт контракта с соблюдением установленных условий.
     </div>
   </div>
+
 </div>
 
-<!-- ======================== ВИРТУАЛЬНЫЙ ======================== -->
-<div id="virtual" class="screen bg-hero">
-
-  <div class="header">
-    <div class="logo">
-      <div class="logo-text">VIRUS<span class="logo-bolt">⚡</span>MLM</div>
-    </div>
-    <div class="lang-switch">
-      <button class="active" onclick="setLang('ru')">RU</button>
-      <button onclick="setLang('en')">EN</button>
-    </div>
-  </div>
-
-  <div class="profile-row">
-    <div class="vip-block">
-      <div class="vip-crown">👑</div>
-      <div class="vip-level" data-i18n="virt_vip">VIRTUAL VIP</div>
-      <div class="vip-stars">★★★★★</div>
-      <div class="vip-duration" data-i18n="virt_vip_dur">Бессрочно</div>
-    </div>
-    <div class="wallet-block">
-      <div class="wallet-label" data-i18n="virt_uid">User ID</div>
-      <div class="wallet-value">VIR-000123</div>
-      <div class="pool-share-label" data-i18n="virt_pool_share">Моя доля в пуле</div>
-      <div class="pool-share-value">$0.00</div>
-    </div>
-  </div>
-
-  <div class="packets-wrap">
-    <div class="packets">
-      <div class="packet active">50</div>
-      <div class="packet">100</div>
-      <div class="packet">150</div>
-      <div class="packet">200</div>
-      <div class="packet">250</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title" data-i18n="virt_matrix">Заполнение матрицы</div>
-    <div class="matrix-bar">
-      <div class="matrix-fill" style="width: 10%;"></div>
-    </div>
-    <div class="matrix-label">
-      <span>819 / 8190 мест</span>
-      <span class="gold">10%</span>
-    </div>
-  </div>
-
-  <div style="max-width:560px;margin:12px auto;padding:0 20px;">
-    <div class="card-title" style="color:#9ca3af;padding-left:0;" data-i18n="virt_ref">Ваша реферальная ссылка</div>
-    <div class="ref-link">
-      <span style="flex:1;">virusmlm.com/join?ref=VIR-000123</span>
-      <button>📋</button>
-    </div>
-  </div>
-
-  <div class="pool-card">
-    <div class="pool-title" data-i18n="virt_pool">Лидерский пул</div>
-    <div class="pool-amount">$12,450.00</div>
-    <div class="pool-sub" data-i18n="virt_pool_sub">До следующего распределения</div>
-    <div class="timer">
-      <div class="timer-box"><div class="timer-val">23</div><div class="timer-lbl" data-i18n="t_hour">час</div></div>
-      <div class="timer-box"><div class="timer-val">45</div><div class="timer-lbl" data-i18n="t_min">мин</div></div>
-      <div class="timer-box"><div class="timer-val">12</div><div class="timer-lbl" data-i18n="t_sec">сек</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="balance-row thick">
-      <span class="balance-label bold" data-i18n="b_ref">Реферальный баланс</span>
-      <span class="balance-value">$0.00</span>
-    </div>
-    <div class="balance-row thick">
-      <span class="balance-label bold" data-i18n="b_mat">Матричный баланс</span>
-      <span class="balance-value">$0.00</span>
-    </div>
-    <div class="balance-row">
-      <span class="balance-label" data-i18n="b_pool">Лидерский пул</span>
-      <span class="balance-value">$0.00</span>
-    </div>
-  </div>
-
-  <div class="withdraw-block">
-    <div class="withdraw-strip">
-      <div class="withdraw-strip-left">
-        <div class="withdraw-icon">₮</div>
-        <div class="withdraw-text"><span data-i18n="b_withdraw">Баланс на вывод:</span> <b>$0.00</b></div>
-      </div>
-      <button class="withdraw-btn" data-i18n="b_withdraw_btn">ВЫВОД</button>
-    </div>
-    <div class="withdraw-detail">
-      <div class="split-item">
-        <div class="val">50%</div>
-        <div class="lbl" data-i18n="s_wallet">На кошелёк</div>
-      </div>
-      <div class="split-item">
-        <div class="val">50%</div>
-        <div class="lbl" data-i18n="s_market">В маркетинг</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title" data-i18n="virt_ai">ИИ-рекрутер</div>
-    <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;" data-i18n="virt_ai_soon">
-      🤖 Скоро — интеллектуальный помощник для рекрутинга
-    </div>
-  </div>
-
-  <div class="activate-box">
-    <div class="activate-title" data-i18n="virt_act">⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА</div>
-
-    <div class="step">
-      <div class="step-num active" id="step1-num">1</div>
-      <div class="step-body">
-        <div class="step-title" data-i18n="s1_title">Подключить кошелёк</div>
-        <div class="step-desc" data-i18n="s1_desc">Разрешить платформе работать с токеном USDT BEP20 на вашем кошельке.</div>
-        <button class="step-btn" id="step1-btn" onclick="step1()" data-i18n="s1_btn">ПОДКЛЮЧИТЬ METAMASK</button>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num" id="step2-num">2</div>
-      <div class="step-body">
-        <div class="step-title" data-i18n="s2_title">Регистрация под спонсора</div>
-        <div class="step-desc" data-i18n="s2_desc">Укажите адрес кошелька вашего спонсора в системе Virus MLM.</div>
-        <input type="text" class="input" id="sponsor-input" placeholder="Адрес кошелька спонсора (0x...)" disabled style="margin-top:8px;">
-        <button class="step-btn" id="step2-btn" onclick="step2()" disabled data-i18n="s2_btn">ЗАРЕГИСТРИРОВАТЬСЯ</button>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num" id="step3-num">3</div>
-      <div class="step-body">
-        <div class="step-title" data-i18n="s3_title">Активировать пакет 50 USDT</div>
-        <div class="step-desc" data-i18n="s3_desc">Единоразовый вход в клуб. Спишется 50 USDT BEP20.</div>
-        <button class="step-btn" id="step3-btn" onclick="step3()" disabled data-i18n="s3_btn">АКТИВИРОВАТЬ 50 USDT</button>
-      </div>
-    </div>
-
-    <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.5;" data-i18n="virt_need">
-      Нужно: BNB для газа + 50 USDT BEP20 на кошельке.
-    </div>
-  </div>
-
-  <div style="height: 40px;"></div>
-</div>
-
-<!-- ======================== РЕАЛЬНЫЙ ======================== -->
-<div id="real" class="screen bg-hero">
-
-  <div class="header">
-    <div class="logo">
-      <div class="logo-text">VIRUS<span class="logo-bolt">⚡</span>MLM</div>
-    </div>
-    <div class="lang-switch">
-      <button class="active" onclick="setLang('ru')">RU</button>
-      <button onclick="setLang('en')">EN</button>
-    </div>
-  </div>
-
-  <div class="notice" data-i18n="real_notice">
-    ✅ Вы активированы в BSC Mainnet. Данные в реальном времени.
-  </div>
-
-  <div class="profile-row">
-    <div class="vip-block">
-      <div class="vip-crown">👑</div>
-      <div class="vip-level">VIP 3</div>
-      <div class="vip-stars">★★★☆☆</div>
-      <div class="vip-duration" data-i18n="real_vip_dur">30 дней</div>
-    </div>
-    <div class="wallet-block">
-      <div class="wallet-label" data-i18n="real_wallet">Wallet</div>
-      <div class="wallet-value">0x6152...dc85</div>
-      <div class="pool-share-label" data-i18n="virt_pool_share">Моя доля в пуле</div>
-      <div class="pool-share-value">$124.50</div>
-    </div>
-  </div>
-
-  <div class="packets-wrap">
-    <div class="packets">
-      <div class="packet active">50</div>
-      <div class="packet active">100</div>
-      <div class="packet active">150</div>
-      <div class="packet">200</div>
-      <div class="packet">250</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title" data-i18n="virt_matrix">Заполнение матрицы</div>
-    <div class="matrix-bar">
-      <div class="matrix-fill" style="width: 34%;"></div>
-    </div>
-    <div class="matrix-label">
-      <span>2785 / 8190 мест</span>
-      <span class="gold">34%</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title" data-i18n="virt_vip_tasks">VIP-задания</div>
-    <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;" data-i18n="virt_vip_tasks_soon">
-      🎯 Скоро — задания для подтверждения VIP-статуса
-    </div>
-  </div>
-
-  <div class="pool-card">
-    <div class="pool-title" data-i18n="virt_pool">Лидерский пул</div>
-    <div class="pool-amount">$45,230.00</div>
-    <div class="pool-sub" data-i18n="virt_pool_sub">До следующего распределения</div>
-    <div class="timer">
-      <div class="timer-box"><div class="timer-val">12</div><div class="timer-lbl" data-i18n="t_hour">час</div></div>
-      <div class="timer-box"><div class="timer-val">34</div><div class="timer-lbl" data-i18n="t_min">мин</div></div>
-      <div class="timer-box"><div class="timer-val">56</div><div class="timer-lbl" data-i18n="t_sec">сек</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="balance-row thick">
-      <span class="balance-label bold" data-i18n="b_ref">Реферальный баланс</span>
-      <span class="balance-value">$845.20</span>
-    </div>
-    <div class="balance-row thick">
-      <span class="balance-label bold" data-i18n="b_mat">Матричный баланс</span>
-      <span class="balance-value">$279.05</span>
-    </div>
-    <div class="balance-row">
-      <span class="balance-label" data-i18n="b_pool">Лидерский пул</span>
-      <span class="balance-value">$124.50</span>
-    </div>
-  </div>
-
-  <div class="withdraw-block">
-    <div class="withdraw-strip">
-      <div class="withdraw-strip-left">
-        <div class="withdraw-icon">₮</div>
-        <div class="withdraw-text"><span data-i18n="b_withdraw">Баланс на вывод:</span> <b>$1,248.75</b></div>
-      </div>
-      <button class="withdraw-btn" data-i18n="b_withdraw_btn">ВЫВОД</button>
-    </div>
-    <div class="withdraw-detail">
-      <div class="split-item">
-        <div class="val">70%</div>
-        <div class="lbl" data-i18n="s_wallet">На кошелёк</div>
-      </div>
-      <div class="split-item">
-        <div class="val">30%</div>
-        <div class="lbl" data-i18n="s_market">В маркетинг</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title" data-i18n="real_products">Продукты и сервисы</div>
-    <div class="products-grid">
-      <div class="product-card"><div class="product-icon">🔍</div><div class="product-name" data-i18n="p_audit">Аудит кошелька</div></div>
-      <div class="product-card"><div class="product-icon">🤖</div><div class="product-name" data-i18n="p_ai">ИИ-рекрутер</div></div>
-      <div class="product-card"><div class="product-icon">🎮</div><div class="product-name" data-i18n="p_games">Игры</div></div>
-      <div class="product-card"><div class="product-icon">💰</div><div class="product-name" data-i18n="p_exchange">Обменник</div></div>
-      <div class="product-card"><div class="product-icon">📊</div><div class="product-name" data-i18n="p_tax">Налоги</div></div>
-      <div class="product-card"><div class="product-icon">🎯</div><div class="product-name" data-i18n="p_fun">Развлечения</div></div>
-    </div>
-  </div>
-
-  <div style="height: 40px;"></div>
-</div>
+<!-- API Client -->
+<script src="api.js"></script>
 
 <script>
+  // ============================================
+  // i18n
+  // ============================================
   const i18n = {
     ru: {
-      reg_subtitle: "Регистрация по приглашению",
-      reg_sponsor: "Ваш спонсор",
-      reg_get_code: "Получить код на email",
-      reg_offer: "Я принимаю условия договора оферты и подтверждаю, что бесплатная регистрация даёт мне статус аффилированного партнёра Virus MLM. Регистрация является бесплатной и не к чему меня не обязывает. У меня есть право участвовать в партнёрской программе и получать вознаграждение за продвижение продуктов и сервисов платформы. Все начисления и выплаты осуществляются в соответствии с действующей маркетинговой программой Virus MLM и её условиями.",
-      reg_confirm: "ПОДТВЕРДИТЬ",
-      reg_notice: "Бесплатная регистрация предоставляет мне, ранний доступ к виртуальному кабинету — симулятору экосистемы Virus MLM. В котором, можно ознакомиться с принципами работы матрицы, реферальной программы и лидерского пула в формате реального времени на тестовые деньги. Для участия в реальной программе и получения реферальных выплат на крипто кошелёк, требуется реальная активация смарт контракта с соблюдением установленных условий.",
-      virt_vip: "VIRTUAL VIP",
-      virt_vip_dur: "Бессрочно",
-      virt_uid: "User ID",
-      virt_pool_share: "Моя доля в пуле",
-      virt_matrix: "Заполнение матрицы",
-      virt_ref: "Ваша реферальная ссылка",
-      virt_pool: "Лидерский пул",
-      virt_pool_sub: "До следующего распределения",
-      virt_ai: "ИИ-рекрутер",
-      virt_ai_soon: "🤖 Скоро — интеллектуальный помощник для рекрутинга",
-      virt_vip_tasks: "VIP-задания",
-      virt_vip_tasks_soon: "🎯 Скоро — задания для подтверждения VIP-статуса",
-      virt_act: "⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА",
-      virt_need: "Нужно: BNB для газа + 50 USDT BEP20 на кошельке.",
-      b_ref: "Реферальный баланс",
-      b_mat: "Матричный баланс",
-      b_pool: "Лидерский пул",
-      b_withdraw: "Баланс на вывод:",
-      b_withdraw_btn: "ВЫВОД",
-      s_wallet: "На кошелёк",
-      s_market: "В маркетинг",
-      t_hour: "час", t_min: "мин", t_sec: "сек",
-      s1_title: "Подключить кошелёк",
-      s1_desc: "Разрешить платформе работать с токеном USDT BEP20 на вашем кошельке.",
-      s1_btn: "ПОДКЛЮЧИТЬ METAMASK",
-      s2_title: "Регистрация под спонсора",
-      s2_desc: "Укажите адрес кошелька вашего спонсора в системе Virus MLM.",
-      s2_btn: "ЗАРЕГИСТРИРОВАТЬСЯ",
-      s3_title: "Активировать пакет 50 USDT",
-      s3_desc: "Единоразовый вход в клуб. Спишется 50 USDT BEP20.",
-      s3_btn: "АКТИВИРОВАТЬ 50 USDT",
-      real_notice: "✅ Вы активированы в BSC Mainnet. Данные в реальном времени.",
-      real_vip_dur: "30 дней",
-      real_wallet: "Wallet",
-      real_products: "Продукты и сервисы",
-      p_audit: "Аудит кошелька", p_ai: "ИИ-рекрутер", p_games: "Игры",
-      p_exchange: "Обменник", p_tax: "Налоги", p_fun: "Развлечения"
+      subtitle: "Регистрация по приглашению",
+      sponsor_label: "Ваш спонсор",
+      send_code: "Получить код на email",
+      confirm: "ПОДТВЕРДИТЬ",
+      login_link: "Уже есть аккаунт?",
+      login_text: "Войти",
+      offer: "Я принимаю условия договора оферты и подтверждаю, что бесплатная регистрация даёт мне статус аффилированного партнёра Virus MLM. Регистрация является бесплатной и не к чему меня не обязывает. У меня есть право участвовать в партнёрской программе и получать вознаграждение за продвижение продуктов и сервисов платформы. Все начисления и выплаты осуществляются в соответствии с действующей маркетинговой программой Virus MLM и её условиями.",
+      notice: "После бесплатной регистрации мне предоставляется ранний доступ к виртуальному кабинету — симулятору экосистемы Virus MLM. В виртуальном кабинете можно ознакомиться с принципами работы матрицы, реферальной программы и лидерского пула в формате реального времени на тестовые деньги. Для участия в реальной программе и получения реферальных выплат на крипто кошелёк, требуется реальная активация смарт контракта с соблюдением установленных условий.",
     },
     en: {
-      reg_subtitle: "Registration by invitation",
-      reg_sponsor: "Your sponsor",
-      reg_get_code: "Get code by email",
-      reg_offer: "I accept the terms of the offer agreement and confirm that free registration gives me the status of an affiliate partner of Virus MLM. Registration is free and does not obligate me to anything. I have the right to participate in the partner program and receive rewards for promoting the platform's products and services. All accruals and payouts are made in accordance with the current Virus MLM marketing program and its terms.",
-      reg_confirm: "CONFIRM",
-      reg_notice: "Free registration gives me early access to the virtual cabinet — a simulator of the Virus MLM ecosystem. There you can learn how the matrix, referral program and leader pool work in real time using test money. To participate in the real program and receive referral payouts to your crypto wallet, real smart contract activation and compliance with the established conditions are required.",
-      virt_vip: "VIRTUAL VIP",
-      virt_vip_dur: "Indefinite",
-      virt_uid: "User ID",
-      virt_pool_share: "My pool share",
-      virt_matrix: "Matrix filling",
-      virt_ref: "Your referral link",
-      virt_pool: "Leader pool",
-      virt_pool_sub: "Until next distribution",
-      virt_ai: "AI Recruiter",
-      virt_ai_soon: "🤖 Coming soon — intelligent recruiting assistant",
-      virt_vip_tasks: "VIP tasks",
-      virt_vip_tasks_soon: "🎯 Coming soon — VIP confirmation tasks",
-      virt_act: "⚡ REAL PACKET ACTIVATION",
-      virt_need: "Required: BNB for gas + 50 USDT BEP20 in wallet.",
-      b_ref: "Referral balance",
-      b_mat: "Matrix balance",
-      b_pool: "Leader pool",
-      b_withdraw: "Withdrawable balance:",
-      b_withdraw_btn: "WITHDRAW",
-      s_wallet: "To wallet",
-      s_market: "To marketing",
-      t_hour: "hr", t_min: "min", t_sec: "sec",
-      s1_title: "Connect wallet",
-      s1_desc: "Allow the platform to work with USDT BEP20 token in your wallet.",
-      s1_btn: "CONNECT METAMASK",
-      s2_title: "Register under sponsor",
-      s2_desc: "Enter your sponsor's wallet address in Virus MLM system.",
-      s2_btn: "REGISTER",
-      s3_title: "Activate packet 50 USDT",
-      s3_desc: "One-time club entry. 50 USDT BEP20 will be deducted.",
-      s3_btn: "ACTIVATE 50 USDT",
-      real_notice: "✅ You are activated in BSC Mainnet. Real-time data.",
-      real_vip_dur: "30 days",
-      real_wallet: "Wallet",
-      real_products: "Products and services",
-      p_audit: "Wallet audit", p_ai: "AI Recruiter", p_games: "Games",
-      p_exchange: "Exchange", p_tax: "Taxes", p_fun: "Entertainment"
-    }
+      subtitle: "Registration by invitation",
+      sponsor_label: "Your sponsor",
+      send_code: "Get code by email",
+      confirm: "CONFIRM",
+      login_link: "Already have an account?",
+      login_text: "Sign in",
+      offer: "I accept the terms of the offer agreement and confirm that free registration gives me the status of an affiliate partner of Virus MLM. Registration is free and does not obligate me to anything. I have the right to participate in the partner program and receive rewards for promoting the platform's products and services. All accruals and payouts are made in accordance with the current Virus MLM marketing program and its terms.",
+      notice: "After free registration I get early access to the virtual cabinet — a simulator of the Virus MLM ecosystem. There I can learn how the matrix, referral program and leader pool work in real time using test money. To participate in the real program and receive payouts to my crypto wallet, real smart contract activation and compliance with the established conditions are required.",
+    },
   };
 
   let currentLang = 'ru';
 
   function setLang(lang) {
     currentLang = lang;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (i18n[lang][key]) el.textContent = i18n[lang][key];
-    });
-    document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.lang-switch button').forEach(b => {
-      if (b.textContent.trim().toLowerCase() === lang) b.classList.add('active');
-    });
+    document.getElementById('subtitle').textContent = i18n[lang].subtitle;
+    document.getElementById('sponsor-label').textContent = i18n[lang].sponsor_label;
+    document.getElementById('btn-send').textContent = i18n[lang].send_code;
+    document.getElementById('btn-register').textContent = i18n[lang].confirm;
+    document.getElementById('offer-text').textContent = i18n[lang].offer;
+    document.getElementById('notice-text').textContent = i18n[lang].notice;
+    document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
+    document.getElementById('lang-' + lang).classList.add('active');
+    localStorage.setItem('virusmlm_lang', lang);
   }
 
-  function showScreen(id, event) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.preview-tabs button').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    if (event && event.target) event.target.classList.add('active');
-    window.scrollTo(0, 0);
+  // Восстановить язык
+  const savedLang = localStorage.getItem('virusmlm_lang');
+  if (savedLang && i18n[savedLang]) {
+    setLang(savedLang);
   }
-  function sendCode() {
-    const email = document.getElementById('email').value;
-    if (email) alert('Код отправлен на ' + email + '\n(демо)');
-    else alert('Введите email');
+
+  // ============================================
+  // Получить ref из URL
+  // ============================================
+  function getRefFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (ref && /^VIR-\d{6,}$/i.test(ref)) {
+      return ref.toUpperCase();
+    }
+    return null;
   }
-  function step1() {
-    document.getElementById('step1-num').className = 'step-num done';
-    document.getElementById('step1-num').textContent = '✓';
-    document.getElementById('step1-btn').textContent = '✓';
-    document.getElementById('step1-btn').disabled = true;
-    document.getElementById('step2-num').className = 'step-num active';
-    document.getElementById('sponsor-input').disabled = false;
-    document.getElementById('step2-btn').disabled = false;
+
+  const referrerVirId = getRefFromUrl() || 'VIR-000001';
+  document.getElementById('sponsor-value').textContent = referrerVirId;
+
+  // ============================================
+  // Alert helpers
+  // ============================================
+  function showAlert(type, message) {
+    const box = document.getElementById('alert-box');
+    box.className = 'alert ' + type;
+    box.textContent = message;
   }
-  function step2() {
-    const sponsor = document.getElementById('sponsor-input').value;
-    if (!sponsor || !sponsor.startsWith('0x')) {
-      alert('Введите корректный адрес спонсора (0x...)');
+
+  function hideAlert() {
+    const box = document.getElementById('alert-box');
+    box.className = 'alert';
+    box.textContent = '';
+  }
+
+  function setLoading(btnId, loading, loadingText) {
+    const btn = document.getElementById(btnId);
+    if (loading) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>' + (loadingText || 'Подождите...');
+    } else {
+      btn.disabled = false;
+    }
+  }
+
+  // ============================================
+  // Если уже залогинен — редирект в кабинет
+  // ============================================
+  if (api.isAuthenticated()) {
+    window.location.href = 'cabinet.html';
+  }
+
+  // ============================================
+  // Send code
+  // ============================================
+  async function handleSendCode() {
+    hideAlert();
+    const email = document.getElementById('email').value.trim();
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showAlert('error', 'Введите корректный email');
       return;
     }
-    document.getElementById('step2-num').className = 'step-num done';
-    document.getElementById('step2-num').textContent = '✓';
-    document.getElementById('step2-btn').textContent = '✓';
-    document.getElementById('step2-btn').disabled = true;
-    document.getElementById('sponsor-input').disabled = true;
-    document.getElementById('step3-num').className = 'step-num active';
-    document.getElementById('step3-btn').disabled = false;
+
+    setLoading('btn-send', true, 'Отправка...');
+
+    try {
+      const result = await api.sendCode(email, 'test');
+      showAlert('success', 'Код отправлен на ' + email + '. Проверьте почту (включая спам).');
+      // Focus на поле кода
+      document.getElementById('code').focus();
+    } catch (error) {
+      if (error.code === 'CONFLICT' || error.message.includes('already registered')) {
+        showAlert('error', 'Этот email уже зарегистрирован. Перейдите на страницу входа.');
+      } else if (error.code === 'TOO_MANY_REQUESTS') {
+        showAlert('error', error.message || 'Подождите минуту перед повторной отправкой.');
+      } else {
+        showAlert('error', error.message || 'Ошибка отправки кода. Попробуйте позже.');
+      }
+    } finally {
+      setLoading('btn-send', false);
+      // Восстановить текст
+      document.getElementById('btn-send').textContent = i18n[currentLang].send_code;
+    }
   }
-  function step3() {
-    document.getElementById('step3-num').className = 'step-num done';
-    document.getElementById('step3-num').textContent = '✓';
-    document.getElementById('step3-btn').textContent = '✓';
-    document.getElementById('step3-btn').disabled = true;
-    setTimeout(() => {
-      showScreen('real', { target: document.querySelectorAll('.preview-tabs button')[2] });
-    }, 800);
+
+  // ============================================
+  // Register
+  // ============================================
+  async function handleRegister() {
+    hideAlert();
+    const email = document.getElementById('email').value.trim();
+    const code = document.getElementById('code').value.trim();
+    const acceptOffer = document.getElementById('accept-offer').checked;
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showAlert('error', 'Введите корректный email');
+      return;
+    }
+    if (!code || !/^\d{6}$/.test(code)) {
+      showAlert('error', 'Введите 6-значный код из письма');
+      return;
+    }
+    if (!acceptOffer) {
+      showAlert('error', 'Необходимо принять условия оферты');
+      return;
+    }
+
+    setLoading('btn-register', true, 'Регистрация...');
+
+    try {
+      const result = await api.register(email, code, referrerVirId, 'test', true);
+      showAlert('success', 'Регистрация успешна! Переход в кабинет...');
+      setTimeout(() => {
+        window.location.href = 'cabinet.html';
+      }, 800);
+    } catch (error) {
+      switch (error.code) {
+        case 'CODE_NOT_FOUND':
+          showAlert('error', 'Код не найден или истёк. Запросите новый код.');
+          break;
+        case 'CODE_INVALID':
+          showAlert('error', 'Неверный код. Проверьте и попробуйте снова.');
+          break;
+        case 'TOO_MANY_ATTEMPTS':
+          showAlert('error', 'Слишком много попыток. Запросите новый код.');
+          break;
+        case 'CONFLICT':
+          showAlert('error', 'Этот email уже зарегистрирован. Перейдите на страницу входа.');
+          break;
+        case 'NOT_FOUND':
+          showAlert('error', 'Спонсор не найден. Проверьте реферальную ссылку.');
+          break;
+        default:
+          showAlert('error', error.message || 'Ошибка регистрации. Попробуйте позже.');
+      }
+    } finally {
+      setLoading('btn-register', false);
+      document.getElementById('btn-register').textContent = i18n[currentLang].confirm;
+    }
   }
 </script>
 
