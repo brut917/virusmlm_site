@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VIRUS MLM — Регистрация</title>
+
+<!-- Favicon ⚡ (временно) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+<!-- Cloudflare Turnstile -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; }
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
@@ -76,10 +83,10 @@
   .btn-green:hover { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
   .btn-green:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; }
 
-  .captcha-box {
-    background: #1f2937; border: 1px dashed #374151; border-radius: 8px;
-    padding: 16px; text-align: center; font-size: 12px; color: #9ca3af;
+  .captcha-wrap {
     margin: 12px 0;
+    display: flex;
+    justify-content: center;
   }
 
   .checkbox-row {
@@ -157,8 +164,9 @@
 
     <input type="text" class="input" placeholder="Введите код из письма" id="code" style="margin-top:12px;">
 
-    <div class="captcha-box">
-      ☁️ Cloudflare Turnstile (защита от ботов)
+    <!-- Cloudflare Turnstile widget -->
+    <div class="captcha-wrap">
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAFQoVElxKXtVNUcR" data-theme="dark" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired"></div>
     </div>
 
     <label class="checkbox-row">
@@ -186,6 +194,28 @@
 
 <script>
   // ============================================
+  // Turnstile token
+  // ============================================
+  let turnstileToken = null;
+
+  function onTurnstileSuccess(token) {
+    turnstileToken = token;
+  }
+
+  function onTurnstileExpired() {
+    turnstileToken = null;
+  }
+
+  function resetTurnstile() {
+    turnstileToken = null;
+    if (window.turnstile) {
+      try {
+        window.turnstile.reset();
+      } catch (e) {}
+    }
+  }
+
+  // ============================================
   // i18n
   // ============================================
   const i18n = {
@@ -194,8 +224,6 @@
       sponsor_label: "Ваш спонсор",
       send_code: "Получить код на email",
       confirm: "ПОДТВЕРДИТЬ",
-      login_link: "Уже есть аккаунт?",
-      login_text: "Войти",
       offer: "Я принимаю условия договора оферты и подтверждаю, что бесплатная регистрация даёт мне статус аффилированного партнёра Virus MLM. Регистрация является бесплатной и не к чему меня не обязывает. У меня есть право участвовать в партнёрской программе и получать вознаграждение за продвижение продуктов и сервисов платформы. Все начисления и выплаты осуществляются в соответствии с действующей маркетинговой программой Virus MLM и её условиями.",
       notice: "После бесплатной регистрации мне предоставляется ранний доступ к виртуальному кабинету — симулятору экосистемы Virus MLM. В виртуальном кабинете можно ознакомиться с принципами работы матрицы, реферальной программы и лидерского пула в формате реального времени на тестовые деньги. Для участия в реальной программе и получения реферальных выплат на крипто кошелёк, требуется реальная активация смарт контракта с соблюдением установленных условий.",
     },
@@ -204,8 +232,6 @@
       sponsor_label: "Your sponsor",
       send_code: "Get code by email",
       confirm: "CONFIRM",
-      login_link: "Already have an account?",
-      login_text: "Sign in",
       offer: "I accept the terms of the offer agreement and confirm that free registration gives me the status of an affiliate partner of Virus MLM. Registration is free and does not obligate me to anything. I have the right to participate in the partner program and receive rewards for promoting the platform's products and services. All accruals and payouts are made in accordance with the current Virus MLM marketing program and its terms.",
       notice: "After free registration I get early access to the virtual cabinet — a simulator of the Virus MLM ecosystem. There I can learn how the matrix, referral program and leader pool work in real time using test money. To participate in the real program and receive payouts to my crypto wallet, real smart contract activation and compliance with the established conditions are required.",
     },
@@ -226,14 +252,13 @@
     localStorage.setItem('virusmlm_lang', lang);
   }
 
-  // Восстановить язык
   const savedLang = localStorage.getItem('virusmlm_lang');
   if (savedLang && i18n[savedLang]) {
     setLang(savedLang);
   }
 
   // ============================================
-  // Получить ref из URL
+  // Ref from URL
   // ============================================
   function getRefFromUrl() {
     const params = new URLSearchParams(window.location.search);
@@ -273,7 +298,7 @@
   }
 
   // ============================================
-  // Если уже залогинен — редирект в кабинет
+  // Redirect if logged in
   // ============================================
   if (api.isAuthenticated()) {
     window.location.href = 'cabinet.html';
@@ -291,24 +316,31 @@
       return;
     }
 
+    if (!turnstileToken) {
+      showAlert('error', 'Пройдите проверку Cloudflare Turnstile');
+      return;
+    }
+
     setLoading('btn-send', true, 'Отправка...');
 
     try {
-      const result = await api.sendCode(email, 'test');
+      await api.sendCode(email, turnstileToken);
       showAlert('success', 'Код отправлен на ' + email + '. Проверьте почту (включая спам).');
-      // Focus на поле кода
       document.getElementById('code').focus();
+      resetTurnstile();
     } catch (error) {
-      if (error.code === 'CONFLICT' || error.message.includes('already registered')) {
+      if (error.code === 'CONFLICT' || (error.message || '').toLowerCase().includes('already registered')) {
         showAlert('error', 'Этот email уже зарегистрирован. Перейдите на страницу входа.');
       } else if (error.code === 'TOO_MANY_REQUESTS') {
         showAlert('error', error.message || 'Подождите минуту перед повторной отправкой.');
+      } else if ((error.message || '').toLowerCase().includes('captcha')) {
+        showAlert('error', 'Ошибка капчи. Обновите страницу и попробуйте снова.');
       } else {
         showAlert('error', error.message || 'Ошибка отправки кода. Попробуйте позже.');
       }
+      resetTurnstile();
     } finally {
       setLoading('btn-send', false);
-      // Восстановить текст
       document.getElementById('btn-send').textContent = i18n[currentLang].send_code;
     }
   }
@@ -334,11 +366,15 @@
       showAlert('error', 'Необходимо принять условия оферты');
       return;
     }
+    if (!turnstileToken) {
+      showAlert('error', 'Пройдите проверку Cloudflare Turnstile');
+      return;
+    }
 
     setLoading('btn-register', true, 'Регистрация...');
 
     try {
-      const result = await api.register(email, code, referrerVirId, 'test', true);
+      await api.register(email, code, referrerVirId, turnstileToken, true);
       showAlert('success', 'Регистрация успешна! Переход в кабинет...');
       setTimeout(() => {
         window.location.href = 'cabinet.html';
@@ -361,8 +397,13 @@
           showAlert('error', 'Спонсор не найден. Проверьте реферальную ссылку.');
           break;
         default:
-          showAlert('error', error.message || 'Ошибка регистрации. Попробуйте позже.');
+          if ((error.message || '').toLowerCase().includes('captcha')) {
+            showAlert('error', 'Ошибка капчи. Обновите страницу.');
+          } else {
+            showAlert('error', error.message || 'Ошибка регистрации. Попробуйте позже.');
+          }
       }
+      resetTurnstile();
     } finally {
       setLoading('btn-register', false);
       document.getElementById('btn-register').textContent = i18n[currentLang].confirm;
