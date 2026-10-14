@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VIRUS MLM — Кабинет</title>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; }
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
@@ -197,10 +200,9 @@
   .btn-green:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; }
   .btn-ghost {
     background: transparent; border: 2px solid #2196f3; color: #2196f3;
-    padding: 10px; font-size: 13px;
+    padding: 8px 14px; font-size: 12px; width: auto;
   }
   .btn-ghost:hover { background: #2196f3; color: #fff; }
-  .btn-ghost:disabled { border-color: #4b5563; color: #4b5563; cursor: not-allowed; }
 
   .pool-card {
     background: linear-gradient(135deg, #0a1f3a, #111827);
@@ -232,15 +234,17 @@
   .referral-item {
     display: flex; justify-content: space-between; align-items: center;
     padding: 10px 0; border-bottom: 1px solid #f3f4f6;
+    gap: 10px;
   }
   .referral-item:last-child { border-bottom: none; }
   .referral-item-left {
-    display: flex; flex-direction: column; gap: 2px;
+    display: flex; flex-direction: column; gap: 2px; flex: 1;
   }
   .referral-virid { font-size: 13px; font-weight: 700; color: #2196f3; font-family: monospace; }
   .referral-meta { font-size: 11px; color: #6b7280; }
+  .referral-actions { display: flex; align-items: center; gap: 8px; }
   .referral-packet {
-    font-size: 12px; font-weight: 700; font-family: monospace;
+    font-size: 11px; font-weight: 700; font-family: monospace;
     padding: 4px 10px; border-radius: 6px;
     background: #e5e7eb; color: #6b7280;
   }
@@ -252,7 +256,19 @@
   }
   .sponsor-info { display: flex; flex-direction: column; gap: 4px; }
   .sponsor-virid { font-size: 15px; font-weight: 700; color: #ffc107; font-family: monospace; }
-  .sponsor-email { font-size: 12px; color: #6b7280; font-family: monospace; }
+  .sponsor-email { font-size: 12px; color: #6b7280; }
+
+  .products-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    margin-top: 12px;
+  }
+  .product-card {
+    background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px;
+    padding: 14px 8px; text-align: center;
+    transition: all 0.2s;
+  }
+  .product-icon { font-size: 24px; margin-bottom: 6px; }
+  .product-name { font-size: 11px; color: #4b5563; font-weight: 600; }
 
   .empty-state {
     text-align: center; padding: 20px 0; color: #9ca3af; font-size: 13px;
@@ -278,19 +294,44 @@
   .alert.success { background: #14532d; color: #bbf7d0; display: block; }
   .alert.info { background: #1e3a8a; color: #bfdbfe; display: block; }
 
-  .notice {
-    background: #e3f2fd; border-left: 4px solid #2196f3;
-    padding: 12px 16px; border-radius: 6px; font-size: 12px;
-    color: #0d47a1; margin: 12px 20px; max-width: 560px;
+  .activate-box {
+    background: #ffffff; border: 2px solid #2196f3; border-radius: 12px;
+    padding: 20px; margin: 12px 20px; max-width: 560px;
     margin-left: auto; margin-right: auto;
-    line-height: 1.6;
+    box-shadow: 0 4px 12px rgba(33,150,243,0.2);
   }
+  .activate-title {
+    font-size: 14px; font-weight: 700; color: #2196f3;
+    margin-bottom: 16px; text-align: center;
+  }
+  .step {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid #f3f4f6;
+  }
+  .step:last-of-type { border-bottom: none; }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #e5e7eb; color: #9ca3af;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .step-body { flex: 1; }
+  .step-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  .step-desc { font-size: 11px; color: #6b7280; line-height: 1.4; }
+  .step-btn {
+    width: 100%; padding: 10px; margin-top: 8px;
+    border: none; border-radius: 8px; font-size: 12px;
+    font-weight: 700; cursor: pointer; text-transform: uppercase;
+    background: #e5e7eb; color: #9ca3af;
+  }
+  .step-btn:disabled { cursor: not-allowed; }
 
   @media (max-width: 480px) {
     .profile-row { gap: 12px; padding: 16px; }
     .vip-crown { font-size: 24px; }
     .logo-text { font-size: 19px; }
     .pool-card .pool-amount { font-size: 26px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
 </head>
@@ -335,12 +376,12 @@
 
     <div class="card">
       <div class="card-title">Мой спонсор</div>
-      <div class="sponsor-block" id="sponsor-block">
+      <div class="sponsor-block">
         <div class="sponsor-info">
           <div class="sponsor-virid" id="sponsor-virid">—</div>
-          <div class="sponsor-email" id="sponsor-email">—</div>
+          <div class="sponsor-email" id="sponsor-email">(email скрыт)</div>
         </div>
-        <button class="btn btn-ghost" style="width:auto;padding:8px 14px;" disabled title="Скоро">Написать</button>
+        <button class="btn btn-ghost">Написать</button>
       </div>
     </div>
 
@@ -356,7 +397,7 @@
 
     <div style="max-width:560px;margin:12px auto;padding:0 20px;">
       <button class="btn btn-blue" id="btn-activate" onclick="handleActivate()">
-        Активировать следующий пакет
+        Активировать пакет 50 USDT
       </button>
     </div>
 
@@ -384,9 +425,9 @@
       <div class="pool-amount" id="pool-amount">$0.00</div>
       <div class="pool-sub">До следующего распределения</div>
       <div class="timer">
-        <div class="timer-box"><div class="timer-val" id="timer-h">—</div><div class="timer-lbl">час</div></div>
-        <div class="timer-box"><div class="timer-val" id="timer-m">—</div><div class="timer-lbl">мин</div></div>
-        <div class="timer-box"><div class="timer-val" id="timer-s">—</div><div class="timer-lbl">сек</div></div>
+        <div class="timer-box"><div class="timer-val" id="timer-h">23</div><div class="timer-lbl">час</div></div>
+        <div class="timer-box"><div class="timer-val" id="timer-m">44</div><div class="timer-lbl">мин</div></div>
+        <div class="timer-box"><div class="timer-val" id="timer-s">34</div><div class="timer-lbl">сек</div></div>
       </div>
     </div>
 
@@ -435,18 +476,62 @@
     </div>
 
     <div class="card">
+      <div class="card-title">Входящие сообщения</div>
+      <div class="empty-state">Нет сообщений</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Продукты и сервисы</div>
+      <div class="products-grid">
+        <div class="product-card"><div class="product-icon">🔍</div><div class="product-name">Аудит кошелька</div></div>
+        <div class="product-card"><div class="product-icon">🤖</div><div class="product-name">ИИ-рекрутер</div></div>
+        <div class="product-card"><div class="product-icon">🎮</div><div class="product-name">Игры</div></div>
+        <div class="product-card"><div class="product-icon">💰</div><div class="product-name">Обменник</div></div>
+        <div class="product-card"><div class="product-icon">📊</div><div class="product-name">Налоги</div></div>
+        <div class="product-card"><div class="product-icon">🎯</div><div class="product-name">Развлечения</div></div>
+      </div>
+    </div>
+
+    <div class="card">
       <div class="card-title">ИИ-рекрутер</div>
       <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;">
         🤖 Скоро — интеллектуальный помощник для рекрутинга
       </div>
     </div>
 
-    <div class="activate-box" style="background:#ffffff;border:2px solid #2196f3;border-radius:12px;padding:20px;margin:12px 20px;max-width:560px;margin-left:auto;margin-right:auto;box-shadow:0 4px 12px rgba(33,150,243,0.2);">
-      <div style="font-size:14px;font-weight:700;color:#2196f3;margin-bottom:16px;text-align:center;">
-        ⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА
+    <div class="activate-box">
+      <div class="activate-title">⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА</div>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Подключить кошелёк</div>
+          <div class="step-desc">Разрешить платформе работать с токеном USDT BEP20 на вашем кошельке.</div>
+          <button class="step-btn" disabled>ПОДКЛЮЧИТЬ METAMASK</button>
+        </div>
       </div>
-      <div style="text-align:center;color:#6b7280;font-size:13px;padding:12px 0;">
-        🔒 Скоро — активация смарт-контракта
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Регистрация под спонсора</div>
+          <div class="step-desc">Укажите адрес кошелька вашего спонсора в системе Virus MLM.</div>
+          <input type="text" placeholder="Адрес кошелька спонсора (0x...)" disabled style="width:100%;padding:10px;margin-top:8px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;color:#9ca3af;">
+          <button class="step-btn" disabled>ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Активировать пакет 50 USDT</div>
+          <div class="step-desc">Единоразовый вход в клуб. Спишется 50 USDT BEP20.</div>
+          <button class="step-btn" disabled>АКТИВИРОВАТЬ 50 USDT</button>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.5;">
+        Нужно: BNB для газа + 50 USDT BEP20 на кошельке.
       </div>
     </div>
 
@@ -458,26 +543,21 @@
 
 <script src="api.js"></script>
 
-
+ 
 <script>
   // ============================================
   // VIRUS MLM — Cabinet
   // ============================================
 
-  // ============================================
   // Проверка авторизации
-  // ============================================
   if (!api.isAuthenticated()) {
     window.location.href = 'index.html';
   }
 
-  // ============================================
   // State
-  // ============================================
   let userData = null;
   let matrixData = null;
   let referralData = [];
-  let poolInfo = null;
   let currentLang = localStorage.getItem('virusmlm_lang') || 'ru';
 
   // ============================================
@@ -556,7 +636,6 @@
   // ============================================
   async function loadCabinet() {
     try {
-      // Параллельно загружаем всё
       const [me, matrix, referrals] = await Promise.all([
         api.getMe(),
         api.getMatrix(),
@@ -587,8 +666,6 @@
   function renderCabinet() {
     // User ID
     document.getElementById('user-virid').textContent = userData.virId || '—';
-
-    // Pool balance (user's share)
     document.getElementById('user-pool-balance').textContent = formatUSDT(userData.poolBalance);
 
     // Sponsor
@@ -641,14 +718,14 @@
     document.getElementById('bal-pool').textContent = formatUSDT(userData.poolBalance);
     document.getElementById('withdraw-total').textContent = formatUSDT(userData.totalBalance);
 
-    // Split percentages based on currentPacket
+    // Split percentages
     updateSplitPercentages(currentPacket);
-
-    // Pool card (global pool)
-    loadPoolInfo();
 
     // Referrals
     renderReferrals();
+
+    // Pool timer
+    startPoolTimer();
   }
 
   function getNextPacket(current) {
@@ -661,8 +738,6 @@
   }
 
   function updateSplitPercentages(packet) {
-    // WITHDRAW_PERCENTAGES from contract:
-    // 50 -> 50/50, 100 -> 60/40, 150 -> 70/30, 200 -> 80/20, 250 -> 90/10
     const map = {
       0:   { wallet: 50, market: 50 },
       50:  { wallet: 50, market: 50 },
@@ -688,33 +763,28 @@
     let html = '';
     referralData.forEach((r) => {
       const packetClass = r.currentPacket >= 50 ? 'active' : '';
-      const packetText = r.currentPacket > 0 ? r.currentPacket + ' USDT' : 'не активирован';
+      const packetText = r.currentPacket > 0 ? r.currentPacket + ' USDT' : '0';
       html += '<div class="referral-item">' +
         '<div class="referral-item-left">' +
           '<div class="referral-virid">' + escapeHtml(r.virId) + '</div>' +
           '<div class="referral-meta">' + escapeHtml(maskEmail(r.email)) + '</div>' +
         '</div>' +
-        '<div class="referral-packet ' + packetClass + '">' + escapeHtml(packetText) + '</div>' +
+        '<div class="referral-actions">' +
+          '<div class="referral-packet ' + packetClass + '">' + escapeHtml(packetText) + '</div>' +
+          '<button class="btn btn-ghost" style="font-size:11px;padding:6px 10px;">Написать</button>' +
+        '</div>' +
       '</div>';
     });
     list.innerHTML = html;
   }
 
   // ============================================
-  // Pool info (public endpoint would be better, but we use /me + dummy)
+  // Pool timer (заглушка)
   // ============================================
-  async function loadPoolInfo() {
-    // Пока нет публичного endpoint для пула — заглушка
-    // TODO: добавить GET /api/v1/pool/info
-    document.getElementById('pool-amount').textContent = '$0.00';
-    startPoolTimer();
-  }
-
   let poolTimerInterval = null;
   function startPoolTimer() {
     if (poolTimerInterval) clearInterval(poolTimerInterval);
-    // Заглушка: 23:45:12
-    let totalSeconds = 23 * 3600 + 45 * 60 + 12;
+    let totalSeconds = 23 * 3600 + 44 * 60 + 34;
     function tick() {
       if (totalSeconds <= 0) return;
       totalSeconds--;
@@ -749,12 +819,9 @@
     btn.textContent = 'Активация...';
 
     try {
-      const packetIndex = next / 50; // 50->1, 100->2, ..., 250->5
+      const packetIndex = next / 50;
       const result = await api.activatePacket(packetIndex);
-
       showAlert('success', 'Пакет ' + result.packet + ' USDT активирован!');
-
-      // Reload data
       await loadCabinet();
     } catch (error) {
       showAlert('error', error.message || 'Ошибка активации');
@@ -764,17 +831,15 @@
   }
 
   // ============================================
-  // Lang (заглушка — реальный перевод позже)
+  // Lang
   // ============================================
   function setLang(lang) {
     currentLang = lang;
     localStorage.setItem('virusmlm_lang', lang);
     document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
     document.getElementById('lang-' + lang).classList.add('active');
-    // TODO: реальный перевод интерфейса
   }
 
-  // Восстановить язык
   if (currentLang === 'en') {
     document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
     document.getElementById('lang-en').classList.add('active');
