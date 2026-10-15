@@ -175,9 +175,8 @@
   }
   .balance-row.thick { border-bottom: 3px solid #e5e7eb; padding-bottom: 16px; margin-bottom: 4px; }
   .balance-row:last-child { border-bottom: none; }
-  .balance-label { font-size: 13px; color: #4b5563; }
-  .balance-label.bold { font-weight: 700; color: #1a1a1a; }
-  .balance-value { font-size: 16px; font-weight: 400; font-family: monospace; color: #1a1a1a; }
+  .balance-label { font-size: 13px; color: #4b5563; font-weight: 400; }
+  .balance-value { font-size: 16px; font-weight: 700; font-family: monospace; color: #1a1a1a; }
 
   .withdraw-block {
     background: #ffffff; border-radius: 12px;
@@ -380,8 +379,8 @@
       <div class="wallet-block">
         <div class="wallet-label">User ID</div>
         <div class="wallet-value" id="user-virid">—</div>
-        <div class="pool-share-label">Моя доля в пуле</div>
-        <div class="pool-share-value" id="user-pool-balance">$0.00</div>
+        <div class="pool-share-label">VIP на уровне</div>
+        <div class="pool-share-value" id="vip-on-level">—</div>
       </div>
     </div>
 
@@ -443,11 +442,11 @@
 
     <div class="card">
       <div class="balance-row thick">
-        <span class="balance-label bold">Реферальный баланс</span>
+        <span class="balance-label">Всего реферальных</span>
         <span class="balance-value" id="bal-referral">$0.00</span>
       </div>
       <div class="balance-row thick">
-        <span class="balance-label bold">Матричный баланс</span>
+        <span class="balance-label">Матричный баланс</span>
         <span class="balance-value" id="bal-matrix">$0.00</span>
       </div>
       <div class="balance-row">
@@ -539,13 +538,12 @@
 
 <script src="api.js"></script>
 
- 
+
 <script>
   // ============================================
   // VIRUS MLM — Cabinet
   // ============================================
 
-  // Проверка авторизации
   if (!api.isAuthenticated()) {
     window.location.href = 'index.html';
   }
@@ -553,6 +551,7 @@
   // State
   let userData = null;
   let matrixData = null;
+  let poolData = null;
   let currentLang = localStorage.getItem('virusmlm_lang') || 'ru';
 
   // ============================================
@@ -587,6 +586,11 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
+  }
+
+  function getVipLevel(packet) {
+    if (!packet || packet < 50) return 0;
+    return Math.floor(packet / 50);
   }
 
   // ============================================
@@ -624,13 +628,15 @@
   // ============================================
   async function loadCabinet() {
     try {
-      const [me, matrix] = await Promise.all([
+      const [me, matrix, pool] = await Promise.all([
         api.getMe(),
         api.getMatrix(),
+        api.getPoolInfo(),
       ]);
 
       userData = me;
       matrixData = matrix;
+      poolData = pool;
 
       renderCabinet();
       document.getElementById('loading').style.display = 'none';
@@ -652,7 +658,6 @@
   function renderCabinet() {
     // User ID
     document.getElementById('user-virid').textContent = userData.virId || '—';
-    document.getElementById('user-pool-balance').textContent = formatUSDT(userData.poolBalance);
 
     // Sponsor
     if (userData.referrerVirId) {
@@ -683,6 +688,16 @@
       btnActivate.disabled = true;
     }
 
+    // VIP on level
+    const vipLevel = getVipLevel(currentPacket);
+    const vipEl = document.getElementById('vip-on-level');
+    if (vipLevel > 0 && poolData && poolData.vipCountsByLevel) {
+      const count = poolData.vipCountsByLevel[vipLevel - 1] || 0;
+      vipEl.textContent = count + ' ID';
+    } else {
+      vipEl.textContent = '—';
+    }
+
     // Matrix
     if (matrixData) {
       const total = matrixData.totalInNetwork || 0;
@@ -705,8 +720,13 @@
     // Split percentages
     updateSplitPercentages(currentPacket);
 
-    // Pool timer
-    startPoolTimer();
+    // Pool (общий)
+    if (poolData) {
+      document.getElementById('pool-amount').textContent = formatUSDT(poolData.balance);
+      startPoolTimer(poolData.nextDistributionAt);
+    } else {
+      startPoolTimer(null);
+    }
   }
 
   function getNextPacket(current) {
@@ -733,18 +753,26 @@
   }
 
   // ============================================
-  // Pool timer (заглушка)
+  // Pool timer
   // ============================================
   let poolTimerInterval = null;
-  function startPoolTimer() {
+  function startPoolTimer(nextDistributionAt) {
     if (poolTimerInterval) clearInterval(poolTimerInterval);
-    let totalSeconds = 23 * 3600 + 44 * 60 + 34;
+
+    let targetTime;
+    if (nextDistributionAt) {
+      targetTime = new Date(nextDistributionAt).getTime();
+    } else {
+      // Заглушка — 23:44:34 от текущего момента
+      targetTime = Date.now() + (23 * 3600 + 44 * 60 + 34) * 1000;
+    }
+
     function tick() {
-      if (totalSeconds <= 0) return;
-      totalSeconds--;
-      const h = Math.floor(totalSeconds / 3600);
-      const m = Math.floor((totalSeconds % 3600) / 60);
-      const s = totalSeconds % 60;
+      const now = Date.now();
+      const diff = Math.max(0, Math.floor((targetTime - now) / 1000));
+      const h = Math.floor(diff / 3600);
+      const m = Math.floor((diff % 3600) / 60);
+      const s = diff % 60;
       document.getElementById('timer-h').textContent = String(h).padStart(2, '0');
       document.getElementById('timer-m').textContent = String(m).padStart(2, '0');
       document.getElementById('timer-s').textContent = String(s).padStart(2, '0');
