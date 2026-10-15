@@ -424,7 +424,7 @@
     <div style="max-width:560px;margin:12px auto;padding:0 20px;">
       <div class="card-title" style="color:#9ca3af;padding-left:0;">Ваша реферальная ссылка</div>
       <div class="ref-link">
-        <span style="flex:1;" id="ref-link-text">virusmlm.com/r/—</span>
+        <span style="flex:1;" id="ref-link-text">virusmlm.com/register?ref=—</span>
         <button onclick="copyRefLink()">📋</button>
       </div>
     </div>
@@ -615,7 +615,7 @@
   // ============================================
   function copyRefLink() {
     if (!userData || !userData.virId) return;
-    const link = 'https://virusmlm.com/r/' + userData.virId;
+    const link = 'https://virusmlm.com/register?ref=' + userData.virId;
     navigator.clipboard.writeText(link).then(() => {
       showAlert('success', 'Ссылка скопирована!');
     }).catch(() => {
@@ -707,7 +707,7 @@
     }
 
     // Ref link
-    document.getElementById('ref-link-text').textContent = 'virusmlm.com/r/' + userData.virId;
+    document.getElementById('ref-link-text').textContent = 'virusmlm.com/register?ref=' + userData.virId;
 
     // Balances
     document.getElementById('bal-referral').textContent = formatUSDT(userData.referralBalance);
