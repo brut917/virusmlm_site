@@ -92,7 +92,6 @@
       };
     }
 
-    // 401 — токен истёк / невалиден
     if (response.status === 401) {
       clearToken();
       throw {
@@ -207,6 +206,13 @@
   }
 
   // ============================================
+  // Pool API (public)
+  // ============================================
+  async function getPoolInfo() {
+    return request('GET', '/api/v1/pool/info', null, { skipAuth: true });
+  }
+
+  // ============================================
   // Экспорт
   // ============================================
   const api = {
@@ -233,6 +239,9 @@
     getReferrals: getReferrals,
     getPayouts: getPayouts,
     activatePacket: activatePacket,
+
+    // Pool (public)
+    getPoolInfo: getPoolInfo,
 
     // Raw request (для отладки)
     request: request,
