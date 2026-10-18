@@ -407,6 +407,10 @@
 <script src="api.js"></script>
 
 <script>
+  // ============================================
+  // VIRUS MLM — Cabinet + Chat
+  // ============================================
+
   if (!api.isAuthenticated()) {
     window.location.href = 'index.html';
   }
@@ -418,6 +422,9 @@
   let chatPartnerId = null;
   let chatPartnerName = null;
 
+  // ============================================
+  // Helpers
+  // ============================================
   function formatUSDT(value) {
     if (!value) return '$0.00';
     try {
@@ -465,6 +472,9 @@
     });
   }
 
+  // ============================================
+  // Load & Render
+  // ============================================
   async function loadCabinet() {
     try {
       const [me, matrix, pool] = await Promise.all([api.getMe(), api.getMatrix(), api.getPoolInfo()]);
@@ -643,42 +653,70 @@
   }
 
   async function openChatModal() {
-    if (!userData.referrerVirId) {
+    if (!userData || !userData.referrerId) {
       alert('У вас нет спонсора (вы корень системы)');
       return;
     }
 
-    // Находим ID спонсора через его vir_id
-    const sponsorVirId = userData.referrerVirId;
-    chatPartnerName = sponsorVirId;
-    chatPartnerId = null;
+    chatPartnerId = userData.referrerId;
+    chatPartnerName = userData.referrerVirId;
 
-    // Мы не знаем ID спонсора напрямую, поэтому возьмем его из /me (он там как referrerVirId)
-    // Но нам нужен числовой ID. Сделаем запрос к нашему API (получим ID через vir_id).
-    try {
-      const referrals = await api.getReferrals();
-      // Ищем спонсора в списке рефералов? Нет, это не сработает.
-      // Нам нужен ID спонсора. Будем использовать API /me, но он не отдаёт ID спонсора.
-      // Временно: откроем чат с первым рефералом (если есть).
-      // В будущем добавим endpoint /user/sponsor-id.
-    } catch (e) {}
-
-    document.getElementById('chat-title').textContent = 'Чат со спонсором (' + sponsorVirId + ')';
+    document.getElementById('chat-title').textContent = 'Чат со спонсором (' + chatPartnerName + ')';
     document.getElementById('chat-modal').classList.add('active');
     document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Загрузка...</div>';
     
-    // Показываем заглушку, так как API для чата со спонсором требует ID
-    setTimeout(() => {
-      document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Чат будет доступен после обновления API (нужен ID спонсора).</div>';
-    }, 500);
+    await loadChatHistory();
+  }
+
+  async function loadChatHistory() {
+    try {
+      const messages = await api.getChat(chatPartnerId);
+      const body = document.getElementById('chat-body');
+      
+      if (messages.length === 0) {
+        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Нет сообщений. Напишите первым!</div>';
+        return;
+      }
+
+      body.innerHTML = messages.map(msg => {
+        const isMine = msg.sender_id === userData.id;
+        const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return `
+          <div class="msg-bubble ${isMine ? 'my' : 'their'}">
+            ${escapeHtml(msg.text)}
+            <span class="msg-time">${time}</span>
+          </div>
+        `;
+      }).join('');
+
+      body.scrollTop = body.scrollHeight;
+    } catch (err) {
+      console.error(err);
+      document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">Ошибка загрузки истории</div>';
+    }
   }
 
   function closeChatModal() {
     document.getElementById('chat-modal').classList.remove('active');
   }
 
-  function sendChatMessage() {
-    alert('Функция отправки сообщений будет доступна после обновления API.');
+  async function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text || !chatPartnerId) return;
+
+    input.value = '';
+    input.disabled = true;
+
+    try {
+      await api.sendMessage(chatPartnerId, text);
+      await loadChatHistory();
+    } catch (err) {
+      alert('Ошибка отправки: ' + (err.message || 'Попробуйте позже'));
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
   }
 
   setInterval(updateUnreadBadge, 30000);
