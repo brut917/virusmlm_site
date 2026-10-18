@@ -128,7 +128,7 @@
   }
 
   /* ============================================
-     МОДАЛЬНОЕ ОКНО ЧАТА
+     МОДАЛЬНОЕ ОКНО (ЧАТ И ВЫБОР РЕФЕРАЛА)
      ============================================ */
   .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -186,6 +186,16 @@
   .msg-time {
     font-size: 10px; opacity: 0.7; margin-top: 4px; display: block;
   }
+
+  /* Список рефералов */
+  .ref-item {
+    padding: 12px 16px; background: #ffffff; border-radius: 8px;
+    border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.2s;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .ref-item:hover { border-color: #2196f3; background: #f0f7ff; }
+  .ref-virid { font-weight: 700; color: #2196f3; font-family: monospace; }
+  .ref-packet { font-size: 12px; color: #6b7280; }
 </style>
 </head>
 <body>
@@ -195,7 +205,7 @@
   <div class="header">
     <div class="header-left">
       <button class="logout-btn" onclick="handleLogout()">← Выйти</button>
-      <button class="messages-btn" onclick="openChatModal()">
+      <button class="messages-btn" onclick="openReferralList()">
         💬
         <span class="messages-badge" id="messages-badge">0</span>
       </button>
@@ -239,7 +249,7 @@
         <div class="sponsor-info">
           <div class="sponsor-virid" id="sponsor-virid">—</div>
         </div>
-        <button class="btn btn-ghost" onclick="openChatModal()">Написать</button>
+        <button class="btn btn-ghost" onclick="openChatModal(userData.referrerId, userData.referrerVirId)">Написать</button>
       </div>
     </div>
 
@@ -386,12 +396,27 @@
 </div>
 
 <!-- ============================================
-     МОДАЛЬНОЕ ОКНО ЧАТА
+     МОДАЛЬНОЕ ОКНО: СПИСОК РЕФЕРАЛОВ
+     ============================================ -->
+<div class="modal-overlay" id="ref-list-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Выберите чат</div>
+      <button class="modal-close" onclick="closeRefList()">×</button>
+    </div>
+    <div class="modal-body" id="ref-list-body">
+      <!-- Список рефералов будет здесь -->
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     МОДАЛЬНОЕ ОКНО: ЧАТ
      ============================================ -->
 <div class="modal-overlay" id="chat-modal">
   <div class="modal-content">
     <div class="modal-header">
-      <div class="modal-title" id="chat-title">Чат со спонсором</div>
+      <div class="modal-title" id="chat-title">Чат</div>
       <button class="modal-close" onclick="closeChatModal()">×</button>
     </div>
     <div class="modal-body" id="chat-body">
@@ -522,11 +547,11 @@
       btnActivate.disabled = true;
     }
 
-    const vipLevel = getVipLevel(currentPacket);
+    // VIP на уровне (только для активированных)
     const vipEl = document.getElementById('vip-on-level');
-    if (vipLevel > 0 && poolData && poolData.vipCountsByLevel) {
-      const count = poolData.vipCountsByLevel[vipLevel - 1] || 0;
-      vipEl.textContent = count + ' ID';
+    if (currentPacket >= 50 && poolData) {
+      // Показываем общее количество активированных в сети (или можно считать по рефералам)
+      vipEl.textContent = (userData.directReferralsCount || 0) + ' ID';
     } else {
       vipEl.textContent = '—';
     }
@@ -652,16 +677,67 @@
     }
   }
 
-  async function openChatModal() {
-    if (!userData || !userData.referrerId) {
+  // Открыть список чатов (рефералы + спонсор)
+  async function openReferralList() {
+    const body = document.getElementById('ref-list-body');
+    body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Загрузка...</div>';
+    document.getElementById('ref-list-modal').classList.add('active');
+
+    try {
+      const referrals = await api.getReferrals();
+      
+      if (referrals.items.length === 0 && !userData.referrerId) {
+        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">У вас нет рефералов и спонсора</div>';
+        return;
+      }
+
+      let html = '';
+      
+      // Спонсор (если есть)
+      if (userData.referrerId) {
+        html += `<div class="ref-item" onclick="openChatModal(${userData.referrerId}, '${userData.referrerVirId}')">
+          <div>
+            <div class="ref-virid">${userData.referrerVirId}</div>
+            <div class="ref-packet">Спонсор</div>
+          </div>
+          <div style="color:#2196f3;">→</div>
+        </div>`;
+      }
+
+      // Рефералы
+      referrals.items.forEach(ref => {
+        html += `<div class="ref-item" onclick="openChatModal(${ref.userId}, '${ref.virId}')">
+          <div>
+            <div class="ref-virid">${ref.virId}</div>
+            <div class="ref-packet">Реферал (пакет ${ref.currentPacket})</div>
+          </div>
+          <div style="color:#2196f3;">→</div>
+        </div>`;
+      });
+
+      body.innerHTML = html;
+    } catch (err) {
+      body.innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">Ошибка загрузки списка</div>';
+    }
+  }
+
+  function closeRefList() {
+    document.getElementById('ref-list-modal').classList.remove('active');
+  }
+
+  // Открыть чат с конкретным человеком
+  async function openChatModal(partnerId, partnerName) {
+    if (!partnerId) {
       alert('У вас нет спонсора (вы корень системы)');
       return;
     }
 
-    chatPartnerId = userData.referrerId;
-    chatPartnerName = userData.referrerVirId;
+    chatPartnerId = partnerId;
+    chatPartnerName = partnerName;
 
-    document.getElementById('chat-title').textContent = 'Чат со спонсором (' + chatPartnerName + ')';
+    // Закрываем список, открываем чат
+    document.getElementById('ref-list-modal').classList.remove('active');
+    document.getElementById('chat-title').textContent = 'Чат (' + chatPartnerName + ')';
     document.getElementById('chat-modal').classList.add('active');
     document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Загрузка...</div>';
     
@@ -679,7 +755,7 @@
       }
 
       body.innerHTML = messages.map(msg => {
-        const isMine = msg.sender_id === userData.id;
+        const isMine = Number(msg.sender_id) === Number(userData.id);
         const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         return `
           <div class="msg-bubble ${isMine ? 'my' : 'their'}">
