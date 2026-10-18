@@ -4,330 +4,119 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VIRUS MLM — Кабинет</title>
-
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
-
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; }
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
-
-  .bg-hero {
-    background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%);
-    min-height: 100vh;
-  }
-
-  .header {
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-    padding: 18px 20px; border-bottom: 1px solid #1f2937;
-    background: linear-gradient(180deg, #0f1e3a, #0a0e1a);
-    position: sticky; top: 0; z-index: 100;
-    min-height: 62px;
-    max-width: 640px;
-    margin: 0 auto;
-  }
+  .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
+  
+  .header { position: relative; display: flex; align-items: center; justify-content: center; padding: 18px 20px; border-bottom: 1px solid #1f2937; background: linear-gradient(180deg, #0f1e3a, #0a0e1a); position: sticky; top: 0; z-index: 100; min-height: 62px; max-width: 640px; margin: 0 auto; }
   .logo { display: flex; align-items: center; gap: 2px; }
   .logo-text { font-weight: 800; font-size: 22px; letter-spacing: 2px; color: #fff; }
   .logo-bolt { font-size: 22px; color: #2196f3; filter: drop-shadow(0 0 8px #2196f3); margin: 0 2px; }
-
-  .header-left {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
-
-  .logout-btn {
-    background: transparent; color: #6b7280;
-    border: 1px solid #374151; border-radius: 5px;
-    padding: 5px 10px; font-size: 11px; font-weight: 700;
-    cursor: pointer; transition: all 0.2s;
-  }
+  .header-left { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 6px; align-items: center; }
+  .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
-
-  .messages-btn {
-    position: relative;
-    background: transparent; color: #2196f3;
-    border: 1px solid #2196f3; border-radius: 5px;
-    padding: 5px 10px; font-size: 14px; font-weight: 700;
-    cursor: pointer; transition: all 0.2s;
-  }
+  .messages-btn { position: relative; background: transparent; color: #2196f3; border: 1px solid #2196f3; border-radius: 5px; padding: 5px 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .messages-btn:hover { background: #2196f3; color: #fff; }
-  .messages-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: #ff1744;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 5px;
-    border-radius: 10px;
-    min-width: 16px;
-    text-align: center;
-    line-height: 1.2;
-  }
+  .messages-badge { position: absolute; top: -6px; right: -6px; background: #ff1744; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center; line-height: 1.2; display: none; }
+  .lang-switch { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 3px; align-items: center; }
+  .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
-  .lang-switch {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex; gap: 3px; align-items: center;
-  }
-  .lang-switch button {
-    background: transparent; color: #6b7280;
-    border: 1px solid #374151; border-radius: 5px;
-    padding: 4px 8px; font-size: 11px; font-weight: 700;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .lang-switch button.active {
-    background: #2196f3; color: #fff; border-color: #2196f3;
-  }
-
-  .profile-row {
-    max-width: 560px; margin: 0 auto; padding: 20px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-    align-items: center;
-  }
-  .vip-block {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; text-align: center; gap: 2px;
-    min-height: 90px;
-  }
+  .profile-row { max-width: 560px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
+  .vip-block { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px; min-height: 90px; }
   .vip-crown { font-size: 26px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(255,193,7,0.6)); }
   .vip-level { font-size: 14px; font-weight: 700; color: #ffc107; line-height: 1.3; }
   .vip-stars { font-size: 12px; color: #ffc107; letter-spacing: 2px; line-height: 1.3; }
   .vip-duration { font-size: 11px; color: #9ca3af; line-height: 1.3; }
-
-  .wallet-block {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; text-align: center; gap: 2px;
-    min-height: 90px;
-  }
+  .wallet-block { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px; min-height: 90px; }
   .wallet-label { font-size: 11px; color: #6b7280; text-transform: uppercase; line-height: 1.3; }
   .wallet-value { font-size: 15px; font-weight: 700; color: #ffffff; font-family: monospace; line-height: 1.3; }
   .pool-share-label { font-size: 11px; color: #6b7280; text-transform: uppercase; margin-top: 8px; line-height: 1.3; }
   .pool-share-value { font-size: 15px; font-weight: 700; color: #ffffff; font-family: monospace; line-height: 1.3; }
 
-  .card {
-    background: #ffffff; border-radius: 12px;
-    padding: 16px; margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-  .card-title {
-    font-size: 11px; color: #6b7280; text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 12px; font-weight: 700;
-    display: flex; justify-content: space-between; align-items: center;
-  }
+  .card { background: #ffffff; border-radius: 12px; padding: 16px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .card-title { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 
-  .packets-wrap {
-    background: #ffffff; border-radius: 12px;
-    padding: 14px 10px; margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
+  .packets-wrap { background: #ffffff; border-radius: 12px; padding: 14px 10px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
   .packets { display: flex; justify-content: space-between; align-items: center; }
-  .packet {
-    width: 44px; height: 44px; border-radius: 50%;
-    background: #e5e7eb; color: #9ca3af;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; flex-shrink: 0;
-  }
-  .packet.active {
-    background: #00c853; color: #fff;
-    box-shadow: 0 0 12px rgba(0,200,83,0.5);
-  }
+  .packet { width: 44px; height: 44px; border-radius: 50%; background: #e5e7eb; color: #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .packet.active { background: #00c853; color: #fff; box-shadow: 0 0 12px rgba(0,200,83,0.5); }
 
-  .matrix-bar {
-    height: 10px; background: #e5e7eb; border-radius: 5px; overflow: hidden;
-    margin-top: 8px;
-  }
-  .matrix-fill {
-    height: 100%; background: linear-gradient(90deg, #00c853, #4caf50);
-    width: 0%; transition: width 0.5s;
-  }
-  .matrix-label {
-    display: flex; justify-content: space-between;
-    font-size: 11px; color: #6b7280; margin-top: 8px;
-  }
+  .matrix-bar { height: 10px; background: #e5e7eb; border-radius: 5px; overflow: hidden; margin-top: 8px; }
+  .matrix-fill { height: 100%; background: linear-gradient(90deg, #00c853, #4caf50); width: 0%; transition: width 0.5s; }
+  .matrix-label { display: flex; justify-content: space-between; font-size: 11px; color: #6b7280; margin-top: 8px; }
   .matrix-label .gold { color: #ffc107; font-weight: 700; }
 
-  .ref-link {
-    background: #ffffff; border: 2px solid #2196f3; border-radius: 8px;
-    padding: 12px; display: flex; align-items: center; gap: 8px;
-    font-size: 13px; color: #2196f3; font-family: monospace;
-    word-break: break-all;
-  }
-  .ref-link button {
-    background: #2196f3; border: none; color: #fff;
-    padding: 6px 12px; border-radius: 6px; cursor: pointer; flex-shrink: 0;
-    font-size: 14px;
-  }
+  .ref-link { background: #ffffff; border: 2px solid #2196f3; border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #2196f3; font-family: monospace; word-break: break-all; }
+  .ref-link button { background: #2196f3; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; flex-shrink: 0; font-size: 14px; }
 
-  .balance-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 0; border-bottom: 1px solid #f3f4f6;
-  }
+  .balance-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
   .balance-row.thick { border-bottom: 3px solid #e5e7eb; padding-bottom: 16px; margin-bottom: 4px; }
   .balance-row:last-child { border-bottom: none; }
   .balance-label { font-size: 13px; color: #4b5563; font-weight: 700; }
   .balance-value { font-size: 16px; font-weight: 400; font-family: monospace; color: #1a1a1a; }
 
-  .withdraw-block {
-    background: #ffffff; border-radius: 12px;
-    margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    overflow: hidden;
-  }
-  .withdraw-strip {
-    background: #b3e5fc;
-    padding: 16px 20px;
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  }
+  .withdraw-block { background: #ffffff; border-radius: 12px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.3); overflow: hidden; }
+  .withdraw-strip { background: #b3e5fc; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .withdraw-strip-left { display: flex; align-items: center; gap: 10px; }
-  .withdraw-icon {
-    width: 34px; height: 34px; background: #ff1744; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 700; font-size: 17px;
-    box-shadow: 0 2px 8px rgba(255,23,68,0.5);
-  }
+  .withdraw-icon { width: 34px; height: 34px; background: #ff1744; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 17px; box-shadow: 0 2px 8px rgba(255,23,68,0.5); }
   .withdraw-text { font-size: 14px; color: #1a1a1a; font-weight: 600; }
   .withdraw-text b { font-family: monospace; font-size: 16px; }
-  .withdraw-btn {
-    background: #ff1744; color: #fff; border: none; border-radius: 6px;
-    padding: 10px 20px; font-size: 13px; font-weight: 700;
-    cursor: pointer; text-transform: uppercase;
-    box-shadow: 0 2px 8px rgba(255,23,68,0.4);
-  }
+  .withdraw-btn { background: #ff1744; color: #fff; border: none; border-radius: 6px; padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; text-transform: uppercase; box-shadow: 0 2px 8px rgba(255,23,68,0.4); }
   .withdraw-btn:disabled { background: #9ca3af; cursor: not-allowed; box-shadow: none; }
-  .withdraw-detail {
-    padding: 16px 20px;
-    display: flex; justify-content: center; gap: 32px;
-    background: #ffffff;
-  }
+  .withdraw-detail { padding: 16px 20px; display: flex; justify-content: center; gap: 32px; background: #ffffff; }
   .split-item { text-align: center; }
   .split-item .val { color: #1a1a1a; font-weight: 700; font-size: 16px; font-family: monospace; }
   .split-item .lbl { color: #6b7280; font-size: 11px; margin-top: 2px; }
 
-  .btn {
-    width: 100%; padding: 14px; border: none; border-radius: 10px;
-    font-size: 15px; font-weight: 700; cursor: pointer;
-    transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
-  }
+  .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
   .btn-blue { background: #2196f3; color: #fff; }
   .btn-blue:hover { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
   .btn-blue:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; }
   .btn-green { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #fff; }
   .btn-green:hover { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
   .btn-green:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; }
-  .btn-ghost {
-    background: transparent; border: 2px solid #2196f3; color: #2196f3;
-    padding: 8px 14px; font-size: 12px; width: auto;
-  }
+  .btn-ghost { background: transparent; border: 2px solid #2196f3; color: #2196f3; padding: 8px 14px; font-size: 12px; width: auto; }
   .btn-ghost:hover { background: #2196f3; color: #fff; }
 
-  .pool-card {
-    background: linear-gradient(135deg, #0a1f3a, #111827);
-    border: 1px solid #2196f3; border-radius: 12px;
-    padding: 20px; margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    text-align: center;
-  }
-  .pool-card .pool-title {
-    font-size: 11px; color: #9ca3af; text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 8px;
-  }
-  .pool-card .pool-amount {
-    font-size: 32px; font-weight: 800; color: #2196f3;
-    font-family: monospace; letter-spacing: -1px;
-    text-shadow: 0 0 20px rgba(33,150,243,0.6);
-  }
-  .pool-card .pool-sub {
-    font-size: 11px; color: #9ca3af; margin-top: 6px;
-  }
+  .pool-card { background: linear-gradient(135deg, #0a1f3a, #111827); border: 1px solid #2196f3; border-radius: 12px; padding: 20px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; text-align: center; }
+  .pool-card .pool-title { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .pool-card .pool-amount { font-size: 32px; font-weight: 800; color: #2196f3; font-family: monospace; letter-spacing: -1px; text-shadow: 0 0 20px rgba(33,150,243,0.6); }
+  .pool-card .pool-sub { font-size: 11px; color: #9ca3af; margin-top: 6px; }
   .pool-card .timer { display: flex; justify-content: center; gap: 12px; margin-top: 14px; }
-  .pool-card .timer-box {
-    background: #0a0e1a; border: 1px solid #1f2937; border-radius: 8px;
-    padding: 10px 14px; text-align: center; min-width: 60px;
-  }
+  .pool-card .timer-box { background: #0a0e1a; border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px; text-align: center; min-width: 60px; }
   .pool-card .timer-val { font-size: 20px; font-weight: 700; color: #ffffff; font-family: monospace; }
   .pool-card .timer-lbl { font-size: 10px; color: #6b7280; text-transform: uppercase; }
 
-  .sponsor-block {
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 12px;
-  }
+  .sponsor-block { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
   .sponsor-info { display: flex; flex-direction: column; gap: 4px; }
   .sponsor-virid { font-size: 15px; font-weight: 700; color: #ffc107; font-family: monospace; }
 
-  .products-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-    margin-top: 12px;
-  }
-  .product-card {
-    background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px;
-    padding: 14px 8px; text-align: center;
-    transition: all 0.2s;
-  }
+  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .product-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px 8px; text-align: center; transition: all 0.2s; }
   .product-icon { font-size: 24px; margin-bottom: 6px; }
   .product-name { font-size: 11px; color: #4b5563; font-weight: 600; }
 
-  .loading {
-    text-align: center; padding: 40px 20px; color: #9ca3af;
-  }
-  .spinner {
-    display: inline-block; width: 24px; height: 24px;
-    border: 3px solid #1f2937; border-top-color: #2196f3;
-    border-radius: 50%; animation: spin 0.8s linear infinite;
-  }
+  .loading { text-align: center; padding: 40px 20px; color: #9ca3af; }
+  .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid #1f2937; border-top-color: #2196f3; border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .alert {
-    padding: 12px 16px; border-radius: 8px; font-size: 13px;
-    margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    line-height: 1.5; display: none;
-  }
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.5; display: none; }
   .alert.error { background: #7f1d1d; color: #fecaca; display: block; }
   .alert.success { background: #14532d; color: #bbf7d0; display: block; }
   .alert.info { background: #1e3a8a; color: #bfdbfe; display: block; }
 
-  .activate-box {
-    background: #ffffff; border: 2px solid #2196f3; border-radius: 12px;
-    padding: 20px; margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    box-shadow: 0 4px 12px rgba(33,150,243,0.2);
-  }
-  .activate-title {
-    font-size: 14px; font-weight: 700; color: #2196f3;
-    margin-bottom: 16px; text-align: center;
-  }
-  .step {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 12px 0; border-bottom: 1px solid #f3f4f6;
-  }
+  .activate-box { background: #ffffff; border: 2px solid #2196f3; border-radius: 12px; padding: 20px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(33,150,243,0.2); }
+  .activate-title { font-size: 14px; font-weight: 700; color: #2196f3; margin-bottom: 16px; text-align: center; }
+  .step { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
   .step:last-of-type { border-bottom: none; }
-  .step-num {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: #e5e7eb; color: #9ca3af;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; flex-shrink: 0;
-  }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: #e5e7eb; color: #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
   .step-body { flex: 1; }
   .step-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
   .step-desc { font-size: 11px; color: #6b7280; line-height: 1.4; }
-  .step-btn {
-    width: 100%; padding: 10px; margin-top: 8px;
-    border: none; border-radius: 8px; font-size: 12px;
-    font-weight: 700; cursor: pointer; text-transform: uppercase;
-    background: #e5e7eb; color: #9ca3af;
-  }
+  .step-btn { width: 100%; padding: 10px; margin-top: 8px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; background: #e5e7eb; color: #9ca3af; }
   .step-btn:disabled { cursor: not-allowed; }
 
   @media (max-width: 480px) {
@@ -336,6 +125,66 @@
     .logo-text { font-size: 19px; }
     .pool-card .pool-amount { font-size: 26px; }
     .products-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ============================================
+     МОДАЛЬНОЕ ОКНО ЧАТА
+     ============================================ */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8); z-index: 1000;
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-content {
+    background: #ffffff; border-radius: 12px; width: 100%; max-width: 500px;
+    height: 80vh; display: flex; flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden;
+  }
+  .modal-header {
+    background: #2196f3; color: #fff; padding: 16px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .modal-title { font-weight: 700; font-size: 16px; }
+  .modal-close {
+    background: transparent; border: none; color: #fff;
+    font-size: 24px; cursor: pointer; line-height: 1; padding: 0;
+  }
+  .modal-body {
+    flex: 1; padding: 16px; overflow-y: auto; background: #f9fafb;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .modal-footer {
+    padding: 12px 16px; background: #ffffff; border-top: 1px solid #e5e7eb;
+    display: flex; gap: 8px;
+  }
+  .modal-input {
+    flex: 1; padding: 10px 14px; border: 1px solid #d1d5db;
+    border-radius: 20px; font-size: 14px; outline: none;
+  }
+  .modal-input:focus { border-color: #2196f3; }
+  .modal-send {
+    background: #2196f3; color: #fff; border: none;
+    border-radius: 20px; padding: 0 20px; font-weight: 700;
+    cursor: pointer; font-size: 14px;
+  }
+  .modal-send:hover { background: #1976d2; }
+
+  .msg-bubble {
+    max-width: 80%; padding: 10px 14px; border-radius: 12px;
+    font-size: 14px; line-height: 1.4; word-wrap: break-word;
+  }
+  .msg-bubble.my {
+    align-self: flex-end; background: #2196f3; color: #fff;
+    border-bottom-right-radius: 2px;
+  }
+  .msg-bubble.their {
+    align-self: flex-start; background: #ffffff; color: #1a1a1a;
+    border-bottom-left-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .msg-time {
+    font-size: 10px; opacity: 0.7; margin-top: 4px; display: block;
   }
 </style>
 </head>
@@ -346,7 +195,7 @@
   <div class="header">
     <div class="header-left">
       <button class="logout-btn" onclick="handleLogout()">← Выйти</button>
-      <button class="messages-btn" onclick="handleMessages()">
+      <button class="messages-btn" onclick="openChatModal()">
         💬
         <span class="messages-badge" id="messages-badge">0</span>
       </button>
@@ -390,7 +239,7 @@
         <div class="sponsor-info">
           <div class="sponsor-virid" id="sponsor-virid">—</div>
         </div>
-        <button class="btn btn-ghost">Написать</button>
+        <button class="btn btn-ghost" onclick="openChatModal()">Написать</button>
       </div>
     </div>
 
@@ -424,7 +273,7 @@
     <div style="max-width:560px;margin:12px auto;padding:0 20px;">
       <div class="card-title" style="color:#9ca3af;padding-left:0;">Ваша реферальная ссылка</div>
       <div class="ref-link">
-        <span style="flex:1;" id="ref-link-text">virusmlm.com/register?ref=—</span>
+        <span style="flex:1;" id="ref-link-text">virusmlm.com/r/—</span>
         <button onclick="copyRefLink()">📋</button>
       </div>
     </div>
@@ -536,27 +385,39 @@
 
 </div>
 
+<!-- ============================================
+     МОДАЛЬНОЕ ОКНО ЧАТА
+     ============================================ -->
+<div class="modal-overlay" id="chat-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="chat-title">Чат со спонсором</div>
+      <button class="modal-close" onclick="closeChatModal()">×</button>
+    </div>
+    <div class="modal-body" id="chat-body">
+      <!-- Сообщения будут здесь -->
+    </div>
+    <div class="modal-footer">
+      <input type="text" class="modal-input" id="chat-input" placeholder="Написать сообщение..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+      <button class="modal-send" onclick="sendChatMessage()">➤</button>
+    </div>
+  </div>
+</div>
+
 <script src="api.js"></script>
 
-
 <script>
-  // ============================================
-  // VIRUS MLM — Cabinet
-  // ============================================
-
   if (!api.isAuthenticated()) {
     window.location.href = 'index.html';
   }
 
-  // State
   let userData = null;
   let matrixData = null;
   let poolData = null;
   let currentLang = localStorage.getItem('virusmlm_lang') || 'ru';
+  let chatPartnerId = null;
+  let chatPartnerName = null;
 
-  // ============================================
-  // Helpers
-  // ============================================
   function formatUSDT(value) {
     if (!value) return '$0.00';
     try {
@@ -574,18 +435,12 @@
     const box = document.getElementById('alert-box');
     box.className = 'alert ' + type;
     box.textContent = message;
-    setTimeout(() => {
-      box.className = 'alert';
-    }, 5000);
+    setTimeout(() => { box.className = 'alert'; }, 5000);
   }
 
   function escapeHtml(str) {
     if (!str) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   function getVipLevel(packet) {
@@ -593,9 +448,6 @@
     return Math.floor(packet / 50);
   }
 
-  // ============================================
-  // Logout
-  // ============================================
   function handleLogout() {
     if (confirm('Выйти из аккаунта?')) {
       api.clearToken();
@@ -603,19 +455,9 @@
     }
   }
 
-  // ============================================
-  // Messages (заглушка)
-  // ============================================
-  function handleMessages() {
-    alert('Скоро — внутренние сообщения со спонсором и рефералами');
-  }
-
-  // ============================================
-  // Copy ref link
-  // ============================================
   function copyRefLink() {
     if (!userData || !userData.virId) return;
-    const link = 'https://virusmlm.com/register?ref=' + userData.virId;
+    const link = 'https://virusmlm.com/r/' + userData.virId;
     navigator.clipboard.writeText(link).then(() => {
       showAlert('success', 'Ссылка скопирована!');
     }).catch(() => {
@@ -623,22 +465,14 @@
     });
   }
 
-  // ============================================
-  // Load data
-  // ============================================
   async function loadCabinet() {
     try {
-      const [me, matrix, pool] = await Promise.all([
-        api.getMe(),
-        api.getMatrix(),
-        api.getPoolInfo(),
-      ]);
-
+      const [me, matrix, pool] = await Promise.all([api.getMe(), api.getMatrix(), api.getPoolInfo()]);
       userData = me;
       matrixData = matrix;
       poolData = pool;
-
       renderCabinet();
+      updateUnreadBadge();
       document.getElementById('loading').style.display = 'none';
       document.getElementById('content').style.display = 'block';
     } catch (error) {
@@ -652,32 +486,22 @@
     }
   }
 
-  // ============================================
-  // Render
-  // ============================================
   function renderCabinet() {
-    // User ID
     document.getElementById('user-virid').textContent = userData.virId || '—';
 
-    // Sponsor
     if (userData.referrerVirId) {
       document.getElementById('sponsor-virid').textContent = userData.referrerVirId;
     } else {
       document.getElementById('sponsor-virid').textContent = 'Корень системы';
     }
 
-    // Packets
     const currentPacket = userData.currentPacket || 0;
     document.querySelectorAll('.packet').forEach((p) => {
       const val = parseInt(p.getAttribute('data-packet'), 10);
-      if (val <= currentPacket) {
-        p.classList.add('active');
-      } else {
-        p.classList.remove('active');
-      }
+      if (val <= currentPacket) p.classList.add('active');
+      else p.classList.remove('active');
     });
 
-    // Activate button
     const nextPacket = getNextPacket(currentPacket);
     const btnActivate = document.getElementById('btn-activate');
     if (nextPacket) {
@@ -688,15 +512,15 @@
       btnActivate.disabled = true;
     }
 
-    // VIP on level (activated users count)
+    const vipLevel = getVipLevel(currentPacket);
     const vipEl = document.getElementById('vip-on-level');
-    if (poolData && typeof poolData.activatedUsersCount === 'number') {
-      vipEl.textContent = poolData.activatedUsersCount + ' ID';
+    if (vipLevel > 0 && poolData && poolData.vipCountsByLevel) {
+      const count = poolData.vipCountsByLevel[vipLevel - 1] || 0;
+      vipEl.textContent = count + ' ID';
     } else {
-      vipEl.textContent = '0 ID';
+      vipEl.textContent = '—';
     }
 
-    // Matrix
     if (matrixData) {
       const total = matrixData.totalInNetwork || 0;
       const max = matrixData.maxPlaces || 8190;
@@ -706,19 +530,15 @@
       document.getElementById('matrix-percent').textContent = percent + '%';
     }
 
-    // Ref link
-    document.getElementById('ref-link-text').textContent = 'virusmlm.com/register?ref=' + userData.virId;
+    document.getElementById('ref-link-text').textContent = 'virusmlm.com/r/' + userData.virId;
 
-    // Balances
     document.getElementById('bal-referral').textContent = formatUSDT(userData.referralBalance);
     document.getElementById('bal-matrix').textContent = formatUSDT(userData.matrixBalance);
     document.getElementById('bal-pool').textContent = formatUSDT(userData.poolBalance);
     document.getElementById('withdraw-total').textContent = formatUSDT(userData.totalBalance);
 
-    // Split percentages
     updateSplitPercentages(currentPacket);
 
-    // Pool (общий)
     if (poolData) {
       document.getElementById('pool-amount').textContent = formatUSDT(poolData.balance);
       startPoolTimer(poolData.nextDistributionAt);
@@ -738,32 +558,20 @@
 
   function updateSplitPercentages(packet) {
     const map = {
-      0:   { wallet: 50, market: 50 },
-      50:  { wallet: 50, market: 50 },
-      100: { wallet: 60, market: 40 },
-      150: { wallet: 70, market: 30 },
-      200: { wallet: 80, market: 20 },
-      250: { wallet: 90, market: 10 },
+      0: { wallet: 50, market: 50 }, 50: { wallet: 50, market: 50 }, 100: { wallet: 60, market: 40 },
+      150: { wallet: 70, market: 30 }, 200: { wallet: 80, market: 20 }, 250: { wallet: 90, market: 10 },
     };
     const p = map[packet] || { wallet: 50, market: 50 };
     document.getElementById('split-wallet').textContent = p.wallet + '%';
     document.getElementById('split-market').textContent = p.market + '%';
   }
 
-  // ============================================
-  // Pool timer
-  // ============================================
   let poolTimerInterval = null;
   function startPoolTimer(nextDistributionAt) {
     if (poolTimerInterval) clearInterval(poolTimerInterval);
-
     let targetTime;
-    if (nextDistributionAt) {
-      targetTime = new Date(nextDistributionAt).getTime();
-    } else {
-      // Заглушка — 23:44:34 от текущего момента
-      targetTime = Date.now() + (23 * 3600 + 44 * 60 + 34) * 1000;
-    }
+    if (nextDistributionAt) targetTime = new Date(nextDistributionAt).getTime();
+    else targetTime = Date.now() + (23 * 3600 + 44 * 60 + 34) * 1000;
 
     function tick() {
       const now = Date.now();
@@ -779,9 +587,6 @@
     poolTimerInterval = setInterval(tick, 1000);
   }
 
-  // ============================================
-  // Activate packet
-  // ============================================
   async function handleActivate() {
     const current = userData.currentPacket || 0;
     const next = getNextPacket(current);
@@ -789,10 +594,7 @@
       showAlert('error', 'Все пакеты уже активированы');
       return;
     }
-
-    if (!confirm('Активировать пакет ' + next + ' USDT? (виртуальная активация)')) {
-      return;
-    }
+    if (!confirm('Активировать пакет ' + next + ' USDT? (виртуальная активация)')) return;
 
     const btn = document.getElementById('btn-activate');
     btn.disabled = true;
@@ -810,9 +612,6 @@
     }
   }
 
-  // ============================================
-  // Lang
-  // ============================================
   function setLang(lang) {
     currentLang = lang;
     localStorage.setItem('virusmlm_lang', lang);
@@ -826,8 +625,63 @@
   }
 
   // ============================================
-  // Start
+  // MESSAGES (ЧАТ)
   // ============================================
+  async function updateUnreadBadge() {
+    try {
+      const result = await api.getUnreadCount();
+      const badge = document.getElementById('messages-badge');
+      if (result.unreadCount > 0) {
+        badge.textContent = result.unreadCount;
+        badge.style.display = 'block';
+      } else {
+        badge.style.display = 'none';
+      }
+    } catch (err) {
+      console.error('Ошибка получения непрочитанных:', err);
+    }
+  }
+
+  async function openChatModal() {
+    if (!userData.referrerVirId) {
+      alert('У вас нет спонсора (вы корень системы)');
+      return;
+    }
+
+    // Находим ID спонсора через его vir_id
+    const sponsorVirId = userData.referrerVirId;
+    chatPartnerName = sponsorVirId;
+    chatPartnerId = null;
+
+    // Мы не знаем ID спонсора напрямую, поэтому возьмем его из /me (он там как referrerVirId)
+    // Но нам нужен числовой ID. Сделаем запрос к нашему API (получим ID через vir_id).
+    try {
+      const referrals = await api.getReferrals();
+      // Ищем спонсора в списке рефералов? Нет, это не сработает.
+      // Нам нужен ID спонсора. Будем использовать API /me, но он не отдаёт ID спонсора.
+      // Временно: откроем чат с первым рефералом (если есть).
+      // В будущем добавим endpoint /user/sponsor-id.
+    } catch (e) {}
+
+    document.getElementById('chat-title').textContent = 'Чат со спонсором (' + sponsorVirId + ')';
+    document.getElementById('chat-modal').classList.add('active');
+    document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Загрузка...</div>';
+    
+    // Показываем заглушку, так как API для чата со спонсором требует ID
+    setTimeout(() => {
+      document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Чат будет доступен после обновления API (нужен ID спонсора).</div>';
+    }, 500);
+  }
+
+  function closeChatModal() {
+    document.getElementById('chat-modal').classList.remove('active');
+  }
+
+  function sendChatMessage() {
+    alert('Функция отправки сообщений будет доступна после обновления API.');
+  }
+
+  setInterval(updateUnreadBadge, 30000);
   loadCabinet();
 </script>
 
