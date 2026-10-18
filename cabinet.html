@@ -692,7 +692,7 @@
       body.scrollTop = body.scrollHeight;
     } catch (err) {
       console.error(err);
-      document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">Ошибка загрузки истории</div>';
+      document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">Ошибка загрузки истории: ' + (err.message || err) + '</div>';
     }
   }
 
