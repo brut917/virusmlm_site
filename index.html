@@ -5,77 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VIRUS MLM — Регистрация</title>
 
-<!-- Favicon ⚡ (временно) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
-
-<!-- Cloudflare Turnstile -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; }
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
 
-  .bg-hero {
-    background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%);
-    min-height: 100vh;
-  }
-
-  .header {
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-    padding: 18px 20px; border-bottom: 1px solid #1f2937;
-    background: linear-gradient(180deg, #0f1e3a, #0a0e1a);
-    min-height: 62px;
-    max-width: 640px;
-    margin: 0 auto;
-  }
+  .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
+  .header { position: relative; display: flex; align-items: center; justify-content: center; padding: 18px 20px; border-bottom: 1px solid #1f2937; background: linear-gradient(180deg, #0f1e3a, #0a0e1a); min-height: 62px; max-width: 640px; margin: 0 auto; }
   .logo { display: flex; align-items: center; gap: 2px; }
   .logo-text { font-weight: 800; font-size: 22px; letter-spacing: 2px; color: #fff; }
   .logo-bolt { font-size: 22px; color: #2196f3; filter: drop-shadow(0 0 8px #2196f3); margin: 0 2px; }
 
-  .lang-switch {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex; gap: 3px; align-items: center;
-  }
-  .lang-switch button {
-    background: transparent; color: #6b7280;
-    border: 1px solid #374151; border-radius: 5px;
-    padding: 4px 8px; font-size: 11px; font-weight: 700;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .lang-switch button.active {
-    background: #2196f3; color: #fff; border-color: #2196f3;
-  }
+  .lang-switch { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 3px; align-items: center; }
+  .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
   .reg-container { max-width: 560px; margin: 0 auto; padding: 40px 20px; }
   .reg-logo { text-align: center; margin-bottom: 32px; }
   .reg-subtitle { font-size: 14px; color: #9ca3af; text-align: center; margin-bottom: 32px; }
 
-  .sponsor-card {
-    background: #ffffff; border-radius: 12px; padding: 16px;
-    margin-bottom: 16px; text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
+  .sponsor-card { background: #ffffff; border-radius: 12px; padding: 16px; margin-bottom: 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
   .sponsor-label { font-size: 11px; color: #6b7280; text-transform: uppercase; margin-bottom: 8px; }
   .sponsor-value { font-size: 20px; font-weight: 700; color: #ffc107; font-family: monospace; }
 
-  .input {
-    width: 100%; padding: 12px; background: #f9fafb;
-    border: 1px solid #e5e7eb; border-radius: 8px;
-    color: #1a1a1a; font-size: 13px; margin-bottom: 10px;
-    font-family: monospace;
-  }
+  .input { width: 100%; padding: 12px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; color: #1a1a1a; font-size: 13px; margin-bottom: 10px; font-family: monospace; }
   .input:focus { outline: none; border-color: #2196f3; }
   .input::placeholder { color: #9ca3af; font-family: sans-serif; }
 
-  .btn {
-    width: 100%; padding: 14px; border: none; border-radius: 10px;
-    font-size: 15px; font-weight: 700; cursor: pointer;
-    transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
-  }
+  .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
   .btn-blue { background: #2196f3; color: #fff; }
   .btn-blue:hover { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
   .btn-blue:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; }
@@ -83,60 +42,30 @@
   .btn-green:hover { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
   .btn-green:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; }
 
-  .captcha-wrap {
-    margin: 12px 0;
-    display: flex;
-    justify-content: center;
-  }
-
-  .checkbox-row {
-    display: flex; align-items: flex-start; gap: 10px; margin: 16px 0;
-    font-size: 12px; color: #9ca3af; line-height: 1.6;
-  }
+  .captcha-wrap { margin: 12px 0; display: flex; justify-content: center; }
+  .checkbox-row { display: flex; align-items: flex-start; gap: 10px; margin: 16px 0; font-size: 12px; color: #9ca3af; line-height: 1.6; }
   .checkbox-row input { margin-top: 3px; accent-color: #2e7d32; }
   .checkbox-row a { color: #2e7d32; }
 
-  .notice {
-    background: #e3f2fd; border-left: 4px solid #2196f3;
-    padding: 12px 16px; border-radius: 6px; font-size: 12px;
-    color: #0d47a1; margin: 12px 20px; max-width: 560px;
-    margin-left: auto; margin-right: auto;
-    line-height: 1.6;
-  }
-
-  .alert {
-    padding: 12px 16px; border-radius: 8px; font-size: 13px;
-    margin: 12px 0; line-height: 1.5; display: none;
-  }
+  .notice { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px 16px; border-radius: 6px; font-size: 12px; color: #0d47a1; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin: 12px 0; line-height: 1.5; display: none; }
   .alert.error { background: #7f1d1d; color: #fecaca; display: block; }
   .alert.success { background: #14532d; color: #bbf7d0; display: block; }
   .alert.info { background: #1e3a8a; color: #bfdbfe; display: block; }
 
-  .login-link {
-    text-align: center; margin-top: 20px; font-size: 13px;
-    color: #9ca3af;
-  }
+  .login-link { text-align: center; margin-top: 20px; font-size: 13px; color: #9ca3af; }
   .login-link a { color: #2196f3; text-decoration: none; }
   .login-link a:hover { text-decoration: underline; }
 
-  .spinner {
-    display: inline-block; width: 14px; height: 14px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff; border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    margin-right: 8px; vertical-align: middle;
-  }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  @media (max-width: 480px) {
-    .logo-text { font-size: 19px; }
-  }
+  @media (max-width: 480px) { .logo-text { font-size: 19px; } }
 </style>
 </head>
 <body>
 
 <div class="bg-hero">
-
   <div class="header">
     <div class="logo">
       <div class="logo-text">VIRUS<span class="logo-bolt">⚡</span>MLM</div>
@@ -164,7 +93,6 @@
 
     <input type="text" class="input" placeholder="Введите код из письма" id="code" style="margin-top:12px;">
 
-    <!-- Cloudflare Turnstile widget -->
     <div class="captcha-wrap">
       <div class="cf-turnstile" data-sitekey="0x4AAAAAAFQoVElxKXtVNUcR" data-theme="dark" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired"></div>
     </div>
@@ -178,52 +106,33 @@
 
     <button class="btn btn-green" id="btn-register" onclick="handleRegister()">ПОДТВЕРДИТЬ</button>
 
-    <div class="login-link">
-      Уже есть аккаунт? <a href="login.html">Войти</a>
+    <div class="login-link" id="login-link-container">
+      Уже есть аккаунт? <a href="login.html" id="login-link-text">Войти</a>
     </div>
 
     <div class="notice" id="notice-text" style="margin-top:20px;">
       После бесплатной регистрации мне предоставляется ранний доступ к виртуальному кабинету — симулятору экосистемы Virus MLM. В виртуальном кабинете можно ознакомиться с принципами работы матрицы, реферальной программы и лидерского пула в формате реального времени на тестовые деньги. Для участия в реальной программе и получения реферальных выплат на крипто кошелёк, требуется реальная активация смарт контракта с соблюдением установленных условий.
     </div>
   </div>
-
 </div>
 
-<!-- API Client -->
 <script src="api.js"></script>
 
 <script>
-  // ============================================
-  // Turnstile token
-  // ============================================
   let turnstileToken = null;
+  function onTurnstileSuccess(token) { turnstileToken = token; }
+  function onTurnstileExpired() { turnstileToken = null; }
+  function resetTurnstile() { turnstileToken = null; if (window.turnstile) { try { window.turnstile.reset(); } catch (e) {} } }
 
-  function onTurnstileSuccess(token) {
-    turnstileToken = token;
-  }
-
-  function onTurnstileExpired() {
-    turnstileToken = null;
-  }
-
-  function resetTurnstile() {
-    turnstileToken = null;
-    if (window.turnstile) {
-      try {
-        window.turnstile.reset();
-      } catch (e) {}
-    }
-  }
-
-  // ============================================
-  // i18n
-  // ============================================
   const i18n = {
     ru: {
       subtitle: "Регистрация по приглашению",
       sponsor_label: "Ваш спонсор",
       send_code: "Получить код на email",
       confirm: "ПОДТВЕРДИТЬ",
+      placeholder_email: "Введите email",
+      placeholder_code: "Введите код из письма",
+      login_text: "Уже есть аккаунт? <a href='login.html' id='login-link-text'>Войти</a>",
       offer: "Я принимаю условия договора оферты и подтверждаю, что бесплатная регистрация даёт мне статус аффилированного партнёра Virus MLM. Регистрация является бесплатной и не к чему меня не обязывает. У меня есть право участвовать в партнёрской программе и получать вознаграждение за продвижение продуктов и сервисов платформы. Все начисления и выплаты осуществляются в соответствии с действующей маркетинговой программой Virus MLM и её условиями.",
       notice: "После бесплатной регистрации мне предоставляется ранний доступ к виртуальному кабинету — симулятору экосистемы Virus MLM. В виртуальном кабинете можно ознакомиться с принципами работы матрицы, реферальной программы и лидерского пула в формате реального времени на тестовые деньги. Для участия в реальной программе и получения реферальных выплат на крипто кошелёк, требуется реальная активация смарт контракта с соблюдением установленных условий.",
     },
@@ -232,6 +141,9 @@
       sponsor_label: "Your sponsor",
       send_code: "Get code by email",
       confirm: "CONFIRM",
+      placeholder_email: "Enter email",
+      placeholder_code: "Enter code from email",
+      login_text: "Already have an account? <a href='login.html' id='login-link-text'>Log in</a>",
       offer: "I accept the terms of the offer agreement and confirm that free registration gives me the status of an affiliate partner of Virus MLM. Registration is free and does not obligate me to anything. I have the right to participate in the partner program and receive rewards for promoting the platform's products and services. All accruals and payouts are made in accordance with the current Virus MLM marketing program and its terms.",
       notice: "After free registration I get early access to the virtual cabinet — a simulator of the Virus MLM ecosystem. There I can learn how the matrix, referral program and leader pool work in real time using test money. To participate in the real program and receive payouts to my crypto wallet, real smart contract activation and compliance with the established conditions are required.",
     },
@@ -245,48 +157,40 @@
     document.getElementById('sponsor-label').textContent = i18n[lang].sponsor_label;
     document.getElementById('btn-send').textContent = i18n[lang].send_code;
     document.getElementById('btn-register').textContent = i18n[lang].confirm;
+    document.getElementById('email').placeholder = i18n[lang].placeholder_email;
+    document.getElementById('code').placeholder = i18n[lang].placeholder_code;
     document.getElementById('offer-text').textContent = i18n[lang].offer;
     document.getElementById('notice-text').textContent = i18n[lang].notice;
+    document.getElementById('login-link-container').innerHTML = i18n[lang].login_text;
+    
     document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
     document.getElementById('lang-' + lang).classList.add('active');
     localStorage.setItem('virusmlm_lang', lang);
   }
 
   const savedLang = localStorage.getItem('virusmlm_lang');
-  if (savedLang && i18n[savedLang]) {
-    setLang(savedLang);
-  }
+  if (savedLang && i18n[savedLang]) { setLang(savedLang); }
 
-  // ============================================
-  // Ref from URL
-  // ============================================
   function getRefFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('ref');
-    if (ref && /^VIR-\d{6,}$/i.test(ref)) {
-      return ref.toUpperCase();
-    }
+    if (ref && /^VIR-\d{6,}$/i.test(ref)) { return ref.toUpperCase(); }
     return null;
   }
 
   const referrerVirId = getRefFromUrl() || 'VIR-000001';
   document.getElementById('sponsor-value').textContent = referrerVirId;
 
-  // ============================================
-  // Alert helpers
-  // ============================================
   function showAlert(type, message) {
     const box = document.getElementById('alert-box');
     box.className = 'alert ' + type;
     box.textContent = message;
   }
-
   function hideAlert() {
     const box = document.getElementById('alert-box');
     box.className = 'alert';
     box.textContent = '';
   }
-
   function setLoading(btnId, loading, loadingText) {
     const btn = document.getElementById(btnId);
     if (loading) {
@@ -297,32 +201,15 @@
     }
   }
 
-  // ============================================
-  // Redirect if logged in
-  // ============================================
-  if (api.isAuthenticated()) {
-    window.location.href = 'cabinet.html';
-  }
+  if (api.isAuthenticated()) { window.location.href = 'cabinet.html'; }
 
-  // ============================================
-  // Send code
-  // ============================================
   async function handleSendCode() {
     hideAlert();
     const email = document.getElementById('email').value.trim();
-
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showAlert('error', 'Введите корректный email');
-      return;
-    }
-
-    if (!turnstileToken) {
-      showAlert('error', 'Пройдите проверку Cloudflare Turnstile');
-      return;
-    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAlert('error', 'Введите корректный email'); return; }
+    if (!turnstileToken) { showAlert('error', 'Пройдите проверку Cloudflare Turnstile'); return; }
 
     setLoading('btn-send', true, 'Отправка...');
-
     try {
       await api.sendCode(email, turnstileToken);
       showAlert('success', 'Код отправлен на ' + email + '. Проверьте почту (включая спам).');
@@ -345,63 +232,32 @@
     }
   }
 
-  // ============================================
-  // Register
-  // ============================================
   async function handleRegister() {
     hideAlert();
     const email = document.getElementById('email').value.trim();
     const code = document.getElementById('code').value.trim();
     const acceptOffer = document.getElementById('accept-offer').checked;
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showAlert('error', 'Введите корректный email');
-      return;
-    }
-    if (!code || !/^\d{6}$/.test(code)) {
-      showAlert('error', 'Введите 6-значный код из письма');
-      return;
-    }
-    if (!acceptOffer) {
-      showAlert('error', 'Необходимо принять условия оферты');
-      return;
-    }
-    if (!turnstileToken) {
-      showAlert('error', 'Пройдите проверку Cloudflare Turnstile');
-      return;
-    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAlert('error', 'Введите корректный email'); return; }
+    if (!code || !/^\d{6}$/.test(code)) { showAlert('error', 'Введите 6-значный код из письма'); return; }
+    if (!acceptOffer) { showAlert('error', 'Необходимо принять условия оферты'); return; }
+    if (!turnstileToken) { showAlert('error', 'Пройдите проверку Cloudflare Turnstile'); return; }
 
     setLoading('btn-register', true, 'Регистрация...');
-
     try {
       await api.register(email, code, referrerVirId, turnstileToken, true);
       showAlert('success', 'Регистрация успешна! Переход в кабинет...');
-      setTimeout(() => {
-        window.location.href = 'cabinet.html';
-      }, 800);
+      setTimeout(() => { window.location.href = 'cabinet.html'; }, 800);
     } catch (error) {
       switch (error.code) {
-        case 'CODE_NOT_FOUND':
-          showAlert('error', 'Код не найден или истёк. Запросите новый код.');
-          break;
-        case 'CODE_INVALID':
-          showAlert('error', 'Неверный код. Проверьте и попробуйте снова.');
-          break;
-        case 'TOO_MANY_ATTEMPTS':
-          showAlert('error', 'Слишком много попыток. Запросите новый код.');
-          break;
-        case 'CONFLICT':
-          showAlert('error', 'Этот email уже зарегистрирован. Перейдите на страницу входа.');
-          break;
-        case 'NOT_FOUND':
-          showAlert('error', 'Спонсор не найден. Проверьте реферальную ссылку.');
-          break;
+        case 'CODE_NOT_FOUND': showAlert('error', 'Код не найден или истёк. Запросите новый код.'); break;
+        case 'CODE_INVALID': showAlert('error', 'Неверный код. Проверьте и попробуйте снова.'); break;
+        case 'TOO_MANY_ATTEMPTS': showAlert('error', 'Слишком много попыток. Запросите новый код.'); break;
+        case 'CONFLICT': showAlert('error', 'Этот email уже зарегистрирован. Перейдите на страницу входа.'); break;
+        case 'NOT_FOUND': showAlert('error', 'Спонсор не найден. Проверьте реферальную ссылку.'); break;
         default:
-          if ((error.message || '').toLowerCase().includes('captcha')) {
-            showAlert('error', 'Ошибка капчи. Обновите страницу.');
-          } else {
-            showAlert('error', error.message || 'Ошибка регистрации. Попробуйте позже.');
-          }
+          if ((error.message || '').toLowerCase().includes('captcha')) { showAlert('error', 'Ошибка капчи. Обновите страницу.'); }
+          else { showAlert('error', error.message || 'Ошибка регистрации. Попробуйте позже.'); }
       }
       resetTurnstile();
     } finally {
