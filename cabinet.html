@@ -11,7 +11,7 @@
   .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
   
   /* =========================================
-     ИДЕАЛЬНАЯ ШАПКА (ДВЕ СТРОКИ НА ТЕЛЕФОНЕ)
+     БАЗОВАЯ ШАПКА (ДЛЯ КОМПЬЮТЕРА - ОДНА СТРОКА)
      ========================================= */
   .header { 
     display: flex; 
@@ -25,35 +25,44 @@
     z-index: 100; 
     max-width: 640px; 
     margin: 0 auto; 
-    flex-wrap: wrap; /* Позволяет переносить элементы */
+    min-height: 60px;
   }
   
-  .header-controls { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; }
+  .header-controls { display: flex; justify-content: space-between; align-items: center; width: auto; margin-bottom: 0; gap: 8px; }
   .header-left { display: flex; gap: 8px; align-items: center; }
   
-  .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 6px 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 5px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
   
-  .messages-btn { position: relative; background: transparent; color: #2196f3; border: 1px solid #2196f3; border-radius: 5px; padding: 6px 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+  .messages-btn { position: relative; background: transparent; color: #2196f3; border: 1px solid #2196f3; border-radius: 5px; padding: 5px 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
   .messages-btn:hover { background: #2196f3; color: #fff; }
   .messages-badge { position: absolute; top: -6px; right: -6px; background: #ff1744; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center; line-height: 1.2; display: none; }
   
+  .logo { display: flex; align-items: center; justify-content: center; gap: 2px; flex: 1; padding: 0 10px; overflow: hidden; }
+  .logo-text { font-weight: 800; font-size: 22px; letter-spacing: 2px; color: #fff; white-space: nowrap; }
+  .logo-bolt { font-size: 22px; color: #2196f3; filter: drop-shadow(0 0 8px #2196f3); margin: 0 2px; }
+  
   .lang-switch { display: flex; gap: 4px; align-items: center; }
-  .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 6px 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 5px 7px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
-  .logo { display: flex; align-items: center; justify-content: center; gap: 2px; width: 100%; }
-  .logo-text { font-weight: 800; font-size: 24px; letter-spacing: 2px; color: #fff; white-space: nowrap; }
-  .logo-bolt { font-size: 24px; color: #2196f3; filter: drop-shadow(0 0 8px #2196f3); margin: 0 2px; }
-
-  /* КОМПЬЮТЕРЫ (в одну строку, как и было) */
-  @media (min-width: 481px) {
-    .header { flex-wrap: nowrap; padding: 12px 16px; }
-    .header-controls { width: auto; margin-bottom: 0; gap: 8px; }
-    .logo { width: auto; flex: 1; }
-    .logout-btn, .messages-btn, .lang-switch button { padding: 5px 8px; font-size: 11px; }
-    .logo-text { font-size: 22px; }
-    .logo-bolt { font-size: 22px; }
+  /* =========================================
+     МОБИЛЬНАЯ ШАПКА (ДВЕ СТРОКИ ДЛЯ ТЕЛЕФОНА И METAMASK)
+     ========================================= */
+  @media (max-width: 480px) {
+    .header { flex-wrap: wrap; padding: 10px 12px; }
+    .header-controls { width: 100%; margin-bottom: 10px; }
+    .header-left { gap: 4px; }
+    
+    .logout-btn { font-size: 10px; padding: 4px 6px; }
+    .messages-btn { font-size: 12px; padding: 4px 6px; }
+    
+    .logo { width: 100%; flex: none; padding: 0; }
+    .logo-text { font-size: 20px; letter-spacing: 1px; }
+    .logo-bolt { font-size: 20px; }
+    
+    .lang-switch { gap: 2px; }
+    .lang-switch button { font-size: 10px; padding: 4px 5px; }
   }
 
   .profile-row { max-width: 560px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
