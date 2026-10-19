@@ -10,22 +10,30 @@
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
   .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
   
-  /* ИСПРАВЛЕННАЯ ШАПКА */
-  .header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 12px 10px; border-bottom: 1px solid #1f2937; background: linear-gradient(180deg, #0f1e3a, #0a0e1a); position: sticky; top: 0; z-index: 100; min-height: 62px; max-width: 640px; margin: 0 auto; }
-  .logo { display: flex; align-items: center; gap: 2px; flex-shrink: 1; overflow: hidden; justify-content: center; flex: 1; }
-  .logo-text { font-weight: 800; font-size: 20px; letter-spacing: 1px; color: #fff; white-space: nowrap; }
-  .logo-bolt { font-size: 20px; color: #2196f3; filter: drop-shadow(0 0 8px #2196f3); margin: 0 2px; }
+  /* ИСПРАВЛЕННАЯ ШАПКА ДЛЯ УЗКИХ ЭКРАНОВ */
+  .header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 10px 8px; border-bottom: 1px solid #1f2937; background: linear-gradient(180deg, #0f1e3a, #0a0e1a); position: sticky; top: 0; z-index: 100; min-height: 60px; max-width: 640px; margin: 0 auto; }
+  .logo { display: flex; align-items: center; gap: 1px; flex-shrink: 1; overflow: hidden; justify-content: center; flex: 1; }
+  .logo-text { font-weight: 800; font-size: 18px; letter-spacing: 1px; color: #fff; white-space: nowrap; }
+  .logo-bolt { font-size: 18px; color: #2196f3; filter: drop-shadow(0 0 8px #2196f3); margin: 0 1px; }
   
-  .header-left { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
-  .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 6px; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .header-left { display: flex; gap: 3px; align-items: center; flex-shrink: 0; }
+  .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 5px; font-size: 9px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
-  .messages-btn { position: relative; background: transparent; color: #2196f3; border: 1px solid #2196f3; border-radius: 5px; padding: 4px 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+  .messages-btn { position: relative; background: transparent; color: #2196f3; border: 1px solid #2196f3; border-radius: 5px; padding: 4px 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
   .messages-btn:hover { background: #2196f3; color: #fff; }
-  .messages-badge { position: absolute; top: -6px; right: -6px; background: #ff1744; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center; line-height: 1.2; display: none; }
+  .messages-badge { position: absolute; top: -6px; right: -6px; background: #ff1744; color: #fff; font-size: 9px; font-weight: 700; padding: 2px 4px; border-radius: 10px; min-width: 14px; text-align: center; line-height: 1.2; display: none; }
   
   .lang-switch { display: flex; gap: 2px; align-items: center; flex-shrink: 0; }
-  .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 5px; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 3px 4px; font-size: 9px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
+
+  @media (max-width: 380px) {
+    .logo-text { font-size: 16px; letter-spacing: 0px; }
+    .logo-bolt { font-size: 16px; }
+    .header { padding: 8px 6px; }
+    .header-left { gap: 2px; }
+    .logout-btn, .messages-btn, .lang-switch button { padding: 3px 4px; font-size: 8px; }
+  }
 
   .profile-row { max-width: 560px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
   .vip-block { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px; min-height: 90px; }
@@ -127,7 +135,6 @@
     .vip-crown { font-size: 24px; }
     .pool-card .pool-amount { font-size: 26px; }
     .products-grid { grid-template-columns: repeat(2, 1fr); }
-    .header { padding: 10px 8px; }
   }
 
   /* ============================================
