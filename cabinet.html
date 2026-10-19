@@ -11,7 +11,7 @@
   .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
   
   /* =========================================
-     ИДЕАЛЬНАЯ ШАПКА (ОДНА СТРОКА, БОЛЬШОЙ ЛОГОТИП)
+     ИДЕАЛЬНАЯ ШАПКА (ОДНА СТРОКА)
      ========================================= */
   .header { 
     display: flex; 
@@ -44,7 +44,6 @@
   .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 5px; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
-  /* УВЕЛИЧИВАЕМ ЛОГОТИП НА БОЛЬШИХ ЭКРАНАХ */
   @media (min-width: 481px) {
     .header { padding: 12px 16px; min-height: 60px; }
     .header-left { gap: 8px; }
@@ -775,11 +774,12 @@
       btnActivate.disabled = true;
     }
 
+    // ИСПРАВЛЕНО: Берем общее количество активированных пользователей из данных пула
     const vipEl = document.getElementById('vip-on-level');
-    if (currentPacket >= 50 && poolData) {
-      vipEl.textContent = (userData.directReferralsCount || 0) + ' ID';
+    if (poolData && typeof poolData.activatedUsersCount === 'number') {
+      vipEl.textContent = poolData.activatedUsersCount + ' ID';
     } else {
-      vipEl.textContent = '—';
+      vipEl.textContent = '0 ID';
     }
 
     if (matrixData) {
