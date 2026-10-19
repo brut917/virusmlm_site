@@ -204,7 +204,7 @@
 
   <div class="header">
     <div class="header-left">
-      <button class="logout-btn" onclick="handleLogout()">← Выйти</button>
+      <button class="logout-btn" onclick="handleLogout()" id="btn-logout">← Выйти</button>
       <button class="messages-btn" onclick="openReferralList()">
         💬
         <span class="messages-badge" id="messages-badge">0</span>
@@ -223,7 +223,7 @@
 
   <div id="loading" class="loading">
     <div class="spinner"></div>
-    <div style="margin-top:12px;">Загрузка кабинета...</div>
+    <div style="margin-top:12px;" id="loading-text">Загрузка кабинета...</div>
   </div>
 
   <div id="content" style="display:none;">
@@ -233,23 +233,23 @@
         <div class="vip-crown">👑</div>
         <div class="vip-level">VIRTUAL VIP</div>
         <div class="vip-stars">★★★★★</div>
-        <div class="vip-duration">Бессрочно</div>
+        <div class="vip-duration" id="lbl-lifetime">Бессрочно</div>
       </div>
       <div class="wallet-block">
-        <div class="wallet-label">User ID</div>
+        <div class="wallet-label" id="lbl-user-id">User ID</div>
         <div class="wallet-value" id="user-virid">—</div>
-        <div class="pool-share-label">VIP на уровне</div>
+        <div class="pool-share-label" id="lbl-vip-on-level">VIP на уровне</div>
         <div class="pool-share-value" id="vip-on-level">—</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Мой спонсор</div>
+      <div class="card-title" id="lbl-my-sponsor">Мой спонсор</div>
       <div class="sponsor-block">
         <div class="sponsor-info">
           <div class="sponsor-virid" id="sponsor-virid">—</div>
         </div>
-        <button class="btn btn-ghost" onclick="openChatModal(userData.referrerId, userData.referrerVirId)">Написать</button>
+        <button class="btn btn-ghost" id="btn-write-sponsor" onclick="openChatModal(userData.referrerId, userData.referrerVirId)">Написать</button>
       </div>
     </div>
 
@@ -270,7 +270,7 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Заполнение матрицы</div>
+      <div class="card-title" id="lbl-matrix-fill">Заполнение матрицы</div>
       <div class="matrix-bar">
         <div class="matrix-fill" id="matrix-fill" style="width: 0%;"></div>
       </div>
@@ -281,7 +281,7 @@
     </div>
 
     <div style="max-width:560px;margin:12px auto;padding:0 20px;">
-      <div class="card-title" style="color:#9ca3af;padding-left:0;">Ваша реферальная ссылка</div>
+      <div class="card-title" style="color:#9ca3af;padding-left:0;" id="lbl-ref-link">Ваша реферальная ссылка</div>
       <div class="ref-link">
         <span style="flex:1;" id="ref-link-text">virusmlm.com/r/—</span>
         <button onclick="copyRefLink()">📋</button>
@@ -289,27 +289,27 @@
     </div>
 
     <div class="pool-card">
-      <div class="pool-title">Лидерский пул</div>
+      <div class="pool-title" id="lbl-pool-title">Лидерский пул</div>
       <div class="pool-amount" id="pool-amount">$0.00</div>
-      <div class="pool-sub">До следующего распределения</div>
+      <div class="pool-sub" id="lbl-pool-sub">До следующего распределения</div>
       <div class="timer">
-        <div class="timer-box"><div class="timer-val" id="timer-h">23</div><div class="timer-lbl">час</div></div>
-        <div class="timer-box"><div class="timer-val" id="timer-m">44</div><div class="timer-lbl">мин</div></div>
-        <div class="timer-box"><div class="timer-val" id="timer-s">34</div><div class="timer-lbl">сек</div></div>
+        <div class="timer-box"><div class="timer-val" id="timer-h">23</div><div class="timer-lbl" id="lbl-h">час</div></div>
+        <div class="timer-box"><div class="timer-val" id="timer-m">44</div><div class="timer-lbl" id="lbl-m">мин</div></div>
+        <div class="timer-box"><div class="timer-val" id="timer-s">34</div><div class="timer-lbl" id="lbl-s">сек</div></div>
       </div>
     </div>
 
     <div class="card">
       <div class="balance-row thick">
-        <span class="balance-label">Всего реферальных</span>
+        <span class="balance-label" id="lbl-bal-referral">Всего реферальных</span>
         <span class="balance-value" id="bal-referral">$0.00</span>
       </div>
       <div class="balance-row thick">
-        <span class="balance-label">Матричный баланс</span>
+        <span class="balance-label" id="lbl-bal-matrix">Матричный баланс</span>
         <span class="balance-value" id="bal-matrix">$0.00</span>
       </div>
       <div class="balance-row">
-        <span class="balance-label">Лидерский пул</span>
+        <span class="balance-label" id="lbl-bal-pool">Лидерский пул</span>
         <span class="balance-value" id="bal-pool">$0.00</span>
       </div>
     </div>
@@ -318,73 +318,73 @@
       <div class="withdraw-strip">
         <div class="withdraw-strip-left">
           <div class="withdraw-icon">₮</div>
-          <div class="withdraw-text">Баланс на вывод: <b id="withdraw-total">$0.00</b></div>
+          <div class="withdraw-text"><span id="lbl-bal-withdraw">Баланс на вывод:</span> <b id="withdraw-total">$0.00</b></div>
         </div>
-        <button class="withdraw-btn" disabled title="Виртуальный кабинет — вывод недоступен">ВЫВОД</button>
+        <button class="withdraw-btn" disabled title="Виртуальный кабинет — вывод недоступен" id="btn-withdraw">ВЫВОД</button>
       </div>
       <div class="withdraw-detail">
         <div class="split-item">
           <div class="val" id="split-wallet">50%</div>
-          <div class="lbl">На кошелёк</div>
+          <div class="lbl" id="lbl-to-wallet">На кошелёк</div>
         </div>
         <div class="split-item">
           <div class="val" id="split-market">50%</div>
-          <div class="lbl">В маркетинг</div>
+          <div class="lbl" id="lbl-to-market">В маркетинг</div>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Продукты и сервисы</div>
+      <div class="card-title" id="lbl-products">Продукты и сервисы</div>
       <div class="products-grid">
-        <div class="product-card"><div class="product-icon">🔍</div><div class="product-name">Аудит кошелька</div></div>
-        <div class="product-card"><div class="product-icon">🤖</div><div class="product-name">ИИ-рекрутер</div></div>
-        <div class="product-card"><div class="product-icon">🎮</div><div class="product-name">Игры</div></div>
-        <div class="product-card"><div class="product-icon">💰</div><div class="product-name">Обменник</div></div>
-        <div class="product-card"><div class="product-icon">📊</div><div class="product-name">Налоги</div></div>
-        <div class="product-card"><div class="product-icon">🎯</div><div class="product-name">Развлечения</div></div>
+        <div class="product-card"><div class="product-icon">🔍</div><div class="product-name" id="prod-1">Аудит кошелька</div></div>
+        <div class="product-card"><div class="product-icon">🤖</div><div class="product-name" id="prod-2">ИИ-рекрутер</div></div>
+        <div class="product-card"><div class="product-icon">🎮</div><div class="product-name" id="prod-3">Игры</div></div>
+        <div class="product-card"><div class="product-icon">💰</div><div class="product-name" id="prod-4">Обменник</div></div>
+        <div class="product-card"><div class="product-icon">📊</div><div class="product-name" id="prod-5">Налоги</div></div>
+        <div class="product-card"><div class="product-icon">🎯</div><div class="product-name" id="prod-6">Развлечения</div></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">ИИ-рекрутер</div>
-      <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;">
+      <div class="card-title" id="lbl-ai-recruiter">ИИ-рекрутер</div>
+      <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;" id="lbl-ai-soon">
         🤖 Скоро — интеллектуальный помощник для рекрутинга
       </div>
     </div>
 
     <div class="activate-box">
-      <div class="activate-title">⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА</div>
+      <div class="activate-title" id="lbl-real-activation">⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА</div>
 
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
-          <div class="step-title">Подключить кошелёк</div>
-          <div class="step-desc">Разрешить платформе работать с токеном USDT BEP20 на вашем кошельке.</div>
-          <button class="step-btn" disabled>ПОДКЛЮЧИТЬ METAMASK</button>
+          <div class="step-title" id="step-1-title">Подключить кошелёк</div>
+          <div class="step-desc" id="step-1-desc">Разрешить платформе работать с токеном USDT BEP20 на вашем кошельке.</div>
+          <button class="step-btn" disabled id="step-1-btn">ПОДКЛЮЧИТЬ METAMASK</button>
         </div>
       </div>
 
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <div class="step-title">Регистрация под спонсора</div>
-          <div class="step-desc">Укажите адрес кошелька вашего спонсора в системе Virus MLM.</div>
-          <input type="text" placeholder="Адрес кошелька спонсора (0x...)" disabled style="width:100%;padding:10px;margin-top:8px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;color:#9ca3af;">
-          <button class="step-btn" disabled>ЗАРЕГИСТРИРОВАТЬСЯ</button>
+          <div class="step-title" id="step-2-title">Регистрация под спонсора</div>
+          <div class="step-desc" id="step-2-desc">Укажите адрес кошелька вашего спонсора в системе Virus MLM.</div>
+          <input type="text" placeholder="Адрес кошелька спонсора (0x...)" disabled style="width:100%;padding:10px;margin-top:8px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;color:#9ca3af;" id="step-2-input">
+          <button class="step-btn" disabled id="step-2-btn">ЗАРЕГИСТРИРОВАТЬСЯ</button>
         </div>
       </div>
 
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-body">
-          <div class="step-title">Активировать пакет 50 USDT</div>
-          <div class="step-desc">Единоразовый вход в клуб. Спишется 50 USDT BEP20.</div>
-          <button class="step-btn" disabled>АКТИВИРОВАТЬ 50 USDT</button>
+          <div class="step-title" id="step-3-title">Активировать пакет 50 USDT</div>
+          <div class="step-desc" id="step-3-desc">Единоразовый вход в клуб. Спишется 50 USDT BEP20.</div>
+          <button class="step-btn" disabled id="step-3-btn">АКТИВИРОВАТЬ 50 USDT</button>
         </div>
       </div>
 
-      <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.5;">
+      <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.5;" id="lbl-need-bnb">
         Нужно: BNB для газа + 50 USDT BEP20 на кошельке.
       </div>
     </div>
@@ -401,7 +401,7 @@
 <div class="modal-overlay" id="ref-list-modal">
   <div class="modal-content">
     <div class="modal-header">
-      <div class="modal-title">Выберите чат</div>
+      <div class="modal-title" id="lbl-choose-chat">Выберите чат</div>
       <button class="modal-close" onclick="closeRefList()">×</button>
     </div>
     <div class="modal-body" id="ref-list-body">
@@ -436,20 +436,236 @@
   // VIRUS MLM — Cabinet + Chat
   // ============================================
 
-  if (!api.isAuthenticated()) {
-    window.location.href = 'index.html';
+  const i18n = {
+    ru: {
+      logout: "← Выйти",
+      loading: "Загрузка кабинета...",
+      lifetime: "Бессрочно",
+      user_id: "User ID",
+      vip_on_level: "VIP на уровне",
+      my_sponsor: "Мой спонсор",
+      write: "Написать",
+      activate_btn: "Активировать пакет {packet} USDT",
+      activate_all: "Все пакеты активированы",
+      matrix_fill: "Заполнение матрицы",
+      places: "{total} / {max} мест",
+      ref_link: "Ваша реферальная ссылка",
+      pool_title: "Лидерский пул",
+      pool_sub: "До следующего распределения",
+      h: "час", m: "мин", s: "сек",
+      bal_referral: "Всего реферальных",
+      bal_matrix: "Матричный баланс",
+      bal_pool: "Лидерский пул",
+      bal_withdraw: "Баланс на вывод:",
+      withdraw: "ВЫВОД",
+      to_wallet: "На кошелёк",
+      to_market: "В маркетинг",
+      products: "Продукты и сервисы",
+      prod_1: "Аудит кошелька", prod_2: "ИИ-рекрутер", prod_3: "Игры", prod_4: "Обменник", prod_5: "Налоги", prod_6: "Развлечения",
+      ai_recruiter: "ИИ-рекрутер",
+      ai_soon: "🤖 Скоро — интеллектуальный помощник для рекрутинга",
+      real_activation: "⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА",
+      step_1_title: "Подключить кошелёк",
+      step_1_desc: "Разрешить платформе работать с токеном USDT BEP20 на вашем кошельке.",
+      step_1_btn: "ПОДКЛЮЧИТЬ METAMASK",
+      step_2_title: "Регистрация под спонсора",
+      step_2_desc: "Укажите адрес кошелька вашего спонсора в системе Virus MLM.",
+      step_2_input: "Адрес кошелька спонсора (0x...)",
+      step_2_btn: "ЗАРЕГИСТРИРОВАТЬСЯ",
+      step_3_title: "Активировать пакет 50 USDT",
+      step_3_desc: "Единоразовый вход в клуб. Спишется 50 USDT BEP20.",
+      step_3_btn: "АКТИВИРОВАТЬ 50 USDT",
+      need_bnb: "Нужно: BNB для газа + 50 USDT BEP20 на кошельке.",
+      choose_chat: "Выберите чат",
+      chat_with: "Чат ({name})",
+      no_messages: "Нет сообщений. Напишите первым!",
+      loading_history: "Загрузка...",
+      error_history: "Ошибка загрузки истории",
+      error_list: "Ошибка загрузки списка",
+      no_refs: "У вас нет рефералов и спонсора",
+      sponsor_lbl: "Спонсор",
+      ref_lbl: "Реферал (пакет {packet})",
+      type_msg: "Написать сообщение...",
+      err_send: "Ошибка отправки: ",
+      err_net: "Обратитесь позже",
+      alert_no_sponsor: "У вас нет спонсора (вы корень системы)",
+      alert_all_packets: "Все пакеты уже активированы",
+      confirm_activate: "Активировать пакет {packet} USDT? (виртуальная активация)",
+      activating: "Активация...",
+      success_activate: "Пакет {packet} USDT активирован!",
+      err_activate: "Ошибка активации",
+      copied: "Ссылка скопирована!",
+      err_copy: "Не удалось скопировать",
+      root_system: "Корень системы",
+      confirm_logout: "Выйти из аккаунта?"
+    },
+    en: {
+      logout: "← Log out",
+      loading: "Loading cabinet...",
+      lifetime: "Lifetime",
+      user_id: "User ID",
+      vip_on_level: "VIP on level",
+      my_sponsor: "My sponsor",
+      write: "Write",
+      activate_btn: "Activate packet {packet} USDT",
+      activate_all: "All packets activated",
+      matrix_fill: "Matrix filling",
+      places: "{total} / {max} places",
+      ref_link: "Your referral link",
+      pool_title: "Leader pool",
+      pool_sub: "Until next distribution",
+      h: "h", m: "m", s: "s",
+      bal_referral: "Total referral",
+      bal_matrix: "Matrix balance",
+      bal_pool: "Leader pool",
+      bal_withdraw: "Balance to withdraw:",
+      withdraw: "WITHDRAW",
+      to_wallet: "To wallet",
+      to_market: "To marketing",
+      products: "Products and services",
+      prod_1: "Wallet audit", prod_2: "AI recruiter", prod_3: "Games", prod_4: "Exchanger", prod_5: "Taxes", prod_6: "Entertainment",
+      ai_recruiter: "AI recruiter",
+      ai_soon: "🤖 Soon — intelligent recruiting assistant",
+      real_activation: "⚡ REAL PACKET ACTIVATION",
+      step_1_title: "Connect wallet",
+      step_1_desc: "Allow the platform to work with USDT BEP20 token on your wallet.",
+      step_1_btn: "CONNECT METAMASK",
+      step_2_title: "Register under sponsor",
+      step_2_desc: "Enter your sponsor's wallet address in the Virus MLM system.",
+      step_2_input: "Sponsor's wallet address (0x...)",
+      step_2_btn: "REGISTER",
+      step_3_title: "Activate 50 USDT packet",
+      step_3_desc: "One-time entry to the club. 50 USDT BEP20 will be charged.",
+      step_3_btn: "ACTIVATE 50 USDT",
+      need_bnb: "Needed: BNB for gas + 50 USDT BEP20 in wallet.",
+      choose_chat: "Choose chat",
+      chat_with: "Chat ({name})",
+      no_messages: "No messages. Write first!",
+      loading_history: "Loading...",
+      error_history: "Error loading history",
+      error_list: "Error loading list",
+      no_refs: "You have no referrals and sponsor",
+      sponsor_lbl: "Sponsor",
+      ref_lbl: "Referral (packet {packet})",
+      type_msg: "Type a message...",
+      err_send: "Send error: ",
+      err_net: "Try again later",
+      alert_no_sponsor: "You have no sponsor (you are the root)",
+      alert_all_packets: "All packets already activated",
+      confirm_activate: "Activate {packet} USDT packet? (virtual activation)",
+      activating: "Activating...",
+      success_activate: "Packet {packet} USDT activated!",
+      err_activate: "Activation error",
+      copied: "Link copied!",
+      err_copy: "Failed to copy",
+      root_system: "System root",
+      confirm_logout: "Log out?"
+    }
+  };
+
+  let currentLang = localStorage.getItem('virusmlm_lang') || 'ru';
+
+  function t(key, params) {
+    let str = i18n[currentLang][key] || key;
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        str = str.replace(`{${k}}`, v);
+      }
+    }
+    return str;
   }
+
+  function applyTranslations() {
+    document.getElementById('btn-logout').textContent = t('logout');
+    document.getElementById('loading-text').textContent = t('loading');
+    document.getElementById('lbl-lifetime').textContent = t('lifetime');
+    document.getElementById('lbl-user-id').textContent = t('user_id');
+    document.getElementById('lbl-vip-on-level').textContent = t('vip_on_level');
+    document.getElementById('lbl-my-sponsor').textContent = t('my_sponsor');
+    document.getElementById('btn-write-sponsor').textContent = t('write');
+    document.getElementById('lbl-matrix-fill').textContent = t('matrix_fill');
+    document.getElementById('lbl-ref-link').textContent = t('ref_link');
+    document.getElementById('lbl-pool-title').textContent = t('pool_title');
+    document.getElementById('lbl-pool-sub').textContent = t('pool_sub');
+    document.getElementById('lbl-h').textContent = t('h');
+    document.getElementById('lbl-m').textContent = t('m');
+    document.getElementById('lbl-s').textContent = t('s');
+    document.getElementById('lbl-bal-referral').textContent = t('bal_referral');
+    document.getElementById('lbl-bal-matrix').textContent = t('bal_matrix');
+    document.getElementById('lbl-bal-pool').textContent = t('bal_pool');
+    document.getElementById('lbl-bal-withdraw').textContent = t('bal_withdraw');
+    document.getElementById('btn-withdraw').textContent = t('withdraw');
+    document.getElementById('lbl-to-wallet').textContent = t('to_wallet');
+    document.getElementById('lbl-to-market').textContent = t('to_market');
+    document.getElementById('lbl-products').textContent = t('products');
+    document.getElementById('prod-1').textContent = t('prod_1');
+    document.getElementById('prod-2').textContent = t('prod_2');
+    document.getElementById('prod-3').textContent = t('prod_3');
+    document.getElementById('prod-4').textContent = t('prod_4');
+    document.getElementById('prod-5').textContent = t('prod_5');
+    document.getElementById('prod-6').textContent = t('prod_6');
+    document.getElementById('lbl-ai-recruiter').textContent = t('ai_recruiter');
+    document.getElementById('lbl-ai-soon').textContent = t('ai_soon');
+    document.getElementById('lbl-real-activation').textContent = t('real_activation');
+    document.getElementById('step-1-title').textContent = t('step_1_title');
+    document.getElementById('step-1-desc').textContent = t('step_1_desc');
+    document.getElementById('step-1-btn').textContent = t('step_1_btn');
+    document.getElementById('step-2-title').textContent = t('step_2_title');
+    document.getElementById('step-2-desc').textContent = t('step_2_desc');
+    document.getElementById('step-2-input').placeholder = t('step_2_input');
+    document.getElementById('step-2-btn').textContent = t('step_2_btn');
+    document.getElementById('step-3-title').textContent = t('step_3_title');
+    document.getElementById('step-3-desc').textContent = t('step_3_desc');
+    document.getElementById('step-3-btn').textContent = t('step_3_btn');
+    document.getElementById('lbl-need-bnb').textContent = t('need_bnb');
+    document.getElementById('lbl-choose-chat').textContent = t('choose_chat');
+    document.getElementById('chat-input').placeholder = t('type_msg');
+    
+    // Кнопка активации (динамическая)
+    if (userData) {
+      const current = userData.currentPacket || 0;
+      const next = getNextPacket(current);
+      const btn = document.getElementById('btn-activate');
+      if (next) {
+        btn.textContent = t('activate_btn', { packet: next });
+      } else {
+        btn.textContent = t('activate_all');
+      }
+    }
+    
+    // Статус спонсора
+    if (userData) {
+      if (!userData.referrerVirId) {
+        document.getElementById('sponsor-virid').textContent = t('root_system');
+      }
+    }
+  }
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('virusmlm_lang', lang);
+    document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
+    document.getElementById('lang-' + lang).classList.add('active');
+    
+    applyTranslations();
+    
+    // Перерисовываем данные с новым языком
+    if (userData) {
+      renderCabinet();
+    }
+  }
+
+  // ============================================
+  // Дальше — вся остальная логика
+  // ============================================
+  if (!api.isAuthenticated()) { window.location.href = 'index.html'; }
 
   let userData = null;
   let matrixData = null;
   let poolData = null;
-  let currentLang = localStorage.getItem('virusmlm_lang') || 'ru';
   let chatPartnerId = null;
   let chatPartnerName = null;
 
-  // ============================================
-  // Helpers
-  // ============================================
   function formatUSDT(value) {
     if (!value) return '$0.00';
     try {
@@ -458,9 +674,7 @@
       const frac = big % 1000000n;
       const fracStr = frac.toString().padStart(6, '0').slice(0, 2);
       return '$' + whole.toString() + '.' + fracStr;
-    } catch {
-      return '$0.00';
-    }
+    } catch { return '$0.00'; }
   }
 
   function showAlert(type, message) {
@@ -481,7 +695,7 @@
   }
 
   function handleLogout() {
-    if (confirm('Выйти из аккаунта?')) {
+    if (confirm(t('confirm_logout'))) {
       api.clearToken();
       window.location.href = 'index.html';
     }
@@ -491,15 +705,12 @@
     if (!userData || !userData.virId) return;
     const link = 'https://virusmlm.com/r/' + userData.virId;
     navigator.clipboard.writeText(link).then(() => {
-      showAlert('success', 'Ссылка скопирована!');
+      showAlert('success', t('copied'));
     }).catch(() => {
-      showAlert('error', 'Не удалось скопировать');
+      showAlert('error', t('err_copy'));
     });
   }
 
-  // ============================================
-  // Load & Render
-  // ============================================
   async function loadCabinet() {
     try {
       const [me, matrix, pool] = await Promise.all([api.getMe(), api.getMatrix(), api.getPoolInfo()]);
@@ -510,6 +721,9 @@
       updateUnreadBadge();
       document.getElementById('loading').style.display = 'none';
       document.getElementById('content').style.display = 'block';
+      
+      // Применяем переводы после загрузки данных
+      applyTranslations();
     } catch (error) {
       if (error.code === 'UNAUTHORIZED') {
         window.location.href = 'index.html';
@@ -527,7 +741,7 @@
     if (userData.referrerVirId) {
       document.getElementById('sponsor-virid').textContent = userData.referrerVirId;
     } else {
-      document.getElementById('sponsor-virid').textContent = 'Корень системы';
+      document.getElementById('sponsor-virid').textContent = t('root_system');
     }
 
     const currentPacket = userData.currentPacket || 0;
@@ -540,17 +754,16 @@
     const nextPacket = getNextPacket(currentPacket);
     const btnActivate = document.getElementById('btn-activate');
     if (nextPacket) {
-      btnActivate.textContent = 'Активировать пакет ' + nextPacket + ' USDT';
+      btnActivate.textContent = t('activate_btn', { packet: nextPacket });
       btnActivate.disabled = false;
     } else {
-      btnActivate.textContent = 'Все пакеты активированы';
+      btnActivate.textContent = t('activate_all');
       btnActivate.disabled = true;
     }
 
-    // VIP на уровне (только для активированных)
+    // VIP на уровне
     const vipEl = document.getElementById('vip-on-level');
     if (currentPacket >= 50 && poolData) {
-      // Показываем общее количество активированных в сети (или можно считать по рефералам)
       vipEl.textContent = (userData.directReferralsCount || 0) + ' ID';
     } else {
       vipEl.textContent = '—';
@@ -561,7 +774,7 @@
       const max = matrixData.maxPlaces || 8190;
       const percent = matrixData.fillPercent || 0;
       document.getElementById('matrix-fill').style.width = Math.min(100, percent) + '%';
-      document.getElementById('matrix-places').textContent = total + ' / ' + max + ' мест';
+      document.getElementById('matrix-places').textContent = t('places', { total: total, max: max });
       document.getElementById('matrix-percent').textContent = percent + '%';
     }
 
@@ -626,37 +839,25 @@
     const current = userData.currentPacket || 0;
     const next = getNextPacket(current);
     if (!next) {
-      showAlert('error', 'Все пакеты уже активированы');
+      showAlert('error', t('alert_all_packets'));
       return;
     }
-    if (!confirm('Активировать пакет ' + next + ' USDT? (виртуальная активация)')) return;
+    if (!confirm(t('confirm_activate', { packet: next }))) return;
 
     const btn = document.getElementById('btn-activate');
     btn.disabled = true;
-    btn.textContent = 'Активация...';
+    btn.textContent = t('activating');
 
     try {
       const packetIndex = next / 50;
       const result = await api.activatePacket(packetIndex);
-      showAlert('success', 'Пакет ' + result.packet + ' USDT активирован!');
+      showAlert('success', t('success_activate', { packet: result.packet }));
       await loadCabinet();
     } catch (error) {
-      showAlert('error', error.message || 'Ошибка активации');
+      showAlert('error', error.message || t('err_activate'));
       btn.disabled = false;
-      btn.textContent = 'Активировать пакет ' + next + ' USDT';
+      btn.textContent = t('activate_btn', { packet: next });
     }
-  }
-
-  function setLang(lang) {
-    currentLang = lang;
-    localStorage.setItem('virusmlm_lang', lang);
-    document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
-    document.getElementById('lang-' + lang).classList.add('active');
-  }
-
-  if (currentLang === 'en') {
-    document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
-    document.getElementById('lang-en').classList.add('active');
   }
 
   // ============================================
@@ -677,39 +878,36 @@
     }
   }
 
-  // Открыть список чатов (рефералы + спонсор)
   async function openReferralList() {
     const body = document.getElementById('ref-list-body');
-    body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Загрузка...</div>';
+    body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('loading_history') + '</div>';
     document.getElementById('ref-list-modal').classList.add('active');
 
     try {
       const referrals = await api.getReferrals();
       
       if (referrals.items.length === 0 && !userData.referrerId) {
-        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">У вас нет рефералов и спонсора</div>';
+        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('no_refs') + '</div>';
         return;
       }
 
       let html = '';
       
-      // Спонсор (если есть)
       if (userData.referrerId) {
         html += `<div class="ref-item" onclick="openChatModal(${userData.referrerId}, '${userData.referrerVirId}')">
           <div>
             <div class="ref-virid">${userData.referrerVirId}</div>
-            <div class="ref-packet">Спонсор</div>
+            <div class="ref-packet">${t('sponsor_lbl')}</div>
           </div>
           <div style="color:#2196f3;">→</div>
         </div>`;
       }
 
-      // Рефералы
       referrals.items.forEach(ref => {
         html += `<div class="ref-item" onclick="openChatModal(${ref.userId}, '${ref.virId}')">
           <div>
             <div class="ref-virid">${ref.virId}</div>
-            <div class="ref-packet">Реферал (пакет ${ref.currentPacket})</div>
+            <div class="ref-packet">${t('ref_lbl', { packet: ref.currentPacket })}</div>
           </div>
           <div style="color:#2196f3;">→</div>
         </div>`;
@@ -717,7 +915,7 @@
 
       body.innerHTML = html;
     } catch (err) {
-      body.innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">Ошибка загрузки списка</div>';
+      body.innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">' + t('error_list') + '</div>';
     }
   }
 
@@ -725,21 +923,19 @@
     document.getElementById('ref-list-modal').classList.remove('active');
   }
 
-  // Открыть чат с конкретным человеком
   async function openChatModal(partnerId, partnerName) {
     if (!partnerId) {
-      alert('У вас нет спонсора (вы корень системы)');
+      alert(t('alert_no_sponsor'));
       return;
     }
 
     chatPartnerId = partnerId;
     chatPartnerName = partnerName;
 
-    // Закрываем список, открываем чат
     document.getElementById('ref-list-modal').classList.remove('active');
-    document.getElementById('chat-title').textContent = 'Чат (' + chatPartnerName + ')';
+    document.getElementById('chat-title').textContent = t('chat_with', { name: chatPartnerName });
     document.getElementById('chat-modal').classList.add('active');
-    document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Загрузка...</div>';
+    document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('loading_history') + '</div>';
     
     await loadChatHistory();
   }
@@ -750,7 +946,7 @@
       const body = document.getElementById('chat-body');
       
       if (messages.length === 0) {
-        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Нет сообщений. Напишите первым!</div>';
+        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('no_messages') + '</div>';
         return;
       }
 
@@ -768,7 +964,7 @@
       body.scrollTop = body.scrollHeight;
     } catch (err) {
       console.error(err);
-      document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">Ошибка загрузки истории: ' + (err.message || err) + '</div>';
+      document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">' + t('error_history') + ': ' + (err.message || err) + '</div>';
     }
   }
 
@@ -788,7 +984,7 @@
       await api.sendMessage(chatPartnerId, text);
       await loadChatHistory();
     } catch (err) {
-      alert('Ошибка отправки: ' + (err.message || 'Попробуйте позже'));
+      alert(t('err_send') + (err.message || t('err_net')));
     } finally {
       input.disabled = false;
       input.focus();
@@ -796,6 +992,11 @@
   }
 
   setInterval(updateUnreadBadge, 30000);
+  
+  // Инициализация
+  document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
+  document.getElementById('lang-' + currentLang).classList.add('active');
+  
   loadCabinet();
 </script>
 
