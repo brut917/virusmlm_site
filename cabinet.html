@@ -41,10 +41,10 @@
     .logout-text { display: none; }
     .logout-icon { display: block; }
     
-    /* ЯРКАЯ РАМКА (как у EN) И БЕЛАЯ СТРЕЛКА */
+    /* ЯРКАЯ РАМКА И БЕЛАЯ СТРЕЛКА */
     .logout-btn { 
       padding: 4px 6px; 
-      border-color: #374151; 
+      border-color: #6b7280; /* Светлая рамка (как у EN) */
       color: #ffffff; 
     } 
     
@@ -695,7 +695,7 @@
     currentLang = lang;
     localStorage.setItem('virusmlm_lang', lang);
     document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
-    document.getElementById('lang-' + currentLang).classList.add('active'); /* ИСПРАВЛЕНО */
+    document.getElementById('lang-' + currentLang).classList.add('active');
     applyTranslations();
     if (userData) renderCabinet();
   }
