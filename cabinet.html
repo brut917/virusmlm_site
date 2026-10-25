@@ -43,36 +43,39 @@
   /* ====== ШАПКА СТРОГО ДЛЯ КОШЕЛЬКА (<= 400px) - ОДНА СТРОКА ====== */
   @media (max-width: 400px) {
     .header { 
-      padding: 8px 4px; 
+      padding: 6px 2px; 
       min-height: 50px;
       justify-content: space-between;
+      flex-wrap: nowrap; /* Запрещаем перенос */
     }
-    /* Сдвигаем влево и уменьшаем */
+    /* Жестко сжимаем кнопки слева */
     .header-left { 
-      position: static; 
-      transform: none; 
-      gap: 3px;
-      flex-shrink: 0;
-    }
-    .logout-btn { padding: 4px 5px; font-size: 9px; }
-    .messages-btn { padding: 4px 6px; font-size: 10px; }
-    .messages-badge { font-size: 8px; padding: 1px 3px; top: -4px; right: -4px; }
-    
-    /* Максимально сжимаем лого, чтобы не наезжало */
-    .logo { 
-      flex-shrink: 1;
-      transform: scale(0.85);
-    }
-    .logo-text { font-size: 15px; gap: 2px; letter-spacing: 0px; }
-    .logo-img { height: 24px; }
-    
-    .lang-switch { 
       position: static; 
       transform: none; 
       gap: 2px;
       flex-shrink: 0;
     }
-    .lang-switch button { padding: 4px 4px; font-size: 9px; }
+    .logout-btn { padding: 4px 3px; font-size: 8px; }
+    .messages-btn { padding: 4px 4px; font-size: 9px; }
+    .messages-badge { display: none; } /* Убираем бейдж, чтобы не мешал на узком экране, можно вернуть позже */
+    
+    /* Логотип оставляем как есть, но убираем лишние отступы */
+    .logo { 
+      flex-shrink: 1;
+      justify-content: center;
+      margin: 0 2px;
+    }
+    .logo-text { font-size: 16px; gap: 4px; letter-spacing: 1px; }
+    .logo-img { height: 28px; } /* Чуть-чуть уменьшили только для кошелька, чтобы влезло */
+    
+    /* Сжимаем переводчик */
+    .lang-switch { 
+      position: static; 
+      transform: none; 
+      gap: 1px;
+      flex-shrink: 0;
+    }
+    .lang-switch button { padding: 4px 2px; font-size: 8px; }
   }
 
   .profile-row { max-width: 560px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
