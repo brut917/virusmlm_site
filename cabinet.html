@@ -11,7 +11,7 @@
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
   .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
   
-  /* ====== БАЗОВАЯ ШАПКА (ПК) ====== */
+  /* ====== БАЗОВАЯ ШАПКА ====== */
   .header { position: relative; display: flex; align-items: center; justify-content: center; padding: 18px 20px; border-bottom: 1px solid #1f2937; background: linear-gradient(180deg, #0f1e3a, #0a0e1a); position: sticky; top: 0; z-index: 100; min-height: 62px; max-width: 640px; margin: 0 auto; }
   .logo { display: flex; align-items: center; gap: 8px; }
   .logo-text { font-weight: 900; font-size: 22px; letter-spacing: 2px; color: #fff; display: flex; align-items: center; gap: 8px; }
@@ -28,32 +28,16 @@
   .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
-  /* ====== ШАПКА ДЛЯ ТЕЛЕФОНОВ (<= 480px) - КАК НА ВХОДЕ ====== */
+  /* ====== ШАПКА ДЛЯ ТЕЛЕФОНОВ ====== */
   @media (max-width: 480px) {
     .header { padding: 12px 10px; min-height: 56px; }
     .header-left { left: 10px; gap: 4px; }
-    .logout-btn { padding: 3px 6px; font-size: 10px; }
-    .messages-btn { padding: 3px 6px; font-size: 11px; }
+    .logout-btn { padding: 4px 8px; font-size: 10px; }
+    .messages-btn { padding: 4px 8px; font-size: 12px; }
     .lang-switch { right: 10px; gap: 2px; }
-    .lang-switch button { padding: 3px 6px; font-size: 10px; }
-    .logo-text { font-size: 18px; gap: 6px; }
+    .lang-switch button { padding: 4px 8px; font-size: 10px; }
+    .logo-text { font-size: 18px; gap: 6px; letter-spacing: 1px; }
     .logo-img { height: 32px; }
-  }
-
-  /* ====== ШАПКА ДЛЯ КОШЕЛЬКОВ (<= 400px) - ОДНА СТРОКА ====== */
-  @media (max-width: 400px) {
-    .header { padding: 10px 6px; justify-content: space-between; }
-    .header-left { position: static; transform: none; gap: 3px; flex-shrink: 0; }
-    .logout-btn { padding: 3px 5px; font-size: 9px; }
-    .messages-btn { padding: 3px 5px; font-size: 10px; }
-    .messages-badge { font-size: 8px; padding: 1px 3px; top: -4px; right: -4px; }
-    
-    .logo { flex-shrink: 1; transform: scale(0.85); transform-origin: center; }
-    .logo-text { font-size: 15px; gap: 2px; letter-spacing: 0px; }
-    .logo-img { height: 24px; }
-    
-    .lang-switch { position: static; transform: none; gap: 2px; flex-shrink: 0; }
-    .lang-switch button { padding: 3px 5px; font-size: 9px; }
   }
 
   .profile-row { max-width: 560px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
