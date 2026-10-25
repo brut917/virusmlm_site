@@ -60,7 +60,17 @@
   .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* Базовое правило для телефонов */
   @media (max-width: 480px) { .logo-text { font-size: 18px; } .logo-img { height: 32px; } }
+  
+  /* СПЕЦИАЛЬНОЕ ПРАВИЛО ДЛЯ METAMASK И УЗКИХ ЭКРАНОВ (до 380px) */
+  @media (max-width: 380px) {
+    .header { padding: 12px 8px; }
+    .logo-text { font-size: 16px; gap: 4px; letter-spacing: 0px; }
+    .logo-img { height: 26px; }
+    .lang-switch { right: 8px; gap: 2px; }
+    .lang-switch button { padding: 4px 6px; font-size: 10px; }
+  }
 </style>
 </head>
 <body>
