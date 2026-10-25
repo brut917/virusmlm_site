@@ -21,8 +21,8 @@
   .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; justify-content: center; min-width: 34px; min-height: 30px; }
   .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
   
-  .logout-text { display: inline; } /* Текст виден на ПК */
-  .logout-icon { display: none; width: 16px; height: 16px; } /* Иконка скрыта на ПК */
+  .logout-text { display: inline; } 
+  .logout-icon { display: none; width: 16px; height: 16px; } 
 
   .messages-btn { position: relative; background: transparent; color: #2196f3; border: 1px solid #2196f3; border-radius: 5px; padding: 5px 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; min-width: 34px; min-height: 30px; display: flex; align-items: center; justify-content: center; }
   .messages-btn:hover { background: #2196f3; color: #fff; }
@@ -32,7 +32,7 @@
   .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
-  /* ====== ВАРИАНТ 1: КНОПКА ВЫХОДА - ТОЛЬКО ИКОНКА ====== */
+  /* ====== ШАПКА ДЛЯ ТЕЛЕФОНОВ ====== */
   @media (max-width: 480px) {
     .header { padding: 12px 10px; min-height: 56px; }
     .header-left { left: 10px; gap: 4px; }
@@ -40,7 +40,13 @@
     /* Скрываем текст выхода, показываем иконку */
     .logout-text { display: none; }
     .logout-icon { display: block; }
-    .logout-btn { padding: 4px 8px; }
+    
+    /* ДЕЛАЕМ РАМКУ СВЕТЛЕЕ (как у EN) И СТРЕЛКУ БЕЛОЙ */
+    .logout-btn { 
+      padding: 4px 6px; 
+      border-color: #374151; /* Светло-серая рамка */
+      color: #ffffff; /* Белая стрелка */
+    } 
     
     .messages-btn { padding: 4px 8px; font-size: 11px; line-height: 1.2; }
     .messages-btn span:not(.messages-badge) { font-size: 12px; }
@@ -48,7 +54,6 @@
     .lang-switch { right: 10px; gap: 3px; }
     .lang-switch button { padding: 4px 8px; font-size: 11px; line-height: 1.2; }
     
-    /* Логотип оставляем как есть (идеальный размер) */
     .logo-text { font-size: 18px; gap: 6px; letter-spacing: 1px; }
     .logo-img { height: 26px; }
   }
@@ -190,7 +195,6 @@
     <div class="header-left">
       <button class="logout-btn" onclick="handleLogout()" id="btn-logout">
         <span class="logout-text">← Выйти</span>
-        <!-- Иконка полностью отражена (дверь слева, стрелка вправо) -->
         <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: scaleX(-1);">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
           <polyline points="16 17 21 12 16 7"></polyline>
@@ -613,7 +617,6 @@
   }
 
   function applyTranslations() {
-    // Обновляем текст внутри span
     const logoutText = document.querySelector('.logout-text');
     if (logoutText) logoutText.textContent = t('logout');
     
@@ -1082,7 +1085,7 @@
   setInterval(updateUnreadBadge, 30000);
   
   document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
-  document.getElementById('lang-' + currentLang).classList.add('active');
+  document.getElementById('lang-' + lang).classList.add('active');
   
   loadCabinet();
 </script>
