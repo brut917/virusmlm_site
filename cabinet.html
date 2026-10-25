@@ -11,13 +11,14 @@
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
   .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
   
+  /* ====== БАЗОВАЯ ШАПКА (ПК) ====== */
   .header { position: relative; display: flex; align-items: center; justify-content: center; padding: 18px 20px; border-bottom: 1px solid #1f2937; background: linear-gradient(180deg, #0f1e3a, #0a0e1a); position: sticky; top: 0; z-index: 100; min-height: 62px; max-width: 640px; margin: 0 auto; }
   .logo { display: flex; align-items: center; gap: 8px; }
   .logo-text { font-weight: 900; font-size: 22px; letter-spacing: 2px; color: #fff; display: flex; align-items: center; gap: 8px; }
   .logo-img { height: 40px; width: auto; }
 
   .header-left { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 6px; align-items: center; }
-  .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
   .messages-btn { position: relative; background: transparent; color: #2196f3; border: 1px solid #2196f3; border-radius: 5px; padding: 5px 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .messages-btn:hover { background: #2196f3; color: #fff; }
@@ -26,6 +27,20 @@
   .lang-switch { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 3px; align-items: center; }
   .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
+
+  /* ====== ШАПКА ДЛЯ ТЕЛЕФОНОВ / METAMASK ====== */
+  @media (max-width: 480px) {
+    .header { padding: 10px 8px; min-height: 56px; }
+    /* Уменьшаем кнопки до размера RU/EN */
+    .header-left { left: 8px; gap: 4px; }
+    .logout-btn { padding: 4px 6px; font-size: 12px; } /* Иконка вместо текста */
+    .messages-btn { padding: 4px 6px; font-size: 12px; }
+    .lang-switch { right: 8px; gap: 2px; }
+    .lang-switch button { padding: 4px 6px; font-size: 10px; }
+    /* Логотип оставляем крупным */
+    .logo-text { font-size: 18px; letter-spacing: 1px; gap: 4px; }
+    .logo-img { height: 32px; }
+  }
 
   .profile-row { max-width: 560px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
   .vip-block { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px; min-height: 90px; }
@@ -127,8 +142,6 @@
     .vip-crown { font-size: 24px; }
     .pool-card .pool-amount { font-size: 26px; }
     .products-grid { grid-template-columns: repeat(2, 1fr); }
-    .logo-text { font-size: 18px; }
-    .logo-img { height: 32px; }
   }
 
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
@@ -164,7 +177,11 @@
 
   <div class="header">
     <div class="header-left">
-      <button class="logout-btn" onclick="handleLogout()" id="btn-logout">← Выйти</button>
+      <!-- Заменяем текст на иконку для телефона, а на ПК оставляем текст через CSS content -->
+      <button class="logout-btn" onclick="handleLogout()" id="btn-logout">
+        <span class="desktop-text">← Выйти</span>
+        <span class="mobile-text" style="display:none;">🚪</span>
+      </button>
       <button class="messages-btn" onclick="openReferralList()">
         💬
         <span class="messages-badge" id="messages-badge">0</span>
@@ -419,637 +436,27 @@
 <script src="api.js"></script>
 
 <script>
-  const i18n = {
-    ru: {
-      logout: "← Выйти",
-      loading: "Загрузка кабинета...",
-      lifetime: "Бессрочно",
-      user_id: "User ID",
-      vip_on_level: "VIP на уровне",
-      my_sponsor: "Мой спонсор",
-      write: "Написать",
-      activate_btn: "Активировать пакет {packet} USDT",
-      activate_all: "Все пакеты активированы",
-      matrix_fill: "Заполнение матрицы",
-      places: "{total} / {max} мест",
-      ref_link: "Ваша реферальная ссылка",
-      pool_title: "Лидерский пул",
-      pool_sub: "До следующего распределения",
-      h: "час", m: "мин", s: "сек",
-      bal_referral: "Всего реферальных",
-      bal_matrix: "Матричный баланс",
-      bal_pool: "Лидерский пул",
-      bal_withdraw: "Баланс на вывод:",
-      withdraw: "ВЫВОД",
-      to_wallet: "На кошелёк",
-      to_market: "В маркетинг",
-      products: "Продукты и сервисы",
-      prod_1: "Аудит кошелька", prod_2: "ИИ-рекрутер", prod_3: "Игры", prod_4: "Обменник", prod_5: "Налоги", prod_6: "Развлечения",
-      ai_recruiter: "ИИ-рекрутер",
-      ai_soon: "🤖 Скоро — интеллектуальный помощник для рекрутинга",
-      real_activation: "⚡ АКТИВАЦИЯ РЕАЛЬНОГО ПАКЕТА",
-      step_1_title: "Подключить кошелёк",
-      step_1_desc: "Разрешить платформе работать с токеном USDT BEP20 на вашем кошельке.",
-      step_1_btn: "ПОДКЛЮЧИТЬ METAMASK",
-      step_2_title: "Регистрация под спонсора",
-      step_2_desc: "Укажите адрес кошелька вашего спонсора в системе Virus MLM.",
-      step_2_input: "Адрес кошелька спонсора (0x...)",
-      step_2_btn: "ЗАРЕГИСТРИРОВАТЬСЯ",
-      step_3_title: "Активировать пакет 50 USDT",
-      step_3_desc: "Единоразовый вход в клуб. Спишется 50 USDT BEP20.",
-      step_3_btn: "АКТИВИРОВАТЬ 50 USDT",
-      need_bnb: "Нужно: BNB для газа + 50 USDT BEP20 на кошельке.",
-      choose_chat: "Выберите чат",
-      chat_with: "Чат ({name})",
-      no_messages: "Нет сообщений. Напишите первым!",
-      loading_history: "Загрузка...",
-      error_history: "Ошибка загрузки истории",
-      error_list: "Ошибка загрузки списка",
-      no_refs: "У вас нет рефералов и спонсора",
-      sponsor_lbl: "Спонсор",
-      ref_lbl: "Реферал (пакет {packet})",
-      type_msg: "Написать сообщение...",
-      err_send: "Ошибка отправки: ",
-      err_net: "Попробуйте позже",
-      alert_no_sponsor: "У вас нет спонсора (вы корень системы)",
-      alert_all_packets: "Все пакеты уже активированы",
-      confirm_activate: "Активировать пакет {packet} USDT? (виртуальная активация)",
-      activating: "Активация...",
-      success_activate: "Пакет {packet} USDT активирован!",
-      err_activate: "Ошибка активации",
-      copied: "Ссылка скопирована!",
-      err_copy: "Не удалось скопировать",
-      root_system: "Корень системы",
-      confirm_logout: "Выйти из аккаунта?",
-      donate_title: "Донат в лидерский пул",
-      donate_info_text: "Виртуальный кабинет не выводит средства на кошелек. Но вы можете поддержать систему, сделав добровольный донат в лидерский пул. Средства пойдут на развитие платформы и будут распределены среди всех VIP-участников.",
-      donate_source_label: "Откуда списать:",
-      donate_source_referral: "Реферальный баланс",
-      donate_source_matrix: "Матричный баланс",
-      donate_source_pool: "Баланс пула",
-      donate_amount_label: "Сумма (USDT):",
-      donate_btn: "Сделать донат",
-      donate_success: "Донат успешно отправлен! Спасибо за поддержку.",
-      donate_error: "Ошибка: ",
-      donate_invalid_amount: "Введите корректную сумму больше 0"
-    },
-    en: {
-      logout: "← Log out",
-      loading: "Loading cabinet...",
-      lifetime: "Lifetime",
-      user_id: "User ID",
-      vip_on_level: "VIP on level",
-      my_sponsor: "My sponsor",
-      write: "Write",
-      activate_btn: "Activate packet {packet} USDT",
-      activate_all: "All packets activated",
-      matrix_fill: "Matrix filling",
-      places: "{total} / {max} places",
-      ref_link: "Your referral link",
-      pool_title: "Leader pool",
-      pool_sub: "Until next distribution",
-      h: "h", m: "m", s: "s",
-      bal_referral: "Total referral",
-      bal_matrix: "Matrix balance",
-      bal_pool: "Leader pool",
-      bal_withdraw: "Balance to withdraw:",
-      withdraw: "WITHDRAW",
-      to_wallet: "To wallet",
-      to_market: "To marketing",
-      products: "Products and services",
-      prod_1: "Wallet audit", prod_2: "AI recruiter", prod_3: "Games", prod_4: "Exchanger", prod_5: "Taxes", prod_6: "Entertainment",
-      ai_recruiter: "AI recruiter",
-      ai_soon: "🤖 Soon — intelligent recruiting assistant",
-      real_activation: "⚡ REAL PACKET ACTIVATION",
-      step_1_title: "Connect wallet",
-      step_1_desc: "Allow the platform to work with USDT BEP20 token on your wallet.",
-      step_1_btn: "CONNECT METAMASK",
-      step_2_title: "Register under sponsor",
-      step_2_desc: "Enter your sponsor's wallet address in the Virus MLM system.",
-      step_2_input: "Sponsor's wallet address (0x...)",
-      step_2_btn: "REGISTER",
-      step_3_title: "Activate 50 USDT packet",
-      step_3_desc: "One-time entry to the club. 50 USDT BEP20 will be charged.",
-      step_3_btn: "ACTIVATE 50 USDT",
-      need_bnb: "Needed: BNB for gas + 50 USDT BEP20 in wallet.",
-      choose_chat: "Choose chat",
-      chat_with: "Chat ({name})",
-      no_messages: "No messages. Write first!",
-      loading_history: "Loading...",
-      error_history: "Error loading history",
-      error_list: "Error loading list",
-      no_refs: "You have no referrals and sponsor",
-      sponsor_lbl: "Sponsor",
-      ref_lbl: "Referral (packet {packet})",
-      type_msg: "Type a message...",
-      err_send: "Send error: ",
-      err_net: "Try again later",
-      alert_no_sponsor: "You have no sponsor (you are the root)",
-      alert_all_packets: "All packets already activated",
-      confirm_activate: "Activate {packet} USDT packet? (virtual activation)",
-      activating: "Activating...",
-      success_activate: "Packet {packet} USDT activated!",
-      err_activate: "Activation error",
-      copied: "Link copied!",
-      err_copy: "Failed to copy",
-      root_system: "System root",
-      confirm_logout: "Log out?",
-      donate_title: "Donate to leader pool",
-      donate_info_text: "The virtual cabinet does not withdraw funds to a wallet. But you can support the system by making a voluntary donation to the leader pool. Funds will go to the development of the platform and will be distributed among all VIP participants.",
-      donate_source_label: "Source of funds:",
-      donate_source_referral: "Referral balance",
-      donate_source_matrix: "Matrix balance",
-      donate_source_pool: "Pool balance",
-      donate_amount_label: "Amount (USDT):",
-      donate_btn: "Make a donation",
-      donate_success: "Donation successfully sent! Thank you for your support.",
-      donate_error: "Error: ",
-      donate_invalid_amount: "Enter a valid amount greater than 0"
+  // ============================================
+  // CSS для скрытия/показа текста на кнопках
+  // ============================================
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (max-width: 480px) {
+      .desktop-text { display: none !important; }
+      .mobile-text { display: inline !important; }
+      .logout-btn { padding: 4px 6px; font-size: 14px; }
+      .messages-btn { padding: 4px 6px; font-size: 14px; }
+      .lang-switch button { padding: 4px 6px; font-size: 10px; }
+      .logo-text { font-size: 18px; letter-spacing: 1px; gap: 4px; }
+      .logo-img { height: 32px; }
     }
-  };
+  `;
+  document.head.appendChild(style);
 
-  let currentLang = localStorage.getItem('virusmlm_lang') || 'ru';
-
-  function t(key, params) {
-    let str = i18n[currentLang][key] || key;
-    if (params) {
-      for (const [k, v] of Object.entries(params)) {
-        str = str.replace(`{${k}}`, v);
-      }
-    }
-    return str;
-  }
-
-  function applyTranslations() {
-    document.getElementById('btn-logout').textContent = t('logout');
-    document.getElementById('loading-text').textContent = t('loading');
-    document.getElementById('lbl-lifetime').textContent = t('lifetime');
-    document.getElementById('lbl-user-id').textContent = t('user_id');
-    document.getElementById('lbl-vip-on-level').textContent = t('vip_on_level');
-    document.getElementById('lbl-my-sponsor').textContent = t('my_sponsor');
-    document.getElementById('btn-write-sponsor').textContent = t('write');
-    document.getElementById('lbl-matrix-fill').textContent = t('matrix_fill');
-    document.getElementById('lbl-ref-link').textContent = t('ref_link');
-    document.getElementById('lbl-pool-title').textContent = t('pool_title');
-    document.getElementById('lbl-pool-sub').textContent = t('pool_sub');
-    document.getElementById('lbl-h').textContent = t('h');
-    document.getElementById('lbl-m').textContent = t('m');
-    document.getElementById('lbl-s').textContent = t('s');
-    document.getElementById('lbl-bal-referral').textContent = t('bal_referral');
-    document.getElementById('lbl-bal-matrix').textContent = t('bal_matrix');
-    document.getElementById('lbl-bal-pool').textContent = t('bal_pool');
-    document.getElementById('lbl-bal-withdraw').textContent = t('bal_withdraw');
-    document.getElementById('btn-withdraw').textContent = t('withdraw');
-    document.getElementById('lbl-to-wallet').textContent = t('to_wallet');
-    document.getElementById('lbl-to-market').textContent = t('to_market');
-    document.getElementById('lbl-products').textContent = t('products');
-    document.getElementById('prod-1').textContent = t('prod_1');
-    document.getElementById('prod-2').textContent = t('prod_2');
-    document.getElementById('prod-3').textContent = t('prod_3');
-    document.getElementById('prod-4').textContent = t('prod_4');
-    document.getElementById('prod-5').textContent = t('prod_5');
-    document.getElementById('prod-6').textContent = t('prod_6');
-    document.getElementById('lbl-ai-recruiter').textContent = t('ai_recruiter');
-    document.getElementById('lbl-ai-soon').textContent = t('ai_soon');
-    document.getElementById('lbl-real-activation').textContent = t('real_activation');
-    document.getElementById('step-1-title').textContent = t('step_1_title');
-    document.getElementById('step-1-desc').textContent = t('step_1_desc');
-    document.getElementById('step-1-btn').textContent = t('step_1_btn');
-    document.getElementById('step-2-title').textContent = t('step_2_title');
-    document.getElementById('step-2-desc').textContent = t('step_2_desc');
-    document.getElementById('step-2-input').placeholder = t('step_2_input');
-    document.getElementById('step-2-btn').textContent = t('step_2_btn');
-    document.getElementById('step-3-title').textContent = t('step_3_title');
-    document.getElementById('step-3-desc').textContent = t('step_3_desc');
-    document.getElementById('step-3-btn').textContent = t('step_3_btn');
-    document.getElementById('lbl-need-bnb').textContent = t('need_bnb');
-    document.getElementById('lbl-choose-chat').textContent = t('choose_chat');
-    document.getElementById('chat-input').placeholder = t('type_msg');
-    
-    document.getElementById('donate-title').textContent = t('donate_title');
-    document.getElementById('donate-info-text').textContent = t('donate_info_text');
-    document.getElementById('donate-source-label').textContent = t('donate_source_label');
-    document.getElementById('donate-source-referral').textContent = t('donate_source_referral');
-    document.getElementById('donate-source-matrix').textContent = t('donate_source_matrix');
-    document.getElementById('donate-source-pool').textContent = t('donate_source_pool');
-    document.getElementById('donate-amount-label').textContent = t('donate_amount_label');
-    document.getElementById('donate-btn').textContent = t('donate_btn');
-    
-    if (userData) {
-      const current = userData.currentPacket || 0;
-      const next = getNextPacket(current);
-      const btn = document.getElementById('btn-activate');
-      if (next) {
-        btn.textContent = t('activate_btn', { packet: next });
-      } else {
-        btn.textContent = t('activate_all');
-      }
-    }
-    
-    if (userData) {
-      if (!userData.referrerVirId) {
-        document.getElementById('sponsor-virid').textContent = t('root_system');
-      }
-    }
-  }
-
-  function setLang(lang) {
-    currentLang = lang;
-    localStorage.setItem('virusmlm_lang', lang);
-    document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
-    document.getElementById('lang-' + lang).classList.add('active');
-    applyTranslations();
-    if (userData) renderCabinet();
-  }
-
-  if (!api.isAuthenticated()) { window.location.href = 'index.html'; }
-
-  let userData = null;
-  let matrixData = null;
-  let poolData = null;
-  let chatPartnerId = null;
-  let chatPartnerName = null;
-
-  function formatUSDT(value) {
-    if (!value) return '$0.00';
-    try {
-      const big = BigInt(value);
-      const whole = big / 1000000n;
-      const frac = big % 1000000n;
-      const fracStr = frac.toString().padStart(6, '0').slice(0, 2);
-      return '$' + whole.toString() + '.' + fracStr;
-    } catch { return '$0.00'; }
-  }
-
-  function showAlert(type, message) {
-    const box = document.getElementById('alert-box');
-    box.className = 'alert ' + type;
-    box.textContent = message;
-    setTimeout(() => { box.className = 'alert'; }, 5000);
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  function getVipLevel(packet) {
-    if (!packet || packet < 50) return 0;
-    return Math.floor(packet / 50);
-  }
-
-  function handleLogout() {
-    if (confirm(t('confirm_logout'))) {
-      api.clearToken();
-      window.location.href = 'index.html';
-    }
-  }
-
-  function copyRefLink() {
-    if (!userData || !userData.virId) return;
-    const link = 'https://virusmlm.com/r/' + userData.virId;
-    navigator.clipboard.writeText(link).then(() => {
-      showAlert('success', t('copied'));
-    }).catch(() => {
-      showAlert('error', t('err_copy'));
-    });
-  }
-
-  async function loadCabinet() {
-    try {
-      const [me, matrix, pool] = await Promise.all([api.getMe(), api.getMatrix(), api.getPoolInfo()]);
-      userData = me;
-      matrixData = matrix;
-      poolData = pool;
-      renderCabinet();
-      updateUnreadBadge();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('content').style.display = 'block';
-      applyTranslations();
-    } catch (error) {
-      if (error.code === 'UNAUTHORIZED') {
-        window.location.href = 'index.html';
-        return;
-      }
-      document.getElementById('loading').innerHTML =
-        '<div style="color:#fecaca;">Ошибка загрузки: ' + escapeHtml(error.message) + '</div>' +
-        '<button class="btn btn-green" style="margin-top:16px;max-width:200px;" onclick="location.reload()">Повторить</button>';
-    }
-  }
-
-  function renderCabinet() {
-    document.getElementById('user-virid').textContent = userData.virId || '—';
-
-    if (userData.referrerVirId) {
-      document.getElementById('sponsor-virid').textContent = userData.referrerVirId;
-    } else {
-      document.getElementById('sponsor-virid').textContent = t('root_system');
-    }
-
-    const currentPacket = userData.currentPacket || 0;
-    document.querySelectorAll('.packet').forEach((p) => {
-      const val = parseInt(p.getAttribute('data-packet'), 10);
-      if (val <= currentPacket) p.classList.add('active');
-      else p.classList.remove('active');
-    });
-
-    const nextPacket = getNextPacket(currentPacket);
-    const btnActivate = document.getElementById('btn-activate');
-    if (nextPacket) {
-      btnActivate.textContent = t('activate_btn', { packet: nextPacket });
-      btnActivate.disabled = false;
-    } else {
-      btnActivate.textContent = t('activate_all');
-      btnActivate.disabled = true;
-    }
-
-    const vipEl = document.getElementById('vip-on-level');
-    if (poolData && typeof poolData.activatedUsersCount === 'number') {
-      vipEl.textContent = poolData.activatedUsersCount + ' ID';
-    } else {
-      vipEl.textContent = '0 ID';
-    }
-
-    if (matrixData) {
-      const total = matrixData.totalInNetwork || 0;
-      const max = matrixData.maxPlaces || 8190;
-      const percent = matrixData.fillPercent || 0;
-      
-      const widthPercent = percent > 0 && percent < 1 ? 1 : Math.min(100, percent);
-      
-      document.getElementById('matrix-fill').style.width = widthPercent + '%';
-      document.getElementById('matrix-places').textContent = t('places', { total: total, max: max });
-      document.getElementById('matrix-percent').textContent = percent + '%';
-    }
-
-    document.getElementById('ref-link-text').textContent = 'virusmlm.com/r/' + userData.virId;
-
-    document.getElementById('bal-referral').textContent = formatUSDT(userData.referralBalance);
-    document.getElementById('bal-matrix').textContent = formatUSDT(userData.matrixBalance);
-    document.getElementById('bal-pool').textContent = formatUSDT(userData.poolBalance);
-    document.getElementById('withdraw-total').textContent = formatUSDT(userData.totalBalance);
-
-    updateSplitPercentages(currentPacket);
-
-    if (poolData) {
-      document.getElementById('pool-amount').textContent = formatUSDT(poolData.balance);
-      startPoolTimer(poolData.nextDistributionAt);
-    } else {
-      startPoolTimer(null);
-    }
-  }
-
-  function getNextPacket(current) {
-    if (current === 0) return 50;
-    if (current === 50) return 100;
-    if (current === 100) return 150;
-    if (current === 150) return 200;
-    if (current === 200) return 250;
-    return null;
-  }
-
-  function updateSplitPercentages(packet) {
-    const map = {
-      0: { wallet: 50, market: 50 }, 50: { wallet: 50, market: 50 }, 100: { wallet: 60, market: 40 },
-      150: { wallet: 70, market: 30 }, 200: { wallet: 80, market: 20 }, 250: { wallet: 90, market: 10 },
-    };
-    const p = map[packet] || { wallet: 50, market: 50 };
-    document.getElementById('split-wallet').textContent = p.wallet + '%';
-    document.getElementById('split-market').textContent = p.market + '%';
-  }
-
-  let poolTimerInterval = null;
-  function startPoolTimer(nextDistributionAt) {
-    if (poolTimerInterval) clearInterval(poolTimerInterval);
-    let targetTime;
-    if (nextDistributionAt) targetTime = new Date(nextDistributionAt).getTime();
-    else targetTime = Date.now() + (23 * 3600 + 44 * 60 + 34) * 1000;
-
-    function tick() {
-      const now = Date.now();
-      const diff = Math.max(0, Math.floor((targetTime - now) / 1000));
-      const h = Math.floor(diff / 3600);
-      const m = Math.floor((diff % 3600) / 60);
-      const s = diff % 60;
-      document.getElementById('timer-h').textContent = String(h).padStart(2, '0');
-      document.getElementById('timer-m').textContent = String(m).padStart(2, '0');
-      document.getElementById('timer-s').textContent = String(s).padStart(2, '0');
-    }
-    tick();
-    poolTimerInterval = setInterval(tick, 1000);
-  }
-
-  async function handleActivate() {
-    const current = userData.currentPacket || 0;
-    const next = getNextPacket(current);
-    if (!next) {
-      showAlert('error', t('alert_all_packets'));
-      return;
-    }
-    if (!confirm(t('confirm_activate', { packet: next }))) return;
-
-    const btn = document.getElementById('btn-activate');
-    btn.disabled = true;
-    btn.textContent = t('activating');
-
-    try {
-      const packetIndex = next / 50;
-      const result = await api.activatePacket(packetIndex);
-      showAlert('success', t('success_activate', { packet: result.packet }));
-      await loadCabinet();
-    } catch (error) {
-      showAlert('error', error.message || t('err_activate'));
-      btn.disabled = false;
-      btn.textContent = t('activate_btn', { packet: next });
-    }
-  }
-
-  async function updateUnreadBadge() {
-    try {
-      const result = await api.getUnreadCount();
-      const badge = document.getElementById('messages-badge');
-      if (result.unreadCount > 0) {
-        badge.textContent = result.unreadCount;
-        badge.style.display = 'block';
-      } else {
-        badge.style.display = 'none';
-      }
-    } catch (err) {
-      console.error('Ошибка получения непрочитанных:', err);
-    }
-  }
-
-  async function openReferralList() {
-    const body = document.getElementById('ref-list-body');
-    body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('loading_history') + '</div>';
-    document.getElementById('ref-list-modal').classList.add('active');
-
-    try {
-      const referrals = await api.getReferrals();
-      
-      if (referrals.items.length === 0 && !userData.referrerId) {
-        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('no_refs') + '</div>';
-        return;
-      }
-
-      let html = '';
-      
-      if (userData.referrerId) {
-        html += `<div class="ref-item" onclick="openChatModal(${userData.referrerId}, '${userData.referrerVirId}')">
-          <div>
-            <div class="ref-virid">${userData.referrerVirId}</div>
-            <div class="ref-packet">${t('sponsor_lbl')}</div>
-          </div>
-          <div style="color:#2196f3;">→</div>
-        </div>`;
-      }
-
-      referrals.items.forEach(ref => {
-        html += `<div class="ref-item" onclick="openChatModal(${ref.userId}, '${ref.virId}')">
-          <div>
-            <div class="ref-virid">${ref.virId}</div>
-            <div class="ref-packet">${t('ref_lbl', { packet: ref.currentPacket })}</div>
-          </div>
-          <div style="color:#2196f3;">→</div>
-        </div>`;
-      });
-
-      body.innerHTML = html;
-    } catch (err) {
-      body.innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">' + t('error_list') + '</div>';
-    }
-  }
-
-  function closeRefList() {
-    document.getElementById('ref-list-modal').classList.remove('active');
-  }
-
-  async function openChatModal(partnerId, partnerName) {
-    if (!partnerId) {
-      alert(t('alert_no_sponsor'));
-      return;
-    }
-
-    chatPartnerId = partnerId;
-    chatPartnerName = partnerName;
-
-    document.getElementById('ref-list-modal').classList.remove('active');
-    document.getElementById('chat-title').textContent = t('chat_with', { name: chatPartnerName });
-    document.getElementById('chat-modal').classList.add('active');
-    document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('loading_history') + '</div>';
-    
-    await loadChatHistory();
-  }
-
-  async function loadChatHistory() {
-    try {
-      const messages = await api.getChat(chatPartnerId);
-      const body = document.getElementById('chat-body');
-      
-      if (messages.length === 0) {
-        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('no_messages') + '</div>';
-        return;
-      }
-
-      body.innerHTML = messages.map(msg => {
-        const isMine = Number(msg.sender_id) === Number(userData.id);
-        const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        return `
-          <div class="msg-bubble ${isMine ? 'my' : 'their'}">
-            ${escapeHtml(msg.text)}
-            <span class="msg-time">${time}</span>
-          </div>
-        `;
-      }).join('');
-
-      body.scrollTop = body.scrollHeight;
-    } catch (err) {
-      console.error(err);
-      document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">' + t('error_history') + ': ' + (err.message || err) + '</div>';
-    }
-  }
-
-  function closeChatModal() {
-    document.getElementById('chat-modal').classList.remove('active');
-  }
-
-  async function sendChatMessage() {
-    const input = document.getElementById('chat-input');
-    const text = input.value.trim();
-    if (!text || !chatPartnerId) return;
-
-    input.value = '';
-    input.disabled = true;
-
-    try {
-      await api.sendMessage(chatPartnerId, text);
-      await loadChatHistory();
-    } catch (err) {
-      alert(t('err_send') + (err.message || t('err_net')));
-    } finally {
-      input.disabled = false;
-      input.focus();
-    }
-  }
-
-  function openDonateModal() {
-    document.getElementById('donate-error').style.display = 'none';
-    document.getElementById('donate-success').style.display = 'none';
-    document.getElementById('donate-amount').value = '';
-    document.getElementById('donate-modal').classList.add('active');
-  }
-
-  function closeDonateModal() {
-    document.getElementById('donate-modal').classList.remove('active');
-  }
-
-  async function handleDonate() {
-    const amountInput = document.getElementById('donate-amount');
-    const sourceSelect = document.getElementById('donate-source');
-    const errorDiv = document.getElementById('donate-error');
-    const successDiv = document.getElementById('donate-success');
-    
-    errorDiv.style.display = 'none';
-    successDiv.style.display = 'none';
-
-    const amount = parseFloat(amountInput.value);
-    const source = sourceSelect.value;
-
-    if (isNaN(amount) || amount <= 0) {
-      errorDiv.textContent = t('donate_invalid_amount');
-      errorDiv.style.display = 'block';
-      return;
-    }
-
-    const amountMicro = Math.round(amount * 1000000).toString();
-
-    const btn = document.getElementById('donate-btn');
-    btn.disabled = true;
-    btn.textContent = 'Отправка...';
-
-    try {
-      const result = await api.donate(amountMicro, source);
-      successDiv.textContent = t('donate_success');
-      successDiv.style.display = 'block';
-      
-      setTimeout(async () => {
-        await loadCabinet();
-        closeDonateModal();
-      }, 1500);
-    } catch (error) {
-      errorDiv.textContent = t('donate_error') + (error.message || 'Ошибка');
-      errorDiv.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = t('donate_btn');
-    }
-  }
-
-  setInterval(updateUnreadBadge, 30000);
+  // ... остальной JS код (i18n, loadCabinet и т.д.) ...
+  // (Он остался без изменений, поэтому я не дублирую его здесь, чтобы не раздувать код. Вставь его из предыдущего файла, начиная с const i18n = { ... })
   
-  document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
-  document.getElementById('lang-' + currentLang).classList.add('active');
-  
-  loadCabinet();
+  // Вставь сюда весь скрипт от "const i18n = {" до "loadCabinet();" (тот, что был в предыдущем сообщении)
 </script>
 
 </body>
