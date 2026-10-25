@@ -41,11 +41,11 @@
     .logout-text { display: none; }
     .logout-icon { display: block; }
     
-    /* ДЕЛАЕМ РАМКУ СВЕТЛЕЕ (как у EN) И СТРЕЛКУ БЕЛОЙ */
+    /* ЯРКАЯ РАМКА (как у EN) И БЕЛАЯ СТРЕЛКА */
     .logout-btn { 
       padding: 4px 6px; 
-      border-color: #374151; /* Светло-серая рамка */
-      color: #ffffff; /* Белая стрелка */
+      border-color: #374151; 
+      color: #ffffff; 
     } 
     
     .messages-btn { padding: 4px 8px; font-size: 11px; line-height: 1.2; }
@@ -695,7 +695,7 @@
     currentLang = lang;
     localStorage.setItem('virusmlm_lang', lang);
     document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
-    document.getElementById('lang-' + lang).classList.add('active');
+    document.getElementById('lang-' + currentLang).classList.add('active'); /* ИСПРАВЛЕНО */
     applyTranslations();
     if (userData) renderCabinet();
   }
@@ -1085,7 +1085,7 @@
   setInterval(updateUnreadBadge, 30000);
   
   document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('active'));
-  document.getElementById('lang-' + lang).classList.add('active');
+  document.getElementById('lang-' + currentLang).classList.add('active');
   
   loadCabinet();
 </script>
