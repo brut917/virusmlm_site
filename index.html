@@ -60,12 +60,19 @@
   .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Базовое правило для телефонов (исходное) */
-  @media (max-width: 480px) { .logo-text { font-size: 18px; } .logo-img { height: 32px; } }
+  /* Базовое правило для телефонов (СДЕЛАЛИ КРУПНЕЕ) */
+  @media (max-width: 480px) { 
+    .logo-text { font-size: 22px; gap: 6px; } 
+    .logo-img { height: 34px; } 
+  }
   
-  /* ПРАВИЛО ТОЛЬКО ДЛЯ METAMASK (сдвигаем логотип влево) */
-  @media (max-width: 380px) {
-    .logo { transform: translateX(-12px); }
+  /* Специальный сдвиг именно для браузера MetaMask */
+  @supports (-webkit-touch-callout: none) {
+    @media (max-width: 380px) {
+      .logo-text { font-size: 16px; gap: 4px; }
+      .logo-img { height: 26px; }
+      .logo { transform: translateX(-10px); }
+    }
   }
 </style>
 </head>
