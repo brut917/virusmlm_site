@@ -21,6 +21,9 @@
   .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; justify-content: center; min-width: 34px; min-height: 30px; }
   .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
   
+  .logout-text { display: inline; } /* Текст виден на ПК */
+  .logout-icon { display: none; width: 16px; height: 16px; } /* Иконка скрыта на ПК */
+
   .messages-btn { position: relative; background: transparent; color: #2196f3; border: 1px solid #2196f3; border-radius: 5px; padding: 5px 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; min-width: 34px; min-height: 30px; display: flex; align-items: center; justify-content: center; }
   .messages-btn:hover { background: #2196f3; color: #fff; }
   .messages-badge { position: absolute; top: -6px; right: -6px; background: #ff1744; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center; line-height: 1.2; display: none; }
@@ -29,19 +32,21 @@
   .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
-  /* ====== ВАРИАНТ 2: УМЕНЬШАЕМ ОТСТУПЫ КНОПОК ====== */
+  /* ====== ВАРИАНТ 1: КНОПКА ВЫХОДА - ТОЛЬКО ИКОНКА ====== */
   @media (max-width: 480px) {
-    .header { padding: 12px 8px; min-height: 56px; }
+    .header { padding: 12px 10px; min-height: 56px; }
+    .header-left { left: 10px; gap: 4px; }
     
-    /* Уменьшаем боковые отступы у левой группы */
-    .header-left { left: 8px; gap: 4px; }
-    .logout-btn { padding: 4px 5px; font-size: 10px; }
-    .messages-btn { padding: 4px 5px; font-size: 11px; line-height: 1.2; }
-    .messages-btn span:not(.messages-badge) { font-size: 11px; }
+    /* Скрываем текст выхода, показываем иконку */
+    .logout-text { display: none; }
+    .logout-icon { display: block; }
+    .logout-btn { padding: 4px 8px; }
     
-    /* Уменьшаем боковые отступы у правой группы */
-    .lang-switch { right: 8px; gap: 2px; }
-    .lang-switch button { padding: 4px 5px; font-size: 10px; line-height: 1.2; }
+    .messages-btn { padding: 4px 8px; font-size: 11px; line-height: 1.2; }
+    .messages-btn span:not(.messages-badge) { font-size: 12px; }
+    
+    .lang-switch { right: 10px; gap: 3px; }
+    .lang-switch button { padding: 4px 8px; font-size: 11px; line-height: 1.2; }
     
     /* Логотип оставляем как есть (идеальный размер) */
     .logo-text { font-size: 18px; gap: 6px; letter-spacing: 1px; }
@@ -183,7 +188,15 @@
 
   <div class="header">
     <div class="header-left">
-      <button class="logout-btn" onclick="handleLogout()" id="btn-logout">← Выйти</button>
+      <button class="logout-btn" onclick="handleLogout()" id="btn-logout">
+        <span class="logout-text">← Выйти</span>
+        <!-- Стрелка направлена вправо -->
+        <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7" transform="translate(24, 0) scale(-1, 1)"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12" transform="translate(24, 0) scale(-1, 1)"></line>
+        </svg>
+      </button>
       <button class="messages-btn" onclick="openReferralList()">
         💬
         <span class="messages-badge" id="messages-badge">0</span>
@@ -600,7 +613,10 @@
   }
 
   function applyTranslations() {
-    document.getElementById('btn-logout').textContent = t('logout');
+    // Обновляем текст внутри span
+    const logoutText = document.querySelector('.logout-text');
+    if (logoutText) logoutText.textContent = t('logout');
+    
     document.getElementById('loading-text').textContent = t('loading');
     document.getElementById('lbl-lifetime').textContent = t('lifetime');
     document.getElementById('lbl-user-id').textContent = t('user_id');
