@@ -122,13 +122,22 @@
   .step-btn { width: 100%; padding: 10px; margin-top: 8px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; background: #e5e7eb; color: #9ca3af; }
   .step-btn:disabled { cursor: not-allowed; }
 
+  /* ======= ИСПРАВЛЕНИЕ ДЛЯ ТЕЛЕФОНОВ ======= */
   @media (max-width: 480px) {
     .profile-row { gap: 12px; padding: 16px; }
     .vip-crown { font-size: 24px; }
     .pool-card .pool-amount { font-size: 26px; }
     .products-grid { grid-template-columns: repeat(2, 1fr); }
-    .logo-text { font-size: 18px; }
-    .logo-img { height: 32px; }
+    
+    /* Уменьшаем кнопки и логотип, чтобы все влезло в одну строку */
+    .header { padding: 10px 8px; min-height: 56px; }
+    .header-left { left: 8px; gap: 4px; }
+    .logout-btn { padding: 4px 6px; font-size: 10px; }
+    .messages-btn { padding: 4px 6px; font-size: 11px; }
+    .lang-switch { right: 8px; gap: 2px; }
+    .lang-switch button { padding: 3px 5px; font-size: 9px; }
+    .logo-text { font-size: 15px; gap: 4px; letter-spacing: 0; }
+    .logo-img { height: 24px; }
   }
 
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
