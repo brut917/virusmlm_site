@@ -32,21 +32,14 @@
   .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
-  /* ====== ШАПКА ДЛЯ ТЕЛЕФОНОВ ====== */
+  /* ====== ШАПКА ДЛЯ ТЕЛЕФОНОВ (СДЕЛАЛИ КРУПНЕЕ) ====== */
   @media (max-width: 480px) {
     .header { padding: 12px 10px; min-height: 56px; }
     .header-left { left: 10px; gap: 4px; }
     
-    /* Скрываем текст выхода, показываем иконку */
     .logout-text { display: none; }
     .logout-icon { display: block; }
-    
-    /* ЯРКАЯ РАМКА И БЕЛАЯ СТРЕЛКА */
-     .logout-btn { 
-      padding: 4px 6px; 
-      border-color: #ffffff; /* Белая рамка */
-      color: #ffffff; 
-    } 
+    .logout-btn { padding: 4px 6px; border-color: #ffffff; color: #ffffff; } 
     
     .messages-btn { padding: 4px 8px; font-size: 11px; line-height: 1.2; }
     .messages-btn span:not(.messages-badge) { font-size: 12px; }
@@ -54,8 +47,8 @@
     .lang-switch { right: 10px; gap: 3px; }
     .lang-switch button { padding: 4px 8px; font-size: 11px; line-height: 1.2; }
     
-    .logo-text { font-size: 18px; gap: 6px; letter-spacing: 1px; }
-    .logo-img { height: 26px; }
+    .logo-text { font-size: 22px; gap: 6px; letter-spacing: 1px; }
+    .logo-img { height: 34px; }
   }
 
   .profile-row { max-width: 560px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
