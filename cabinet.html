@@ -32,7 +32,7 @@
   .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
-  /* ====== ШАПКА ДЛЯ ТЕЛЕФОНОВ (СДЕЛАЛИ КРУПНЕЕ) ====== */
+  /* ====== ШАПКА ДЛЯ ТЕЛЕФОНОВ ====== */
   @media (max-width: 480px) {
     .header { padding: 12px 10px; min-height: 56px; }
     .header-left { left: 10px; gap: 4px; }
@@ -160,14 +160,18 @@
   .modal-title { font-weight: 700; font-size: 16px; }
   .modal-close { background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; line-height: 1; padding: 0; }
   .modal-body { flex: 1; padding: 16px; overflow-y: auto; background: #f9fafb; display: flex; flex-direction: column; gap: 10px; }
-  .modal-footer { padding: 12px 16px; background: #ffffff; border-top: 1px solid #e5e7eb; display: flex; gap: 8px; }
+  .modal-footer { padding: 12px 16px; background: #ffffff; border-top: 1px solid #e5e7eb; display: flex; flex-direction: column; gap: 8px; }
+  .modal-input-row { display: flex; gap: 8px; }
   .modal-input { flex: 1; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 20px; font-size: 14px; outline: none; }
   .modal-input:focus { border-color: #2196f3; }
   .modal-send { background: #2196f3; color: #fff; border: none; border-radius: 20px; padding: 0 20px; font-weight: 700; cursor: pointer; font-size: 14px; }
   .modal-send:hover { background: #1976d2; }
+  .modal-broadcast { background: #4b5563; color: #fff; border: none; border-radius: 8px; padding: 10px; font-weight: 700; cursor: pointer; font-size: 13px; text-transform: uppercase; }
+  .modal-broadcast:hover { background: #374151; }
   .msg-bubble { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
   .msg-bubble.my { align-self: flex-end; background: #2196f3; color: #fff; border-bottom-right-radius: 2px; }
   .msg-bubble.their { align-self: flex-start; background: #ffffff; color: #1a1a1a; border-bottom-left-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+  .msg-bubble.admin { align-self: flex-start; background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; border-radius: 4px; }
   .msg-time { font-size: 10px; opacity: 0.7; margin-top: 4px; display: block; }
   .ref-item { padding: 12px 16px; background: #ffffff; border-radius: 8px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
   .ref-item:hover { border-color: #2196f3; background: #f0f7ff; }
@@ -338,7 +342,7 @@
     <div class="card">
       <div class="card-title" id="lbl-ai-recruiter">ИИ-рекрутер</div>
       <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;" id="lbl-ai-soon">
-        🤖 Скоро — интеллектуальный помощник для рекрутинга
+        🤖 Скоро  — интеллектуальный помощник для рекрутинга
       </div>
     </div>
 
@@ -408,8 +412,11 @@
       <!-- Сообщения будут здесь -->
     </div>
     <div class="modal-footer">
-      <input type="text" class="modal-input" id="chat-input" placeholder="Написать сообщение..." onkeypress="if(event.key==='Enter') sendChatMessage()">
-      <button class="modal-send" onclick="sendChatMessage()">➤</button>
+      <div class="modal-input-row">
+        <input type="text" class="modal-input" id="chat-input" placeholder="Написать сообщение..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+        <button class="modal-send" onclick="sendChatMessage()">➤</button>
+      </div>
+      <button class="modal-broadcast" id="btn-broadcast" onclick="sendBroadcastMessage()" style="display: none;">📢 Отправить всем</button>
     </div>
   </div>
 </div>
@@ -520,7 +527,13 @@
       donate_btn: "Сделать донат",
       donate_success: "Донат успешно отправлен! Спасибо за поддержку.",
       donate_error: "Ошибка: ",
-      donate_invalid_amount: "Введите корректную сумму больше 0"
+      donate_invalid_amount: "Введите корректную сумму больше 0",
+      admin_chat: "Администрация",
+      admin_chat_desc: "Только для чтения",
+      broadcast_btn: "📢 Отправить всем",
+      broadcast_success: "Сообщение отправлено всем рефералам!",
+      broadcast_confirm: "Отправить это сообщение ВСЕМ вашим рефералам?",
+      admin_label: "Администрация"
     },
     en: {
       logout: "← Log out",
@@ -593,7 +606,13 @@
       donate_btn: "Make a donation",
       donate_success: "Donation successfully sent! Thank you for your support.",
       donate_error: "Error: ",
-      donate_invalid_amount: "Enter a valid amount greater than 0"
+      donate_invalid_amount: "Enter a valid amount greater than 0",
+      admin_chat: "Administration",
+      admin_chat_desc: "Read-only",
+      broadcast_btn: "📢 Send to all",
+      broadcast_success: "Message sent to all referrals!",
+      broadcast_confirm: "Send this message to ALL your referrals?",
+      admin_label: "Administration"
     }
   };
 
@@ -656,6 +675,7 @@
     document.getElementById('lbl-need-bnb').textContent = t('need_bnb');
     document.getElementById('lbl-choose-chat').textContent = t('choose_chat');
     document.getElementById('chat-input').placeholder = t('type_msg');
+    document.getElementById('btn-broadcast').textContent = t('broadcast_btn');
     
     document.getElementById('donate-title').textContent = t('donate_title');
     document.getElementById('donate-info-text').textContent = t('donate_info_text');
@@ -700,6 +720,7 @@
   let poolData = null;
   let chatPartnerId = null;
   let chatPartnerName = null;
+  let isAdminChat = false;
 
   function formatUSDT(value) {
     if (!value) return '$0.00';
@@ -918,13 +939,17 @@
     try {
       const referrals = await api.getReferrals();
       
-      if (referrals.items.length === 0 && !userData.referrerId) {
-        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('no_refs') + '</div>';
-        return;
-      }
-
       let html = '';
       
+      // Отдельный чат с Администрацией
+      html += `<div class="ref-item" onclick="openAdminChat()">
+        <div>
+          <div class="ref-virid" style="color: #f59e0b;">${t('admin_chat')}</div>
+          <div class="ref-packet">${t('admin_chat_desc')}</div>
+        </div>
+        <div style="color:#f59e0b;">→</div>
+      </div>`;
+
       if (userData.referrerId) {
         html += `<div class="ref-item" onclick="openChatModal(${userData.referrerId}, '${userData.referrerVirId}')">
           <div>
@@ -955,12 +980,28 @@
     document.getElementById('ref-list-modal').classList.remove('active');
   }
 
+  function openAdminChat() {
+    isAdminChat = true;
+    chatPartnerId = null;
+    chatPartnerName = t('admin_chat');
+    
+    document.getElementById('ref-list-modal').classList.remove('active');
+    document.getElementById('chat-title').textContent = chatPartnerName;
+    document.getElementById('chat-modal').classList.add('active');
+    document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('loading_history') + '</div>';
+    document.getElementById('chat-input').disabled = true;
+    document.getElementById('btn-broadcast').style.display = 'none';
+    
+    loadAdminHistory();
+  }
+
   async function openChatModal(partnerId, partnerName) {
     if (!partnerId) {
       alert(t('alert_no_sponsor'));
       return;
     }
 
+    isAdminChat = false;
     chatPartnerId = partnerId;
     chatPartnerName = partnerName;
 
@@ -968,8 +1009,37 @@
     document.getElementById('chat-title').textContent = t('chat_with', { name: chatPartnerName });
     document.getElementById('chat-modal').classList.add('active');
     document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('loading_history') + '</div>';
+    document.getElementById('chat-input').disabled = false;
+    document.getElementById('btn-broadcast').style.display = 'block';
     
     await loadChatHistory();
+  }
+
+  async function loadAdminHistory() {
+    try {
+      const messages = await api.getAdminMessages();
+      const body = document.getElementById('chat-body');
+      
+      if (messages.length === 0) {
+        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">' + t('no_messages') + '</div>';
+        return;
+      }
+
+              body.innerHTML = messages.map(msg => {
+          const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          return `
+            <div class="msg-bubble admin">
+              ${escapeHtml(msg.text)}
+              <span class="msg-time">${time} · ${t('admin_label')}</span>
+            </div>
+          `;
+        }).join('');
+
+        body.scrollTop = body.scrollHeight;
+    } catch (err) {
+      console.error(err);
+      document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">' + t('error_history') + ': ' + (err.message || err) + '</div>';
+    }
   }
 
   async function loadChatHistory() {
@@ -1002,6 +1072,7 @@
 
   function closeChatModal() {
     document.getElementById('chat-modal').classList.remove('active');
+    isAdminChat = false;
   }
 
   async function sendChatMessage() {
@@ -1014,6 +1085,31 @@
 
     try {
       await api.sendMessage(chatPartnerId, text);
+      await loadChatHistory();
+    } catch (err) {
+      alert(t('err_send') + (err.message || t('err_net')));
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
+  }
+
+  async function sendBroadcastMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) {
+      alert(t('type_msg'));
+      return;
+    }
+
+    if (!confirm(t('broadcast_confirm'))) return;
+
+    input.value = '';
+    input.disabled = true;
+
+    try {
+      const result = await api.broadcastMessage(text);
+      alert(t('broadcast_success') + ' (' + result.message + ')');
       await loadChatHistory();
     } catch (err) {
       alert(t('err_send') + (err.message || t('err_net')));
