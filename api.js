@@ -101,7 +101,27 @@
     return request('GET', '/api/v1/messages/chat/' + otherUserId);
   }
   async function getUnreadCount() {
-    return request('GET', '/api/v1/messages/unread');
+    return request('GET', '/api/v1/messages/unread-count');
+  }
+
+  // ============================================
+  // Новые функции: админ и рассылка
+  // ============================================
+  
+  async function getAdminMessages() {
+    return request('GET', '/api/v1/messages/admin');
+  }
+
+  async function broadcastMessage(text) {
+    return request('POST', '/api/v1/messages/broadcast', { text });
+  }
+
+  async function requestVip(starLevel, proofUrl) {
+    return request('POST', '/api/v1/vip/request', { starLevel, proofUrl });
+  }
+
+  async function verifySybil(proofUrl) {
+    return request('POST', '/api/v1/vip/verify-sybil', { proofUrl });
   }
 
   const api = {
@@ -111,6 +131,8 @@
     getMe, getMatrix, getReferrals, getPayouts, activatePacket, donate,
     getPoolInfo,
     sendMessage, getChat, getUnreadCount,
+    getAdminMessages, broadcastMessage,
+    requestVip, verifySybil,
     request
   };
   global.api = api;
