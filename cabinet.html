@@ -10,14 +10,49 @@
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; }
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
   .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
+
+  /* ====== FLEXBOX ШАПКА ====== */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid #1f2937;
+    background: linear-gradient(180deg, #0f1e3a, #0a0e1a);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: 62px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
   
-  /* ====== БАЗОВАЯ ШАПКА (ПК) ====== */
-  .header { position: relative; display: flex; align-items: center; justify-content: center; padding: 18px 20px; border-bottom: 1px solid #1f2937; background: linear-gradient(180deg, #0f1e3a, #0a0e1a); position: sticky; top: 0; z-index: 100; min-height: 62px; max-width: 640px; margin: 0 auto; }
+  .header-left {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-start;
+  }
+
+  .header-center {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .header-right {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
   .logo { display: flex; align-items: center; gap: 8px; }
   .logo-text { font-weight: 900; font-size: 22px; letter-spacing: 2px; color: #fff; display: flex; align-items: center; gap: 8px; }
   .logo-img { height: 40px; width: auto; }
 
-  .header-left { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 6px; align-items: center; }
   .logout-btn { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; justify-content: center; min-width: 34px; min-height: 30px; }
   .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
   
@@ -28,14 +63,14 @@
   .messages-btn:hover { background: #2196f3; color: #fff; }
   .messages-badge { position: absolute; top: -6px; right: -6px; background: #ff1744; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center; line-height: 1.2; display: none; }
   
-  .lang-switch { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 3px; align-items: center; }
+  .lang-switch { display: flex; gap: 3px; align-items: center; }
   .lang-switch button { background: transparent; color: #6b7280; border: 1px solid #374151; border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .lang-switch button.active { background: #2196f3; color: #fff; border-color: #2196f3; }
 
-  /* ====== ШАПКА ДЛЯ ТЕЛЕФОНОВ ====== */
+  /* ====== АДАПТИВ ====== */
   @media (max-width: 480px) {
     .header { padding: 12px 10px; min-height: 56px; }
-    .header-left { left: 10px; gap: 4px; }
+    .header-left { gap: 4px; }
     
     .logout-text { display: none; }
     .logout-icon { display: block; }
@@ -44,7 +79,7 @@
     .messages-btn { padding: 4px 8px; font-size: 11px; line-height: 1.2; }
     .messages-btn span:not(.messages-badge) { font-size: 12px; }
     
-    .lang-switch { right: 10px; gap: 3px; }
+    .lang-switch { gap: 3px; }
     .lang-switch button { padding: 4px 8px; font-size: 11px; line-height: 1.2; }
     
     .logo-text { font-size: 22px; gap: 6px; letter-spacing: 1px; }
@@ -203,12 +238,18 @@
         <span class="messages-badge" id="messages-badge">0</span>
       </button>
     </div>
-    <div class="logo">
-      <div class="logo-text">VIRUS <img src="logo.png" alt="Logo" class="logo-img"> MLM</div>
+    
+    <div class="header-center">
+      <div class="logo">
+        <div class="logo-text">VIRUS <img src="logo.png" alt="Logo" class="logo-img"> MLM</div>
+      </div>
     </div>
-    <div class="lang-switch">
-      <button class="active" id="lang-ru" onclick="setLang('ru')">RU</button>
-      <button id="lang-en" onclick="setLang('en')">EN</button>
+    
+    <div class="header-right">
+      <div class="lang-switch">
+        <button class="active" id="lang-ru" onclick="setLang('ru')">RU</button>
+        <button id="lang-en" onclick="setLang('en')">EN</button>
+      </div>
     </div>
   </div>
 
@@ -1025,17 +1066,17 @@
         return;
       }
 
-              body.innerHTML = messages.map(msg => {
-          const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          return `
-            <div class="msg-bubble admin">
-              ${escapeHtml(msg.text)}
-              <span class="msg-time">${time} · ${t('admin_label')}</span>
-            </div>
-          `;
-        }).join('');
+      body.innerHTML = messages.map(msg => {
+        const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return `
+          <div class="msg-bubble admin">
+            ${escapeHtml(msg.text)}
+            <span class="msg-time">${time} · ${t('admin_label')}</span>
+          </div>
+        `;
+      }).join('');
 
-        body.scrollTop = body.scrollHeight;
+      body.scrollTop = body.scrollHeight;
     } catch (err) {
       console.error(err);
       document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">' + t('error_history') + ': ' + (err.message || err) + '</div>';
