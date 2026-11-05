@@ -202,7 +202,6 @@
     }
   }
 
-  // Если уже авторизован, редирект в кабинет
   if (api.isAuthenticated()) { window.location.href = 'cabinet.html'; }
 
   async function handleSendCode() {
@@ -213,7 +212,9 @@
 
     setLoading('btn-send', true, 'Отправка...');
     try {
-      await api.sendCode(email, turnstileToken);
+      // ИСПОЛЬЗУЕМ API.LOGIN ДЛЯ ВХОДА (ПРОВЕРКА, ЧТО АККАУНТ СУЩЕСТВУЕТ)
+      await api.login(email, turnstileToken);
+      
       showAlert('success', 'Код отправлен на ' + email + '. Проверьте почту (включая спам).');
       document.getElementById('code').focus();
       resetTurnstile();
