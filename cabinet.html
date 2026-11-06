@@ -274,7 +274,7 @@
         <div class="sponsor-info">
           <div class="sponsor-virid" id="sponsor-virid">—</div>
         </div>
-        <!-- Добавлен бейдж для кнопки Написать -->
+        <!-- Бейдж для кнопки Написать -->
         <button class="btn btn-ghost" id="btn-write-sponsor" onclick="openReferralList()">
           Написать
           <span class="write-badge" id="write-badge">0</span>
@@ -676,12 +676,11 @@
     document.getElementById('lbl-vip-on-level').textContent = t('vip_on_level');
     document.getElementById('lbl-my-sponsor').textContent = t('my_sponsor');
     
-    // У кнопки Написать есть бейдж, поэтому меняем только текст, не трогая бейдж
+    // Обновляем только текст на кнопке "Написать", не трогая бейдж
     const btnWrite = document.getElementById('btn-write-sponsor');
     if (btnWrite) {
-      // Находим текстовый узел и меняем только его
       for (let node of btnWrite.childNodes) {
-        if (node.nodeType === Node.TEXT_NODE) {
+        if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
           node.textContent = t('write') + ' ';
           break;
         }
@@ -768,7 +767,6 @@
     document.getElementById('lang-menu').classList.toggle('show');
   }
 
-  // Закрыть меню при клике вне его
   document.addEventListener('click', function(event) {
     const dropdown = document.querySelector('.lang-dropdown');
     if (dropdown && !dropdown.contains(event.target)) {
@@ -988,7 +986,7 @@
       const badge = document.getElementById('write-badge');
       if (result.unreadCount > 0) {
         badge.textContent = result.unreadCount;
-        badge.style.display = 'flex'; // Используем flex для центрирования
+        badge.style.display = 'flex'; // Используем flex для центрирования цифры
       } else {
         badge.style.display = 'none';
       }
@@ -1003,6 +1001,9 @@
     document.getElementById('ref-list-modal').classList.add('active');
 
     try {
+      // 1. Принудительно обновляем общий счетчик на кнопке "Написать"
+      await updateUnreadBadge();
+
       const referrals = await api.getReferrals();
       
       let html = `<div class="welcome-msg">${t('welcome_chat')}</div>`;
@@ -1019,7 +1020,8 @@
 
       referrals.items.forEach(ref => {
         let unreadHtml = '';
-        if (ref.unreadCount > 0) {
+        // 2. Если сервер прислал unreadCount > 0, рисуем красную точку
+        if (ref.unreadCount && ref.unreadCount > 0) {
            unreadHtml = `<div class="ref-unread-dot" style="margin-right: 10px;"></div>`;
         }
 
@@ -1037,6 +1039,7 @@
 
       body.innerHTML = html;
     } catch (err) {
+      console.error(err);
       body.innerHTML = '<div style="text-align:center;color:#ef4444;padding:20px;">' + t('error_list') + '</div>';
     }
   }
@@ -1197,9 +1200,6 @@
     }
   }
 
-  // Проверяем новые сообщения каждые 30 секунд
-  setInterval(updateUnreadBadge, 30000);
-  
   document.querySelectorAll('.lang-menu button').forEach((b) => b.classList.remove('active'));
   document.getElementById('lang-' + currentLang).classList.add('active');
   
