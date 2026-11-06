@@ -986,7 +986,7 @@
       const badge = document.getElementById('write-badge');
       if (result.unreadCount > 0) {
         badge.textContent = result.unreadCount;
-        badge.style.display = 'flex'; // Используем flex для центрирования цифры
+        badge.style.display = 'flex';
       } else {
         badge.style.display = 'none';
       }
@@ -1001,25 +1001,28 @@
     document.getElementById('ref-list-modal').classList.add('active');
 
     try {
-      // 1. Обновляем общий счетчик на кнопке
       await updateUnreadBadge();
-
-      // 2. Запрашиваем свежие данные о спонсоре (чтобы узнать, есть ли от него непрочитанные)
-      userData = await api.getMe(); 
-
+      
+      // Приводим строковые ID к числам для корректного сравнения
+      const freshMe = await api.getMe();
+      if (freshMe) {
+        freshMe.id = Number(freshMe.id);
+        freshMe.referrerId = freshMe.referrerId ? Number(freshMe.referrerId) : null;
+      }
+      
       const referrals = await api.getReferrals();
       
       let html = `<div class="welcome-msg">${t('welcome_chat')}</div>`;
 
-      // Рисуем спонсора с точкой, если есть непрочитанные
-      if (userData.referrerId) {
-        let sponsorDot = '';
-        if (userData.sponsorUnreadCount > 0) {
-          sponsorDot = `<div class="ref-unread-dot" style="margin-right: 10px;"></div>`;
-        }
-        html += `<div class="ref-item" onclick="openChatModal(${userData.referrerId}, '${userData.referrerVirId}')">
+      // Отрисовка спонсора
+      if (freshMe && freshMe.referrerId) {
+        // Если сообщения от спонсора непрочитаны, показываем точку
+        const isSponsorUnread = freshMe.sponsorUnreadCount > 0;
+        let sponsorDot = isSponsorUnread ? `<div class="ref-unread-dot" style="margin-right: 10px;"></div>` : '';
+        
+        html += `<div class="ref-item" onclick="openChatModal(${freshMe.referrerId}, '${freshMe.referrerVirId}')">
           <div>
-            <div class="ref-virid">${userData.referrerVirId}</div>
+            <div class="ref-virid">${freshMe.referrerVirId}</div>
             <div class="ref-packet">${t('sponsor_lbl')}</div>
           </div>
           <div style="display:flex; align-items:center;">
@@ -1029,12 +1032,10 @@
         </div>`;
       }
 
-      // Рисуем рефералов с точками
+      // Отрисовка рефералов
       referrals.items.forEach(ref => {
-        let refDot = '';
-        if (ref.unreadCount && ref.unreadCount > 0) {
-           refDot = `<div class="ref-unread-dot" style="margin-right: 10px;"></div>`;
-        }
+        const isUnread = Number(ref.unreadCount) > 0;
+        let refDot = isUnread ? `<div class="ref-unread-dot" style="margin-right: 10px;"></div>` : '';
 
         html += `<div class="ref-item" onclick="openChatModal(${ref.userId}, '${ref.virId}')">
           <div>
