@@ -1003,7 +1003,6 @@
     try {
       await updateUnreadBadge();
       
-      // Приводим строковые ID к числам для корректного сравнения
       const freshMe = await api.getMe();
       if (freshMe) {
         freshMe.id = Number(freshMe.id);
@@ -1014,13 +1013,11 @@
       
       let html = `<div class="welcome-msg">${t('welcome_chat')}</div>`;
 
-      // Отрисовка спонсора
       if (freshMe && freshMe.referrerId) {
-        // Если сообщения от спонсора непрочитаны, показываем точку
         const isSponsorUnread = freshMe.sponsorUnreadCount > 0;
         let sponsorDot = isSponsorUnread ? `<div class="ref-unread-dot" style="margin-right: 10px;"></div>` : '';
         
-        html += `<div class="ref-item" onclick="openChatModal(${freshMe.referrerId}, '${freshMe.referrerVirId}')">
+        html += `<div class="ref-item" id="ref-item-sponsor" onclick="openChatModal(${freshMe.referrerId}, '${freshMe.referrerVirId}')">
           <div>
             <div class="ref-virid">${freshMe.referrerVirId}</div>
             <div class="ref-packet">${t('sponsor_lbl')}</div>
@@ -1032,12 +1029,11 @@
         </div>`;
       }
 
-      // Отрисовка рефералов
       referrals.items.forEach(ref => {
         const isUnread = Number(ref.unreadCount) > 0;
         let refDot = isUnread ? `<div class="ref-unread-dot" style="margin-right: 10px;"></div>` : '';
 
-        html += `<div class="ref-item" onclick="openChatModal(${ref.userId}, '${ref.virId}')">
+        html += `<div class="ref-item" id="ref-item-${ref.userId}" onclick="openChatModal(${ref.userId}, '${ref.virId}')">
           <div>
             <div class="ref-virid">${ref.virId}</div>
             <div class="ref-packet">${t('ref_lbl', { packet: ref.currentPacket })}</div>
@@ -1070,6 +1066,13 @@
     chatPartnerId = partnerId;
     chatPartnerName = partnerName;
 
+    // Визуально убираем точку у этого пользователя сразу
+    const refItem = document.getElementById('ref-item-' + partnerId);
+    if (refItem) {
+      const dot = refItem.querySelector('.ref-unread-dot');
+      if (dot) dot.remove();
+    }
+
     document.getElementById('ref-list-modal').classList.remove('active');
     document.getElementById('chat-title').textContent = t('chat_with', { name: chatPartnerName });
     document.getElementById('chat-modal').classList.add('active');
@@ -1079,7 +1082,7 @@
     
     await loadChatHistory();
     
-    // После прочтения сообщений обновляем бейдж на кнопке "Написать"
+    // Обновляем бейдж после загрузки истории
     await updateUnreadBadge();
   }
 
