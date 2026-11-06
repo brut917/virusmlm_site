@@ -33,8 +33,9 @@
   .logo-text { font-weight: 900; font-size: 22px; letter-spacing: 2px; color: #fff; display: flex; align-items: center; gap: 8px; }
   .logo-img { height: 40px; width: auto; filter: contrast(1.1) brightness(1.1); }
 
+  /* Выпадающий глобус: белая квадратная рамка 32x32, SVG-иконка */
   .lang-dropdown { position: relative; display: inline-block; }
-  .lang-globe { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 5px 8px; font-size: 20px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; min-width: 34px; min-height: 30px; line-height: 1; }
+  .lang-globe { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 0; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; }
   .lang-globe:hover { background: #1f2937; color: #fff; }
   .lang-menu { display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; background: #1f2937; border: 1px solid #374151; border-radius: 5px; overflow: hidden; z-index: 200; min-width: 60px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
   .lang-menu.show { display: block; }
@@ -46,7 +47,7 @@
     .header { padding: 12px 10px; min-height: 56px; }
     .logo-text { font-size: 22px; gap: 6px; letter-spacing: 1px; }
     .logo-img { height: 34px; }
-    .lang-globe { padding: 4px 6px; font-size: 18px; }
+    .lang-globe { width: 32px; height: 32px; }
   }
 
   .reg-container { max-width: 560px; margin: 0 auto; padding: 40px 20px; }
@@ -100,7 +101,13 @@
     </div>
     <div class="header-right">
       <div class="lang-dropdown">
-        <button class="lang-globe" onclick="toggleLangMenu()">🌐</button>
+        <button class="lang-globe" onclick="toggleLangMenu()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </button>
         <div class="lang-menu" id="lang-menu">
           <button class="active" id="lang-ru" onclick="setLang('ru')">RU</button>
           <button id="lang-en" onclick="setLang('en')">EN</button>
