@@ -11,7 +11,6 @@
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
   .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
 
-  /* ====== ШАПКА ====== */
   .header {
     display: flex;
     align-items: center;
@@ -116,11 +115,9 @@
   .btn-green:hover { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
   .btn-green:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; }
   
-  /* Кнопка Написать (с поддержкой бейджа) */
   .btn-ghost { background: transparent; border: 2px solid #2196f3; color: #2196f3; padding: 8px 14px; font-size: 12px; width: auto; position: relative; }
   .btn-ghost:hover { background: #2196f3; color: #fff; }
   
-  /* Красный бейдж для кнопки Написать */
   .write-badge { display: none; position: absolute; top: -8px; right: -8px; background: #ff1744; color: #fff; font-size: 11px; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
   .pool-card { background: linear-gradient(135deg, #0a1f3a, #111827); border: 1px solid #2196f3; border-radius: 12px; padding: 20px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; text-align: center; }
@@ -193,7 +190,6 @@
   .ref-virid { font-weight: 700; color: #2196f3; font-family: monospace; }
   .ref-packet { font-size: 12px; color: #6b7280; }
   
-  /* Красная точка в списке чатов */
   .ref-unread-dot { width: 10px; height: 10px; background: #ff1744; border-radius: 50%; box-shadow: 0 0 5px rgba(255,23,68,0.5); }
   
   .welcome-msg { text-align: center; color: #6b7280; font-size: 13px; padding: 20px; line-height: 1.5; background: #f3f4f6; border-radius: 8px; margin-bottom: 10px; }
@@ -274,7 +270,6 @@
         <div class="sponsor-info">
           <div class="sponsor-virid" id="sponsor-virid">—</div>
         </div>
-        <!-- Бейдж для кнопки Написать -->
         <button class="btn btn-ghost" id="btn-write-sponsor" onclick="openReferralList()">
           Написать
           <span class="write-badge" id="write-badge">0</span>
@@ -676,7 +671,6 @@
     document.getElementById('lbl-vip-on-level').textContent = t('vip_on_level');
     document.getElementById('lbl-my-sponsor').textContent = t('my_sponsor');
     
-    // Обновляем только текст на кнопке "Написать", не трогая бейдж
     const btnWrite = document.getElementById('btn-write-sponsor');
     if (btnWrite) {
       for (let node of btnWrite.childNodes) {
@@ -835,10 +829,7 @@
       matrixData = matrix;
       poolData = pool;
       renderCabinet();
-      
-      // Загружаем счетчик непрочитанных на кнопку "Написать"
       await updateUnreadBadge(); 
-
       document.getElementById('loading').style.display = 'none';
       document.getElementById('content').style.display = 'block';
       applyTranslations();
@@ -1066,7 +1057,6 @@
     chatPartnerId = partnerId;
     chatPartnerName = partnerName;
 
-    // Визуально убираем точку у этого пользователя сразу
     const refItem = document.getElementById('ref-item-' + partnerId);
     if (refItem) {
       const dot = refItem.querySelector('.ref-unread-dot');
@@ -1082,7 +1072,6 @@
     
     await loadChatHistory();
     
-    // Обновляем бейдж после загрузки истории
     await updateUnreadBadge();
   }
 
@@ -1118,7 +1107,6 @@
     document.getElementById('chat-modal').classList.remove('active');
     isAdminChat = false;
     
-    // Обновляем счетчик непрочитанных при закрытии чата
     updateUnreadBadge();
   }
 
