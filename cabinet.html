@@ -1001,28 +1001,39 @@
     document.getElementById('ref-list-modal').classList.add('active');
 
     try {
-      // 1. Принудительно обновляем общий счетчик на кнопке "Написать"
+      // 1. Обновляем общий счетчик на кнопке
       await updateUnreadBadge();
+
+      // 2. Запрашиваем свежие данные о спонсоре (чтобы узнать, есть ли от него непрочитанные)
+      userData = await api.getMe(); 
 
       const referrals = await api.getReferrals();
       
       let html = `<div class="welcome-msg">${t('welcome_chat')}</div>`;
 
+      // Рисуем спонсора с точкой, если есть непрочитанные
       if (userData.referrerId) {
+        let sponsorDot = '';
+        if (userData.sponsorUnreadCount > 0) {
+          sponsorDot = `<div class="ref-unread-dot" style="margin-right: 10px;"></div>`;
+        }
         html += `<div class="ref-item" onclick="openChatModal(${userData.referrerId}, '${userData.referrerVirId}')">
           <div>
             <div class="ref-virid">${userData.referrerVirId}</div>
             <div class="ref-packet">${t('sponsor_lbl')}</div>
           </div>
-          <div style="color:#2196f3;">→</div>
+          <div style="display:flex; align-items:center;">
+            ${sponsorDot}
+            <div style="color:#2196f3;">→</div>
+          </div>
         </div>`;
       }
 
+      // Рисуем рефералов с точками
       referrals.items.forEach(ref => {
-        let unreadHtml = '';
-        // 2. Если сервер прислал unreadCount > 0, рисуем красную точку
+        let refDot = '';
         if (ref.unreadCount && ref.unreadCount > 0) {
-           unreadHtml = `<div class="ref-unread-dot" style="margin-right: 10px;"></div>`;
+           refDot = `<div class="ref-unread-dot" style="margin-right: 10px;"></div>`;
         }
 
         html += `<div class="ref-item" onclick="openChatModal(${ref.userId}, '${ref.virId}')">
@@ -1031,7 +1042,7 @@
             <div class="ref-packet">${t('ref_lbl', { packet: ref.currentPacket })}</div>
           </div>
           <div style="display:flex; align-items:center;">
-            ${unreadHtml}
+            ${refDot}
             <div style="color:#2196f3;">→</div>
           </div>
         </div>`;
@@ -1102,6 +1113,9 @@
   function closeChatModal() {
     document.getElementById('chat-modal').classList.remove('active');
     isAdminChat = false;
+    
+    // Обновляем счетчик непрочитанных при закрытии чата
+    updateUnreadBadge();
   }
 
   async function sendChatMessage() {
