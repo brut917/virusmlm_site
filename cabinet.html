@@ -35,17 +35,17 @@
   .logo-text { font-weight: 900; font-size: 22px; letter-spacing: 2px; color: #fff; display: flex; align-items: center; gap: 8px; }
   .logo-img { height: 40px; width: auto; }
 
-  /* Кнопка Выйти: белая рамка */
-  .logout-btn { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; justify-content: center; min-width: 34px; min-height: 30px; }
+  /* Кнопка Выйти: белая рамка, высота 32px */
+  .logout-btn { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 0 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; justify-content: center; height: 32px; min-width: 34px; }
   .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
   
   .logout-text { display: inline; } 
   .logout-icon { display: none; width: 16px; height: 16px; } 
 
-  /* Выпадающий глобус: белая рамка, увеличенная иконка */
+  /* Выпадающий глобус: белая квадратная рамка 32x32, белая иконка */
   .lang-dropdown { position: relative; display: inline-block; }
-  .lang-globe { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 5px 8px; font-size: 20px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; min-width: 34px; min-height: 30px; line-height: 1; }
-  .lang-globe:hover { background: #1f2937; color: #fff; }
+  .lang-globe { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 0; font-size: 18px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; line-height: 1; filter: brightness(0) invert(1); }
+  .lang-globe:hover { background: #1f2937; }
   .lang-menu { display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; background: #1f2937; border: 1px solid #374151; border-radius: 5px; overflow: hidden; z-index: 200; min-width: 60px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
   .lang-menu.show { display: block; }
   .lang-menu button { display: block; width: 100%; padding: 8px 12px; background: transparent; color: #9ca3af; border: none; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.2s; }
@@ -59,12 +59,12 @@
     
     .logout-text { display: none; }
     .logout-icon { display: block; }
-    .logout-btn { padding: 4px 6px; border-color: #ffffff; color: #ffffff; } 
+    .logout-btn { padding: 0 6px; border-color: #ffffff; color: #ffffff; } 
     
     .logo-text { font-size: 22px; gap: 6px; letter-spacing: 1px; }
     .logo-img { height: 34px; }
     
-    .lang-globe { padding: 4px 6px; font-size: 18px; }
+    .lang-globe { padding: 0; font-size: 16px; width: 32px; height: 32px; }
   }
 
   .profile-row { max-width: 560px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
