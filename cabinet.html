@@ -1054,7 +1054,7 @@
     }
 
     isAdminChat = false;
-    chatPartnerId = partnerId;
+    chatPartnerId = Number(partnerId);
     chatPartnerName = partnerName;
 
     const refItem = document.getElementById('ref-item-' + partnerId);
@@ -1073,6 +1073,64 @@
     await loadChatHistory();
     
     await updateUnreadBadge();
+
+    // Обновляем точки в списке чатов в фоне (если список открыт ранее)
+    try {
+      const freshMe = await api.getMe();
+      if (freshMe) {
+        freshMe.id = Number(freshMe.id);
+        freshMe.referrerId = freshMe.referrerId ? Number(freshMe.referrerId) : null;
+      }
+      const referrals = await api.getReferrals();
+      // Перерисовываем список, но не открываем его
+      renderReferralList(freshMe, referrals);
+    } catch (e) {
+      // тихо игнорируем — это фоновое обновление
+    }
+  }
+
+  // Вынесенная функция отрисовки списка (чтобы не дублировать код)
+  function renderReferralList(freshMe, referrals) {
+    const body = document.getElementById('ref-list-body');
+    if (!body) return;
+
+    let html = `<div class="welcome-msg">${t('welcome_chat')}</div>`;
+
+    if (freshMe && freshMe.referrerId) {
+      const isSponsorUnread = Number(freshMe.sponsorUnreadCount) > 0;
+      let sponsorDot = isSponsorUnread ? `<div class="ref-unread-dot" style="margin-right: 10px;"></div>` : '';
+      
+      html += `<div class="ref-item" id="ref-item-sponsor" onclick="openChatModal(${freshMe.referrerId}, '${freshMe.referrerVirId}')">
+        <div>
+          <div class="ref-virid">${freshMe.referrerVirId}</div>
+          <div class="ref-packet">${t('sponsor_lbl')}</div>
+        </div>
+        <div style="display:flex; align-items:center;">
+          ${sponsorDot}
+          <div style="color:#2196f3;">→</div>
+        </div>
+      </div>`;
+    }
+
+    if (referrals && referrals.items) {
+      referrals.items.forEach(ref => {
+        const isUnread = Number(ref.unreadCount) > 0;
+        let refDot = isUnread ? `<div class="ref-unread-dot" style="margin-right: 10px;"></div>` : '';
+
+        html += `<div class="ref-item" id="ref-item-${ref.userId}" onclick="openChatModal(${ref.userId}, '${ref.virId}')">
+          <div>
+            <div class="ref-virid">${ref.virId}</div>
+            <div class="ref-packet">${t('ref_lbl', { packet: ref.currentPacket })}</div>
+          </div>
+          <div style="display:flex; align-items:center;">
+            ${refDot}
+            <div style="color:#2196f3;">→</div>
+          </div>
+        </div>`;
+      });
+    }
+
+    body.innerHTML = html;
   }
 
   async function loadChatHistory() {
@@ -1103,11 +1161,26 @@
     }
   }
 
-  function closeChatModal() {
+  async function closeChatModal() {
     document.getElementById('chat-modal').classList.remove('active');
     isAdminChat = false;
-    
-    updateUnreadBadge();
+
+    // Обновляем верхний бейдж
+    await updateUnreadBadge();
+
+    // Возвращаемся в список чатов и перерисовываем его (точки сбрасываются)
+    try {
+      const freshMe = await api.getMe();
+      if (freshMe) {
+        freshMe.id = Number(freshMe.id);
+        freshMe.referrerId = freshMe.referrerId ? Number(freshMe.referrerId) : null;
+      }
+      const referrals = await api.getReferrals();
+      renderReferralList(freshMe, referrals);
+      document.getElementById('ref-list-modal').classList.add('active');
+    } catch (e) {
+      console.error('Ошибка обновления списка чатов:', e);
+    }
   }
 
   async function sendChatMessage() {
