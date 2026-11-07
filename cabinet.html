@@ -853,8 +853,9 @@
 
   function checkMetaMaskHint() {
     try {
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       const isMetaMask = !!(window.ethereum && window.ethereum.isMetaMask);
-      if (isMetaMask) {
+      if (isMobile && isMetaMask) {
         const hint = document.getElementById('mm-hint');
         if (hint) hint.classList.add('show');
       }
