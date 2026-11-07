@@ -261,7 +261,7 @@
       <div class="wallet-block">
         <div class="wallet-label" id="lbl-user-id">User ID</div>
         <div class="wallet-value" id="user-virid">—</div>
-        <div class="pool-share-label" id="lbl-vip-on-level">VIP на уровне</div>
+        <div class="pool-share-label" id="lbl-vip-on-level">VIP-участников</div>
         <div class="pool-share-value" id="vip-on-level">—</div>
       </div>
     </div>
@@ -296,7 +296,7 @@
     </div>
 
     <div class="card">
-      <div class="card-title" id="lbl-matrix-fill">Заполнение матрицы</div>
+      <div class="card-title" id="lbl-matrix-fill">Заполнение команды</div>
       <div class="matrix-bar">
         <div class="matrix-fill" id="matrix-fill" style="width: 0%;"></div>
       </div>
@@ -315,7 +315,7 @@
     </div>
 
     <div class="pool-card">
-      <div class="pool-title" id="lbl-pool-title">Лидерский пул</div>
+      <div class="pool-title" id="lbl-pool-title">Бонус активности</div>
       <div class="pool-amount" id="pool-amount">$0.00</div>
       <div class="pool-sub" id="lbl-pool-sub">До следующего распределения</div>
       <div class="timer">
@@ -327,15 +327,15 @@
 
     <div class="card">
       <div class="balance-row thick">
-        <span class="balance-label" id="lbl-bal-referral">Всего реферальных</span>
+        <span class="balance-label" id="lbl-bal-referral">Всего за приглашения</span>
         <span class="balance-value" id="bal-referral">$0.00</span>
       </div>
       <div class="balance-row thick">
-        <span class="balance-label" id="lbl-bal-matrix">Матричный баланс</span>
+        <span class="balance-label" id="lbl-bal-matrix">Бонус за команду</span>
         <span class="balance-value" id="bal-matrix">$0.00</span>
       </div>
       <div class="balance-row">
-        <span class="balance-label" id="lbl-bal-pool">Лидерский пул</span>
+        <span class="balance-label" id="lbl-bal-pool">Бонус активности</span>
         <span class="balance-value" id="bal-pool">$0.00</span>
       </div>
     </div>
@@ -344,7 +344,7 @@
       <div class="withdraw-strip">
         <div class="withdraw-strip-left">
           <div class="withdraw-icon">₮</div>
-          <div class="withdraw-text"><span id="lbl-bal-withdraw">Баланс на вывод:</span> <b id="withdraw-total">$0.00</b></div>
+          <div class="withdraw-text"><span id="lbl-bal-withdraw">Доступно к выводу:</span> <b id="withdraw-total">$0.00</b></div>
         </div>
         <button class="withdraw-btn" id="btn-withdraw" onclick="openDonateModal()">ВЫВОД</button>
       </div>
@@ -459,13 +459,13 @@
 <div class="modal-overlay" id="donate-modal">
   <div class="modal-content" style="height: auto; max-height: 90vh;">
     <div class="modal-header">
-      <div class="modal-title" id="donate-title">Донат в лидерский пул</div>
+      <div class="modal-title" id="donate-title">Донат в бонус активности</div>
       <button class="modal-close" onclick="closeDonateModal()">×</button>
     </div>
     <div class="modal-body">
       <p class="donate-info" id="donate-info-text">
         Виртуальный кабинет не выводит средства на кошелек. 
-        Но вы можете поддержать систему, сделав добровольный донат в лидерский пул. 
+        Но вы можете поддержать систему, сделав добровольный донат в бонус активности. 
         Средства пойдут на развитие платформы и будут распределены среди всех VIP-участников.
       </p>
       <div id="donate-error" style="color: #ef4444; font-size: 13px; margin-bottom: 10px; display: none;"></div>
@@ -495,21 +495,21 @@
       loading: "Загрузка кабинета...",
       lifetime: "Бессрочно",
       user_id: "User ID",
-      vip_on_level: "VIP на уровне",
+      vip_on_level: "VIP-участников",
       my_sponsor: "Мой спонсор",
       write: "Написать",
       activate_btn: "Активировать пакет {packet} USDT",
       activate_all: "Все пакеты активированы",
-      matrix_fill: "Заполнение матрицы",
+      matrix_fill: "Заполнение команды",
       places: "{total} / {max} мест",
       ref_link: "Ваша реферальная ссылка",
-      pool_title: "Лидерский пул",
+      pool_title: "Бонус активности",
       pool_sub: "До следующего распределения",
       h: "час", m: "мин", s: "сек",
-      bal_referral: "Всего реферальных",
-      bal_matrix: "Матричный баланс",
-      bal_pool: "Лидерский пул",
-      bal_withdraw: "Баланс на вывод:",
+      bal_referral: "Всего за приглашения",
+      bal_matrix: "Бонус за команду",
+      bal_pool: "Бонус активности",
+      bal_withdraw: "Доступно к выводу:",
       withdraw: "ВЫВОД",
       to_wallet: "На кошелёк",
       to_market: "В маркетинг",
@@ -551,8 +551,8 @@
       err_copy: "Не удалось скопировать",
       root_system: "Корень системы",
       confirm_logout: "Выйти из аккаунта?",
-      donate_title: "Донат в лидерский пул",
-      donate_info_text: "Виртуальный кабинет не выводит средства на кошелек. Но вы можете поддержать систему, сделав добровольный донат в лидерский пул. Средства пойдут на развитие платформы и будут распределены среди всех VIP-участников.",
+      donate_title: "Донат в бонус активности",
+      donate_info_text: "Виртуальный кабинет не выводит средства на кошелек. Но вы можете поддержать систему, сделав добровольный донат в бонус активности. Средства пойдут на развитие платформы и будут распределены среди всех VIP-участников.",
       donate_source_label: "Откуда списать:",
       donate_source_referral: "Реферальный баланс",
       donate_source_matrix: "Матричный баланс",
@@ -576,21 +576,21 @@
       loading: "Loading cabinet...",
       lifetime: "Lifetime",
       user_id: "User ID",
-      vip_on_level: "VIP on level",
+      vip_on_level: "VIP members",
       my_sponsor: "My sponsor",
       write: "Write",
       activate_btn: "Activate packet {packet} USDT",
       activate_all: "All packets activated",
-      matrix_fill: "Matrix filling",
+      matrix_fill: "Team filling",
       places: "{total} / {max} places",
       ref_link: "Your referral link",
-      pool_title: "Leader pool",
+      pool_title: "Activity Bonus",
       pool_sub: "Until next distribution",
       h: "h", m: "m", s: "s",
       bal_referral: "Total referral",
-      bal_matrix: "Matrix balance",
-      bal_pool: "Leader pool",
-      bal_withdraw: "Balance to withdraw:",
+      bal_matrix: "Team Bonus",
+      bal_pool: "Activity Bonus",
+      bal_withdraw: "Available to withdraw:",
       withdraw: "WITHDRAW",
       to_wallet: "To wallet",
       to_market: "To marketing",
@@ -632,8 +632,8 @@
       err_copy: "Failed to copy",
       root_system: "System root",
       confirm_logout: "Log out?",
-      donate_title: "Donate to leader pool",
-      donate_info_text: "The virtual cabinet does not withdraw funds to a wallet. But you can support the system by making a voluntary donation to the leader pool. Funds will go to the development of the platform and will be distributed among all VIP participants.",
+      donate_title: "Donate to activity bonus",
+      donate_info_text: "The virtual cabinet does not withdraw funds to a wallet. But you can support the system by making a voluntary donation to the activity bonus. Funds will go to the development of the platform and will be distributed among all VIP participants.",
       donate_source_label: "Source of funds:",
       donate_source_referral: "Referral balance",
       donate_source_matrix: "Matrix balance",
