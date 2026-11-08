@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIRUS MLM — Активация (Testnet)</title>
+
+<link rel="icon" href="favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; }
+  body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
+  .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid #1f2937;
+    background: linear-gradient(180deg, #0f1e3a, #0a0e1a);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: 62px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  
+  .header-left { display: flex; align-items: center; flex: 1; justify-content: flex-start; }
+  .header-center { display: flex; justify-content: center; flex-shrink: 0; }
+  .header-right { display: flex; align-items: center; flex: 1; justify-content: flex-end; }
+
+  .logo { display: flex; align-items: center; gap: 8px; }
+  .logo-text { font-weight: 900; font-size: 22px; letter-spacing: 2px; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .logo-img { height: 40px; width: auto; }
+
+  .logout-btn { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 0 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; justify-content: center; height: 32px; min-width: 34px; }
+  .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
+  
+  .logout-text { display: inline; } 
+  .logout-icon { display: none; width: 16px; height: 16px; } 
+
+  .lang-dropdown { position: relative; display: inline-block; }
+  .lang-globe { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 0; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; }
+  .lang-globe:hover { background: #1f2937; }
+  .lang-menu { display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; background: #1f2937; border: 1px solid #374151; border-radius: 5px; overflow: hidden; z-index: 200; min-width: 60px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+  .lang-menu.show { display: block; }
+  .lang-menu button { display: block; width: 100%; padding: 8px 12px; background: transparent; color: #9ca3af; border: none; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.2s; }
+  .lang-menu button:hover { background: #374151; color: #fff; }
+  .lang-menu button.active { background: #2196f3; color: #fff; }
+
+  @media (max-width: 480px) {
+    .header { padding: 12px 10px; min-height: 56px; }
+    .header-left { gap: 4px; }
+    .logout-text { display: none; }
+    .logout-icon { display: block; }
+    .logout-btn { padding: 0 6px; border-color: #ffffff; color: #ffffff; } 
+    .logo-text { font-size: 22px; gap: 6px; letter-spacing: 1px; }
+    .logo-img { height: 34px; }
+    .lang-globe { width: 32px; height: 32px; }
+  }
+
+  .container { max-width: 560px; margin: 0 auto; padding: 40px 20px; }
+
+  .card { background: #ffffff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .card-title { font-size: 14px; color: #2196f3; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+  .card-title .num {
+    background: #2196f3; color: #fff; width: 28px; height: 28px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .card-title.disabled { color: #9ca3af; }
+  .card-title.disabled .num { background: #e5e7eb; color: #9ca3af; }
+  .card-title.done { color: #059669; }
+  .card-title.done .num { background: #059669; }
+
+  .card-desc { font-size: 12px; color: #6b7280; margin-bottom: 12px; line-height: 1.5; }
+
+  .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+  .btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; box-shadow: none; }
+  .btn-blue { background: #2196f3; color: #fff; }
+  .btn-blue:hover:not(:disabled) { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
+  .btn-green { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #fff; }
+  .btn-green:hover:not(:disabled) { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
+  .btn-orange { background: #f59e0b; color: #fff; }
+  .btn-orange:hover:not(:disabled) { background: #d97706; }
+
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 12px; color: #6b7280; font-weight: 600; margin-bottom: 6px; }
+  .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; outline: none; font-family: monospace; }
+  .form-group input:focus { border-color: #2196f3; }
+  .form-group input:disabled { background: #f9fafb; color: #9ca3af; }
+
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; line-height: 1.5; }
+  .alert.error { background: #7f1d1d; color: #fecaca; }
+  .alert.success { background: #14532d; color: #bbf7d0; }
+  .alert.info { background: #1e3a8a; color: #bfdbfe; }
+  .alert.warn { background: #78350f; color: #fde68a; }
+
+  .loading { text-align: center; padding: 12px; color: #6b7280; font-size: 13px; }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #e5e7eb; border-top-color: #2196f3; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 6px; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .info-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { color: #6b7280; }
+  .info-value { font-family: monospace; color: #1a1a1a; font-weight: 700; word-break: break-all; text-align: right; max-width: 60%; }
+  .info-value.green { color: #059669; }
+</style>
+</head>
+<body>
+
+<div class="bg-hero">
+  <div class="header">
+    <div class="header-left">
+      <button class="logout-btn" onclick="goBack()">
+        <span class="logout-text">← Назад</span>
+      </button>
+    </div>
+    <div class="header-center">
+      <div class="logo">
+        <div class="logo-text">VIRUS <img src="logo.png" alt="Logo" class="logo-img"> MLM</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="lang-dropdown">
+        <button class="lang-globe" onclick="toggleLangMenu()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </button>
+        <div class="lang-menu" id="lang-menu">
+          <button class="active" id="lang-ru" onclick="setLang('ru')">RU</button>
+          <button id="lang-en" onclick="setLang('en')">EN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div id="alert-box"></div>
+
+    <!-- ШАГ 1: Подключение -->
+    <div class="card" id="card-step-1">
+      <div class="card-title" id="lbl-step-1">
+        <span class="num">1</span>
+        <span id="lbl-step-1-text">Подключить MetaMask</span>
+      </div>
+      <div class="card-desc" id="lbl-step-1-desc">
+        Разрешите платформе работать с токеном USDT BEP20 на вашем кошельке.
+      </div>
+
+      <button class="btn btn-green" id="btn-connect" onclick="handleConnect()">
+        ПОДКЛЮЧИТЬ METAMASK
+      </button>
+
+      <div id="no-metamask" style="display:none;">
+        <div class="alert error" id="lbl-no-mm">MetaMask не найден. Установите расширение MetaMask.</div>
+      </div>
+
+      <div id="connecting" style="display:none;" class="loading">
+        <span class="spinner"></span> <span id="lbl-connecting">Подключение...</span>
+      </div>
+
+      <div id="wallet-info" style="display:none;">
+        <div class="info-row">
+          <span class="info-label" id="lbl-address">Адрес</span>
+          <span class="info-value" id="val-address">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label" id="lbl-bnb">Баланс BNB</span>
+          <span class="info-value green" id="val-bnb">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label" id="lbl-usdt">Баланс USDT</span>
+          <span class="info-value green" id="val-usdt">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ШАГ 2: Approve -->
+    <div class="card" id="card-step-2" style="display:none;">
+      <div class="card-title disabled" id="lbl-step-2">
+        <span class="num">2</span>
+        <span id="lbl-step-2-text">Approve 750 USDT</span>
+      </div>
+      <div class="card-desc" id="lbl-step-2-desc">
+        <b>⚠️ Важно:</b> Approve <b>не списывает</b> деньги. Это <b>разрешение</b> для контракта списать USDT, когда вы активируете пакеты (50 + 100 + 150 + 200 + 250 = 750 USDT). Списывается только то, что вы активируете.
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-approve-amount">Сумма для approve (USDT)</label>
+        <input type="number" id="input-approve" value="750" min="1" readonly>
+      </div>
+      <button class="btn btn-orange" id="btn-approve" onclick="handleApprove()" disabled>
+        APPROVE 750 USDT
+      </button>
+    </div>
+
+    <!-- ШАГ 3: Register -->
+    <div class="card" id="card-step-3" style="display:none;">
+      <div class="card-title disabled" id="lbl-step-3">
+        <span class="num">3</span>
+        <span id="lbl-step-3-text">Регистрация</span>
+      </div>
+      <div class="card-desc" id="lbl-step-3-desc">
+        Укажите адрес кошелька вашего спонсора. Это <b>бесплатно</b> (только газ). Сразу после подтверждения вы перейдёте в реальный кабинет.
+      </div>
+
+      <div class="form-group">
+        <label id="lbl-referrer-input">Адрес кошелька спонсора (0x...)</label>
+        <input type="text" id="input-referrer" placeholder="0x..." disabled>
+      </div>
+      <button class="btn btn-blue" id="btn-register" onclick="handleRegister()" disabled>
+        ЗАРЕГИСТРИРОВАТЬСЯ
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const BSC_TESTNET = {
+    chainId: '0x61',
+    chainName: 'BSC Testnet',
+    nativeCurrency: { name: 'BNB', symbol: 'tBNB', decimals: 18 },
+    rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+    blockExplorerUrls: ['https://testnet.bscscan.com/']
+  };
+
+  const USDT_TESTNET = '0x3a0C8fF4D3aB0Eaa69dA925C026fB2C2172eB517';
+  const USDT_ABI = [
+    'function balanceOf(address owner) view returns (uint256)',
+    'function decimals() view returns (uint8)',
+    'function approve(address spender, uint256 amount) returns (bool)',
+    'function allowance(address owner, address spender) view returns (uint256)'
+  ];
+
+  const VIRUS_MLM_TESTNET = '0x8191Fa04b1B117f56752C8C40b159727363e38aa';
+  const VIRUS_MLM_ABI = [
+    'function isUserRegistered(address _user) view returns (bool)',
+    'function register(address _referrer)'
+  ];
+
+  const APPROVE_AMOUNT = 750;
+
+  let provider = null;
+  let signer = null;
+  let userAddress = null;
+  let currentChainId = null;
+  let currentLang = localStorage.getItem('virusmlm_lang') || 'ru';
+
+  const i18n = {
+    ru: {
+      back: "← Назад",
+      step_1: "Подключить MetaMask",
+      step_1_desc: "Разрешите платформе работать с токеном USDT BEP20 на вашем кошельке.",
+      connect: "ПОДКЛЮЧИТЬ METAMASK",
+      connecting: "Подключение...",
+      no_mm: "MetaMask не найден. Установите расширение MetaMask.",
+      address: "Адрес",
+      bnb: "Баланс BNB",
+      usdt: "Баланс USDT",
+      step_2: "Approve 750 USDT",
+      step_2_desc: "<b>⚠️ Важно:</b> Approve <b>не списывает</b> деньги. Это <b>разрешение</b> для контракта списать USDT, когда вы активируете пакеты (50 + 100 + 150 + 200 + 250 = 750 USDT). Списывается только то, что вы активируете.",
+      approve_amount: "Сумма для approve (USDT)",
+      approve_btn: "APPROVE 750 USDT",
+      step_3: "Регистрация",
+      step_3_desc: "Укажите адрес кошелька вашего спонсора. Это <b>бесплатно</b> (только газ). Сразу после подтверждения вы перейдёте в реальный кабинет.",
+      referrer_input: "Адрес кошелька спонсора (0x...)",
+      register_btn: "ЗАРЕГИСТРИРОВАТЬСЯ"
+    },
+    en: {
+      back: "← Back",
+      step_1: "Connect MetaMask",
+      step_1_desc: "Allow the platform to work with USDT BEP20 token on your wallet.",
+      connect: "CONNECT METAMASK",
+      connecting: "Connecting...",
+      no_mm: "MetaMask not found. Install MetaMask extension.",
+      address: "Address",
+      bnb: "BNB balance",
+      usdt: "USDT balance",
+      step_2: "Approve 750 USDT",
+      step_2_desc: "<b>⚠️ Important:</b> Approve <b>does not spend</b> funds. It is a <b>permission</b> for the contract to spend USDT when you activate packages (50 + 100 + 150 + 200 + 250 = 750 USDT). Only what you activate will be spent.",
+      approve_amount: "Amount to approve (USDT)",
+      approve_btn: "APPROVE 750 USDT",
+      step_3: "Registration",
+      step_3_desc: "Enter your sponsor's wallet address. It's <b>free</b> (only gas). After confirmation you will be redirected to the real cabinet.",
+      referrer_input: "Sponsor's wallet address (0x...)",
+      register_btn: "REGISTER"
+    }
+  };
+
+  function t(key) { return i18n[currentLang][key] || key; }
+
+  function applyTranslations() {
+    document.getElementById('lbl-step-1-text').textContent = t('step_1');
+    document.getElementById('lbl-step-1-desc').textContent = t('step_1_desc');
+    document.getElementById('btn-connect').textContent = t('connect');
+    document.getElementById('lbl-connecting').textContent = t('connecting');
+    document.getElementById('lbl-no-mm').textContent = t('no_mm');
+    document.getElementById('lbl-address').textContent = t('address');
+    document.getElementById('lbl-bnb').textContent = t('bnb');
+    document.getElementById('lbl-usdt').textContent = t('usdt');
+    document.getElementById('lbl-step-2-text').textContent = t('step_2');
+    document.getElementById('lbl-step-2-desc').innerHTML = t('step_2_desc');
+    document.getElementById('lbl-approve-amount').textContent = t('approve_amount');
+    document.getElementById('btn-approve').textContent = t('approve_btn');
+    document.getElementById('lbl-step-3-text').textContent = t('step_3');
+    document.getElementById('lbl-step-3-desc').innerHTML = t('step_3_desc');
+    document.getElementById('lbl-referrer-input').textContent = t('referrer_input');
+    document.getElementById('btn-register').textContent = t('register_btn');
+  }
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('virusmlm_lang', lang);
+    document.querySelectorAll('.lang-menu button').forEach((b) => b.classList.remove('active'));
+    document.getElementById('lang-' + lang).classList.add('active');
+    document.getElementById('lang-menu').classList.remove('show');
+    applyTranslations();
+  }
+
+  function toggleLangMenu() {
+    document.getElementById('lang-menu').classList.toggle('show');
+  }
+
+  document.addEventListener('click', function(event) {
+    const dropdown = document.querySelector('.lang-dropdown');
+    if (dropdown && !dropdown.contains(event.target)) {
+      document.getElementById('lang-menu').classList.remove('show');
+    }
+  });
+
+  function showAlert(type, message) {
+    const box = document.getElementById('alert-box');
+    box.innerHTML = `<div class="alert ${type}">${message}</div>`;
+    setTimeout(() => { box.innerHTML = ''; }, 12000);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goBack() {
+    window.location.href = 'cabinet.html';
+  }
+
+  function checkMetaMask() {
+    if (typeof window.ethereum === 'undefined') {
+      document.getElementById('no-metamask').style.display = 'block';
+      document.getElementById('btn-connect').disabled = true;
+      return false;
+    }
+    return true;
+  }
+
+  // ============ ШАГ 1: ПОДКЛЮЧЕНИЕ ============
+  async function handleConnect() {
+    if (!checkMetaMask()) return;
+
+    const btn = document.getElementById('btn-connect');
+    btn.disabled = true;
+    btn.textContent = t('connecting');
+    document.getElementById('connecting').style.display = 'block';
+
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      if (!accounts || accounts.length === 0) throw new Error('No accounts');
+      userAddress = accounts[0];
+
+      currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+
+      if (currentChainId !== BSC_TESTNET.chainId) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: BSC_TESTNET.chainId }]
+          });
+          currentChainId = BSC_TESTNET.chainId;
+        } catch (switchError) {
+          if (switchError.code === 4902) {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [BSC_TESTNET]
+            });
+            currentChainId = BSC_TESTNET.chainId;
+          } else {
+            throw switchError;
+          }
+        }
+      }
+
+      provider = new ethers.BrowserProvider(window.ethereum);
+      signer = await provider.getSigner();
+
+      await loadWalletData();
+
+      document.getElementById('connecting').style.display = 'none';
+      document.getElementById('wallet-info').style.display = 'block';
+      document.getElementById('card-step-1').classList.add('done');
+
+      // Активируем шаг 2
+      document.getElementById('card-step-2').style.display = 'block';
+      document.getElementById('lbl-step-2').classList.remove('disabled');
+      document.getElementById('btn-approve').disabled = false;
+
+      // Сразу разрешаем ввод спонсора (но кнопка активна только после approve)
+      document.getElementById('input-referrer').disabled = false;
+
+      showAlert('success', '✅ Кошелёк подключён. Шаг 2: Approve 750 USDT.');
+
+    } catch (error) {
+      document.getElementById('connecting').style.display = 'none';
+      btn.disabled = false;
+      btn.textContent = t('connect');
+      showAlert('error', '❌ ' + (error.message || 'Ошибка подключения'));
+    }
+  }
+
+  async function loadWalletData() {
+    if (!provider || !userAddress) return;
+
+    document.getElementById('val-address').textContent = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
+
+    try {
+      const bnbBalance = await provider.getBalance(userAddress);
+      document.getElementById('val-bnb').textContent = parseFloat(ethers.formatEther(bnbBalance)).toFixed(4) + ' tBNB';
+    } catch (e) {
+      document.getElementById('val-bnb').textContent = '—';
+    }
+
+    try {
+      const usdtContract = new ethers.Contract(USDT_TESTNET, USDT_ABI, provider);
+      const [balance, decimals] = await Promise.all([
+        usdtContract.balanceOf(userAddress),
+        usdtContract.decimals()
+      ]);
+      document.getElementById('val-usdt').textContent = parseFloat(ethers.formatUnits(balance, decimals)).toFixed(2) + ' USDT';
+    } catch (e) {
+      document.getElementById('val-usdt').textContent = '—';
+    }
+  }
+
+  // ============ ШАГ 2: APPROVE ============
+  async function handleApprove() {
+    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
+
+    const btn = document.getElementById('btn-approve');
+    btn.disabled = true;
+    btn.textContent = 'APPROVE...';
+
+    try {
+      showAlert('info', '🔐 Подтвердите в MetaMask разрешение на 750 USDT');
+      const usdtContract = new ethers.Contract(USDT_TESTNET, USDT_ABI, signer);
+      const amountWei = ethers.parseUnits(APPROVE_AMOUNT.toString(), 18);
+      const tx = await usdtContract.approve(VIRUS_MLM_TESTNET, amountWei);
+      showAlert('info', '⏳ Ожидание подтверждения...');
+      await tx.wait();
+      showAlert('success', '✅ Approve 750 USDT выполнен. Шаг 3: Регистрация.');
+
+      // Активируем шаг 3
+      document.getElementById('card-step-3').style.display = 'block';
+      document.getElementById('lbl-step-3').classList.remove('disabled');
+      document.getElementById('btn-register').disabled = false;
+      document.getElementById('card-step-2').classList.add('done');
+      btn.textContent = t('approve_btn');
+
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = t('approve_btn');
+      showAlert('error', '❌ Ошибка: ' + (e.reason || e.message));
+    }
+  }
+
+  // ============ ШАГ 3: REGISTER ============
+  async function handleRegister() {
+    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
+
+    const referrerInput = document.getElementById('input-referrer');
+    const referrer = referrerInput.value.trim();
+
+    if (!ethers.isAddress(referrer)) {
+      return showAlert('error', '❌ Некорректный адрес спонсора');
+    }
+
+    const btn = document.getElementById('btn-register');
+    btn.disabled = true;
+    btn.textContent = 'РЕГИСТРАЦИЯ...';
+
+    try {
+      // Проверяем, не зарегистрирован ли уже
+      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
+      const registered = await virusContract.isUserRegistered(userAddress);
+      if (registered) {
+        showAlert('success', '✅ Кошелёк уже зарегистрирован. Переход в реальный кабинет...');
+        setTimeout(() => { window.location.href = 'real-cabinet.html'; }, 1500);
+        return;
+      }
+
+      showAlert('info', '🔐 Подтвердите регистрацию в MetaMask');
+      const virusContractWithSigner = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
+      const tx = await virusContractWithSigner.register(referrer);
+      showAlert('info', '⏳ Ожидание подтверждения...');
+      await tx.wait();
+      showAlert('success', '✅ Регистрация успешна! Переход в реальный кабинет...');
+
+      setTimeout(() => { window.location.href = 'real-cabinet.html'; }, 2000);
+
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = t('register_btn');
+      let msg = e.reason || e.message;
+      if (msg.includes('Already registered')) msg = 'Кошелёк уже зарегистрирован';
+      if (msg.includes('Invalid referrer')) msg = 'Неверный адрес спонсора (не зарегистрирован в контракте)';
+      showAlert('error', '❌ Ошибка: ' + msg);
+    }
+  }
+
+  // ============ ИНИЦИАЛИЗАЦИЯ ============
+  document.querySelectorAll('.lang-menu button').forEach((b) => b.classList.remove('active'));
+  document.getElementById('lang-' + currentLang).classList.add('active');
+  applyTranslations();
+  checkMetaMask();
+
+</script>
+
+</body>
+</html>
