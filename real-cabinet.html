@@ -6,8 +6,6 @@
 <title>VIRUS MLM — Реальный кабинет (Testnet)</title>
 
 <link rel="icon" href="favicon.png">
-
-<!-- ethers.js v6 -->
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
 
 <style>
@@ -15,21 +13,7 @@
   body { background: #0a0e1a; color: #1a1a1a; min-height: 100vh; }
   .bg-hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f1e3a 40%, #0a0e1a 100%); min-height: 100vh; }
 
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 20px;
-    border-bottom: 1px solid #1f2937;
-    background: linear-gradient(180deg, #0f1e3a, #0a0e1a);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    min-height: 62px;
-    max-width: 640px;
-    margin: 0 auto;
-  }
-  
+  .header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #1f2937; background: linear-gradient(180deg, #0f1e3a, #0a0e1a); position: sticky; top: 0; z-index: 100; min-height: 62px; max-width: 640px; margin: 0 auto; }
   .header-left { display: flex; align-items: center; flex: 1; justify-content: flex-start; }
   .header-center { display: flex; justify-content: center; flex-shrink: 0; }
   .header-right { display: flex; align-items: center; flex: 1; justify-content: flex-end; }
@@ -38,88 +22,146 @@
   .logo-text { font-weight: 900; font-size: 22px; letter-spacing: 2px; color: #fff; display: flex; align-items: center; gap: 8px; }
   .logo-img { height: 40px; width: auto; }
 
-  .logout-btn { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 0 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; justify-content: center; height: 32px; min-width: 34px; }
-  .logout-btn:hover { background: #7f1d1d; color: #fff; border-color: #7f1d1d; }
-  
-  .logout-text { display: inline; } 
-  .logout-icon { display: none; width: 16px; height: 16px; } 
+  .header-btn { background: transparent; color: #fff; border: 1px solid #fff; border-radius: 5px; padding: 0 10px; font-size: 11px; font-weight: 700; cursor: pointer; height: 32px; min-width: 34px; display: flex; align-items: center; justify-content: center; }
+  .header-btn:hover { background: #7f1d1d; border-color: #7f1d1d; }
+  .header-btn.virtual { background: #2196f3; border-color: #2196f3; color: #fff; padding: 0 14px; }
+  .header-btn.virtual:hover { background: #1976d2; }
 
   .lang-dropdown { position: relative; display: inline-block; }
-  .lang-globe { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 0; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; }
+  .lang-globe { background: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; }
   .lang-globe:hover { background: #1f2937; }
-  .lang-menu { display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; background: #1f2937; border: 1px solid #374151; border-radius: 5px; overflow: hidden; z-index: 200; min-width: 60px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+  .lang-menu { display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; background: #1f2937; border: 1px solid #374151; border-radius: 5px; overflow: hidden; z-index: 200; min-width: 60px; }
   .lang-menu.show { display: block; }
-  .lang-menu button { display: block; width: 100%; padding: 8px 12px; background: transparent; color: #9ca3af; border: none; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.2s; }
+  .lang-menu button { display: block; width: 100%; padding: 8px 12px; background: transparent; color: #9ca3af; border: none; font-size: 12px; font-weight: 700; cursor: pointer; }
   .lang-menu button:hover { background: #374151; color: #fff; }
   .lang-menu button.active { background: #2196f3; color: #fff; }
 
   @media (max-width: 480px) {
     .header { padding: 12px 10px; min-height: 56px; }
-    .header-left { gap: 4px; }
-    .logout-text { display: none; }
-    .logout-icon { display: block; }
-    .logout-btn { padding: 0 6px; border-color: #ffffff; color: #ffffff; } 
     .logo-text { font-size: 22px; gap: 6px; letter-spacing: 1px; }
     .logo-img { height: 34px; }
-    .lang-globe { width: 32px; height: 32px; }
+    .header-btn { padding: 0 6px; font-size: 10px; }
+    .header-btn.virtual { padding: 0 8px; }
   }
 
-  .container { max-width: 560px; margin: 0 auto; padding: 40px 20px; }
+  .profile-row { max-width: 560px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
+  .vip-block { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px; min-height: 90px; }
+  .vip-crown { font-size: 26px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(255,193,7,0.6)); }
+  .vip-level { font-size: 14px; font-weight: 700; color: #ffc107; line-height: 1.3; }
+  .vip-stars { font-size: 14px; color: #9ca3af; letter-spacing: 2px; line-height: 1.3; }
+  .vip-stars .filled { color: #ffc107; }
+  .vip-duration { font-size: 11px; color: #9ca3af; line-height: 1.3; }
+  .wallet-block { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px; min-height: 90px; }
+  .wallet-label { font-size: 11px; color: #6b7280; text-transform: uppercase; line-height: 1.3; }
+  .wallet-value { font-size: 15px; font-weight: 700; color: #ffffff; font-family: monospace; line-height: 1.3; word-break: break-all; }
+  .pool-share-label { font-size: 11px; color: #6b7280; text-transform: uppercase; margin-top: 8px; line-height: 1.3; }
+  .pool-share-value { font-size: 15px; font-weight: 700; color: #ffffff; font-family: monospace; line-height: 1.3; }
 
-  .card { background: #ffffff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-  .card-title { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; }
+  .card { background: #ffffff; border-radius: 12px; padding: 16px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .card-title { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 
-  .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .packets-wrap { background: #ffffff; border-radius: 12px; padding: 14px 10px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .packets { display: flex; justify-content: space-between; align-items: center; }
+  .packet { width: 44px; height: 44px; border-radius: 50%; background: #e5e7eb; color: #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .packet.active { background: #00c853; color: #fff; box-shadow: 0 0 12px rgba(0,200,83,0.5); }
+
+  .action-buttons { display: flex; gap: 10px; max-width: 560px; margin: 12px auto; padding: 0 20px; }
+  .action-buttons .btn { flex: 1; }
+
+  .matrix-bar { height: 10px; background: #e5e7eb; border-radius: 5px; overflow: hidden; margin-top: 8px; }
+  .matrix-fill { height: 100%; background: linear-gradient(90deg, #00c853, #4caf50); width: 0%; transition: width 0.5s; min-width: 0; }
+  .matrix-label { display: flex; justify-content: space-between; font-size: 11px; color: #6b7280; margin-top: 8px; }
+  .matrix-label .gold { color: #ffc107; font-weight: 700; }
+
+  .ref-link { background: #ffffff; border: 2px solid #2196f3; border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #2196f3; font-family: monospace; word-break: break-all; }
+  .ref-link button { background: #2196f3; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; flex-shrink: 0; font-size: 14px; }
+
+  .balance-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+  .balance-row.thick { border-bottom: 3px solid #e5e7eb; padding-bottom: 16px; margin-bottom: 4px; }
+  .balance-row:last-child { border-bottom: none; }
+  .balance-label { font-size: 13px; color: #4b5563; font-weight: 700; }
+  .balance-value { font-size: 16px; font-weight: 400; font-family: monospace; color: #1a1a1a; }
+
+  .withdraw-block { background: #ffffff; border-radius: 12px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.3); overflow: hidden; }
+  .withdraw-strip { background: #b3e5fc; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .withdraw-strip-left { display: flex; align-items: center; gap: 10px; }
+  .withdraw-icon { width: 34px; height: 34px; background: #ff1744; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 17px; box-shadow: 0 2px 8px rgba(255,23,68,0.5); }
+  .withdraw-text { font-size: 14px; color: #1a1a1a; font-weight: 600; }
+  .withdraw-text b { font-family: monospace; font-size: 16px; }
+  .withdraw-btn { background: #ff1744; color: #fff; border: none; border-radius: 6px; padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; text-transform: uppercase; box-shadow: 0 2px 8px rgba(255,23,68,0.4); }
+  .withdraw-btn:disabled { background: #9ca3af; cursor: not-allowed; box-shadow: none; }
+  .withdraw-detail { padding: 16px 20px; display: flex; justify-content: center; gap: 32px; background: #ffffff; }
+  .split-item { text-align: center; }
+  .split-item .val { color: #1a1a1a; font-weight: 700; font-size: 16px; font-family: monospace; }
+  .split-item .lbl { color: #6b7280; font-size: 11px; margin-top: 2px; }
+
+  .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
   .btn-blue { background: #2196f3; color: #fff; }
-  .btn-blue:hover { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
+  .btn-blue:hover:not(:disabled) { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
   .btn-green { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #fff; }
-  .btn-green:hover { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
+  .btn-green:hover:not(:disabled) { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
   .btn-orange { background: #f59e0b; color: #fff; }
-  .btn-orange:hover { background: #d97706; }
-  .btn-red { background: #dc2626; color: #fff; }
-  .btn-red:hover { background: #b91c1c; }
+  .btn-orange:hover:not(:disabled) { background: #d97706; }
   .btn:disabled { background: #4b5563; cursor: not-allowed; box-shadow: none; opacity: 0.6; }
 
-  .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
-  .info-row:last-child { border-bottom: none; }
-  .info-label { color: #6b7280; }
-  .info-value { font-family: monospace; color: #1a1a1a; font-weight: 700; word-break: break-all; text-align: right; max-width: 60%; }
-  .info-value.green { color: #059669; }
-  .info-value.red { color: #dc2626; }
+  .pool-card { background: linear-gradient(135deg, #0a1f3a, #111827); border: 1px solid #2196f3; border-radius: 12px; padding: 20px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; text-align: center; }
+  .pool-card .pool-title { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .pool-card .pool-amount { font-size: 32px; font-weight: 800; color: #2196f3; font-family: monospace; letter-spacing: -1px; text-shadow: 0 0 20px rgba(33,150,243,0.6); }
+  .pool-card .pool-sub { font-size: 11px; color: #9ca3af; margin-top: 6px; }
+  .pool-card .timer { display: flex; justify-content: center; gap: 12px; margin-top: 14px; }
+  .pool-card .timer-box { background: #0a0e1a; border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px; text-align: center; min-width: 60px; }
+  .pool-card .timer-val { font-size: 20px; font-weight: 700; color: #ffffff; font-family: monospace; }
+  .pool-card .timer-lbl { font-size: 10px; color: #6b7280; text-transform: uppercase; }
+
+  .sponsor-block { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .sponsor-info { display: flex; flex-direction: column; gap: 4px; }
+  .sponsor-virid { font-size: 15px; font-weight: 700; color: #ffc107; font-family: monospace; }
+
+  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .product-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px 8px; text-align: center; }
+  .product-icon { font-size: 24px; margin-bottom: 6px; }
+  .product-name { font-size: 11px; color: #4b5563; font-weight: 600; }
+
+  .loading { text-align: center; padding: 40px 20px; color: #9ca3af; }
+  .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid #1f2937; border-top-color: #2196f3; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin: 12px 20px; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.5; display: none; }
+  .alert.error { background: #7f1d1d; color: #fecaca; display: block; }
+  .alert.success { background: #14532d; color: #bbf7d0; display: block; }
+  .alert.info { background: #1e3a8a; color: #bfdbfe; display: block; }
+
+  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.active { display: flex; }
+  .modal-content { background: #ffffff; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden; }
+  .modal-header { background: #2196f3; color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+  .modal-title { font-weight: 700; font-size: 16px; }
+  .modal-close { background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; line-height: 1; padding: 0; }
+  .modal-body { flex: 1; padding: 20px; overflow-y: auto; background: #f9fafb; display: flex; flex-direction: column; gap: 14px; }
+  .modal-footer { padding: 12px 20px; background: #fff; border-top: 1px solid #e5e7eb; display: flex; gap: 8px; }
+
+  .vip-step { background: #ffffff; border-radius: 8px; padding: 14px; border: 1px solid #e5e7eb; }
+  .vip-step-title { font-size: 12px; font-weight: 700; color: #2196f3; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .vip-step-title.done { color: #059669; }
+  .vip-step-title.pending { color: #d97706; }
+  .vip-step-title.rejected { color: #dc2626; }
+  .vip-step input, .vip-step select, .vip-step textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; outline: none; font-family: inherit; }
+  .vip-step input:focus, .vip-step select:focus, .vip-step textarea:focus { border-color: #2196f3; }
+  .vip-step textarea { min-height: 60px; resize: vertical; }
+  .vip-status { font-size: 13px; color: #6b7280; padding: 8px 0; }
 
   .form-group { margin-bottom: 12px; }
   .form-group label { display: block; font-size: 12px; color: #6b7280; font-weight: 600; margin-bottom: 6px; }
-  .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; outline: none; font-family: monospace; }
-  .form-group input:focus, .form-group select:focus { border-color: #2196f3; }
-
-  .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; line-height: 1.5; }
-  .alert.error { background: #7f1d1d; color: #fecaca; }
-  .alert.success { background: #14532d; color: #bbf7d0; }
-  .alert.info { background: #1e3a8a; color: #bfdbfe; }
-  .alert.warn { background: #78350f; color: #fde68a; }
-
-  .loading { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
-  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #e5e7eb; border-top-color: #2196f3; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .hint { font-size: 12px; color: #6b7280; margin-top: 8px; line-height: 1.5; text-align: center; }
-  .hint a { color: #2196f3; }
-
-  .network-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; }
-  .network-badge.testnet { background: #fef3c7; color: #92400e; }
-  .network-badge.mainnet { background: #dcfce7; color: #166534; }
-  .network-badge.unknown { background: #fee2e2; color: #991b1b; }
-
-  .section-title { font-size: 14px; font-weight: 700; color: #1a1a1a; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 0.5px; }
 </style>
 </head>
 <body>
 
 <div class="bg-hero">
+
   <div class="header">
     <div class="header-left">
-      <button class="logout-btn" onclick="handleDisconnect()" id="btn-disconnect" style="display:none;">
-        <span class="logout-text">← Отключить</span>
+      <button class="header-btn virtual" onclick="window.location.href='cabinet.html'">
+        ← Виртуальный
       </button>
     </div>
     <div class="header-center">
@@ -144,183 +186,161 @@
     </div>
   </div>
 
-  <div class="container">
+  <div id="alert-box" class="alert"></div>
 
-    <div id="alert-box"></div>
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <div style="margin-top:12px;">Загрузка...</div>
+  </div>
 
-    <!-- БЛОК 1: Подключение -->
-    <div class="card" style="text-align:center;">
-      <div style="font-size: 40px; margin-bottom: 8px;">🦊</div>
-      <div class="card-title" id="lbl-title">Реальный кабинет — Testnet</div>
-      <div style="font-size: 13px; color: #6b7280; margin-bottom: 16px;" id="lbl-subtitle">
-        Подключение MetaMask к BSC Testnet.
+  <div id="content" style="display:none;">
+
+    <!-- БЛОК 1: VIP + ID -->
+    <div class="profile-row">
+      <div class="vip-block">
+        <div class="vip-crown">👑</div>
+        <div class="vip-level" id="vip-level-text">СТАТУС VIP</div>
+        <div class="vip-stars" id="vip-stars">☆☆☆☆☆</div>
+        <div class="vip-duration" id="vip-duration">—</div>
       </div>
-
-      <button class="btn btn-green" id="btn-connect" onclick="handleConnect()" style="display:none;">
-        ПОДКЛЮЧИТЬ METAMASK
-      </button>
-
-      <div id="no-metamask" style="display:none;">
-        <div class="alert error" id="lbl-no-mm">MetaMask не найден. Установите расширение MetaMask.</div>
-      </div>
-
-      <div id="connecting" style="display:none;" class="loading">
-        <span class="spinner"></span> <span id="lbl-connecting">Подключение...</span>
+      <div class="wallet-block">
+        <div class="wallet-label">User ID</div>
+        <div class="wallet-value" id="user-address">—</div>
+        <div class="pool-share-label">VIP на уровне</div>
+        <div class="pool-share-value" id="vip-on-level">—</div>
       </div>
     </div>
 
-    <!-- БЛОК 2: Данные кошелька -->
-    <div class="card" id="wallet-info" style="display:none;">
-      <div class="card-title" id="lbl-wallet-info">Данные кошелька</div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-address">Адрес</span>
-        <span class="info-value" id="val-address">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-network">Сеть</span>
-        <span class="info-value" id="val-network">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-bnb">Баланс BNB (газ)</span>
-        <span class="info-value green" id="val-bnb">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-usdt">Баланс USDT</span>
-        <span class="info-value green" id="val-usdt">—</span>
+    <!-- БЛОК 2: Спонсор -->
+    <div class="card">
+      <div class="card-title">Мой спонсор</div>
+      <div class="sponsor-block">
+        <div class="sponsor-info">
+          <div class="sponsor-virid" id="sponsor-address">—</div>
+        </div>
+        <button class="btn btn-blue" style="width:auto;padding:8px 14px;font-size:12px;" onclick="openChat()">Написать</button>
       </div>
     </div>
 
-    <!-- БЛОК 3: Данные VIRUS MLM (контракт) -->
-    <div class="card" id="contract-info" style="display:none;">
-      <div class="card-title" id="lbl-contract-info">Данные VIRUS MLM (контракт)</div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-packet">Текущий пакет</span>
-        <span class="info-value" id="val-packet">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-placement">ID в матрице</span>
-        <span class="info-value" id="val-placement">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-matrix-bal">Бонус за команду</span>
-        <span class="info-value green" id="val-matrix-bal">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-pool-bal">Бонус активности</span>
-        <span class="info-value green" id="val-pool-bal">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-total-earned">Всего заработано</span>
-        <span class="info-value green" id="val-total-earned">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-referrer">Спонсор</span>
-        <span class="info-value" id="val-referrer">—</span>
+    <!-- БЛОК 3: Пакеты -->
+    <div class="packets-wrap">
+      <div class="packets" id="packets">
+        <div class="packet" data-packet="50">50</div>
+        <div class="packet" data-packet="100">100</div>
+        <div class="packet" data-packet="150">150</div>
+        <div class="packet" data-packet="200">200</div>
+        <div class="packet" data-packet="250">250</div>
       </div>
     </div>
 
-    <!-- БЛОК 4: Транзакции -->
-    <div class="card" id="actions-card" style="display:none;">
-      <div class="card-title" id="lbl-actions-title">Действия</div>
-
-      <!-- Approve -->
-      <div class="section-title" id="lbl-approve-title">1. Approve USDT</div>
-      <div class="form-group">
-        <label id="lbl-approve-amount">Сумма для approve (USDT)</label>
-        <input type="number" id="input-approve" value="250" min="1">
-      </div>
-      <button class="btn btn-orange" id="btn-approve" onclick="handleApprove()">
-        APPROVE USDT
-      </button>
-      <div class="hint" id="lbl-approve-hint">Разрешает контракту списывать USDT. Нужно 1 раз.</div>
-
-      <!-- Register -->
-      <div class="section-title" id="lbl-register-title">2. Регистрация</div>
-      <div class="form-group">
-        <label id="lbl-referrer-input">Адрес спонсора (0x...)</label>
-        <input type="text" id="input-referrer" placeholder="0x..." value="0x1362Da98D3302457f947A986082140ed721DA330">
-      </div>
-      <button class="btn btn-blue" id="btn-register" onclick="handleRegister()">
-        ЗАРЕГИСТРИРОВАТЬСЯ
-      </button>
-
-      <!-- Activate Packet -->
-      <div class="section-title" id="lbl-activate-title">3. Активация пакета</div>
-      <div class="form-group">
-        <label id="lbl-packet-index">Пакет (1-5)</label>
-        <select id="input-packet">
-          <option value="1">1 — 50 USDT</option>
-          <option value="2">2 — 100 USDT</option>
-          <option value="3">3 — 150 USDT</option>
-          <option value="4">4 — 200 USDT</option>
-          <option value="5">5 — 250 USDT</option>
-        </select>
-      </div>
+    <!-- БЛОК 4: Активация + VIP -->
+    <div class="action-buttons">
       <button class="btn btn-green" id="btn-activate" onclick="handleActivate()">
         АКТИВИРОВАТЬ ПАКЕТ
       </button>
-
-      <!-- Claim -->
-      <div class="section-title" id="lbl-claim-title">4. Вывод средств</div>
-      <button class="btn btn-blue" id="btn-claim-matrix" onclick="handleClaimMatrix()">
-        ВЫВЕСТИ МАТРИЧНЫЙ БАЛАНС
-      </button>
-      <button class="btn btn-blue" id="btn-claim-pool" onclick="handleClaimPool()">
-        ВЫВЕСТИ ПУЛ
-      </button>
-      <button class="btn btn-blue" id="btn-claim-all" onclick="handleClaimAll()">
-        ВЫВЕСТИ ВСЁ
-      </button>
-
-      <!-- Donate -->
-      <div class="section-title" id="lbl-donate-title">5. Донат в пул</div>
-      <div class="form-group">
-        <label id="lbl-donate-amount">Сумма (USDT)</label>
-        <input type="number" id="input-donate" value="10" min="1">
-      </div>
-      <button class="btn btn-orange" id="btn-donate" onclick="handleDonate()">
-        СДЕЛАТЬ ДОНАТ
-      </button>
-
-      <!-- VIP -->
-      <div class="section-title" id="lbl-vip-title">6. Запрос VIP</div>
-      <div class="form-group">
-        <label id="lbl-vip-level">Уровень (1-5)</label>
-        <select id="input-vip-level">
-          <option value="1">1 — 21%</option>
-          <option value="2">2 — 33%</option>
-          <option value="3">3 — 15%</option>
-          <option value="4">4 — 12%</option>
-          <option value="5">5 — 9%</option>
-        </select>
-      </div>
-      <button class="btn btn-blue" id="btn-vip" onclick="handleRequestVip()">
+      <button class="btn btn-orange" id="btn-vip" onclick="openVipModal()">
         ЗАПРОСИТЬ VIP
       </button>
     </div>
 
-    <!-- БЛОК 5: Пул -->
-    <div class="card" id="pool-info" style="display:none;">
-      <div class="card-title" id="lbl-pool-info">Пул VIRUS MLM</div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-pool-total">Баланс пула</span>
-        <span class="info-value green" id="val-pool-total">—</span>
+    <!-- БЛОК 5: Заполнение команды -->
+    <div class="card">
+      <div class="card-title">Заполнение команды</div>
+      <div class="matrix-bar">
+        <div class="matrix-fill" id="matrix-fill" style="width: 0%;"></div>
       </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-next-dist">Следующее распределение</span>
-        <span class="info-value" id="val-next-dist">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label" id="lbl-vip-counts">VIP по уровням (1-5)</span>
-        <span class="info-value" id="val-vip-counts">—</span>
+      <div class="matrix-label">
+        <span id="matrix-places">0 / 8190 мест</span>
+        <span class="gold" id="matrix-percent">0%</span>
       </div>
     </div>
 
-    <div class="hint" id="lbl-hint">
-      💡 Тестовые tUSDT можно получить в <a href="https://testnet.binance.org/faucet-smart" target="_blank">BSC Testnet Faucet</a>.<br>
-      Сеть: <b>BSC Testnet (Chain ID 97)</b>
+    <!-- БЛОК 6: Пул -->
+    <div class="pool-card">
+      <div class="pool-title">Бонус активности</div>
+      <div class="pool-amount" id="pool-amount">$0.00</div>
+      <div class="pool-sub">До следующего распределения</div>
+      <div class="timer">
+        <div class="timer-box"><div class="timer-val" id="timer-h">00</div><div class="timer-lbl">час</div></div>
+        <div class="timer-box"><div class="timer-val" id="timer-m">00</div><div class="timer-lbl">мин</div></div>
+        <div class="timer-box"><div class="timer-val" id="timer-s">00</div><div class="timer-lbl">сек</div></div>
+      </div>
     </div>
 
+    <!-- БЛОК 7: Балансы -->
+    <div class="card">
+      <div class="balance-row thick">
+        <span class="balance-label">Всего за приглашения</span>
+        <span class="balance-value" id="bal-referral">$0.00</span>
+      </div>
+      <div class="balance-row thick">
+        <span class="balance-label">Бонус за команду</span>
+        <span class="balance-value" id="bal-matrix">$0.00</span>
+      </div>
+      <div class="balance-row">
+        <span class="balance-label">Бонус активности</span>
+        <span class="balance-value" id="bal-pool">$0.00</span>
+      </div>
+    </div>
+
+    <!-- БЛОК 8-9: Вывод -->
+    <div class="withdraw-block">
+      <div class="withdraw-strip">
+        <div class="withdraw-strip-left">
+          <div class="withdraw-icon">₮</div>
+          <div class="withdraw-text">Доступно к выводу: <b id="withdraw-total">$0.00</b></div>
+        </div>
+        <button class="withdraw-btn" id="btn-withdraw" onclick="handleClaimAll()">ВЫВОД</button>
+      </div>
+      <div class="withdraw-detail">
+        <div class="split-item">
+          <div class="val" id="split-wallet">50%</div>
+          <div class="lbl">На кошелёк</div>
+        </div>
+        <div class="split-item">
+          <div class="val" id="split-market">50%</div>
+          <div class="lbl">В маркетинг</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- БЛОК 10: Продукты -->
+    <div class="card">
+      <div class="card-title">Продукты и сервисы</div>
+      <div class="products-grid">
+        <div class="product-card"><div class="product-icon">🔍</div><div class="product-name">Аудит кошелька</div></div>
+        <div class="product-card"><div class="product-icon">🤖</div><div class="product-name">ИИ-рекрутер</div></div>
+        <div class="product-card"><div class="product-icon">🎮</div><div class="product-name">Игры</div></div>
+        <div class="product-card"><div class="product-icon">💰</div><div class="product-name">Обменник</div></div>
+        <div class="product-card"><div class="product-icon">📊</div><div class="product-name">Налоги</div></div>
+        <div class="product-card"><div class="product-icon">🎯</div><div class="product-name">Развлечения</div></div>
+      </div>
+    </div>
+
+    <!-- БЛОК 11: ИИ-рекрутер -->
+    <div class="card">
+      <div class="card-title">ИИ-рекрутер</div>
+      <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;">
+        🤖 Скоро — интеллектуальный помощник для рекрутинга
+      </div>
+    </div>
+
+    <div style="height: 40px;"></div>
+
+  </div>
+
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО: VIP -->
+<div class="modal-overlay" id="vip-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="vip-modal-title">Запрос VIP</div>
+      <button class="modal-close" onclick="closeVipModal()">×</button>
+    </div>
+    <div class="modal-body" id="vip-modal-body">
+      <div class="loading"><span class="spinner"></span> Загрузка...</div>
+    </div>
   </div>
 </div>
 
@@ -339,10 +359,7 @@
   const USDT_TESTNET = '0x3a0C8fF4D3aB0Eaa69dA925C026fB2C2172eB517';
   const USDT_ABI = [
     'function balanceOf(address owner) view returns (uint256)',
-    'function decimals() view returns (uint8)',
-    'function symbol() view returns (string)',
-    'function approve(address spender, uint256 amount) returns (bool)',
-    'function allowance(address owner, address spender) view returns (uint256)'
+    'function decimals() view returns (uint8)'
   ];
 
   const VIRUS_MLM_TESTNET = '0x8191Fa04b1B117f56752C8C40b159727363e38aa';
@@ -350,13 +367,11 @@
   const VIRUS_MLM_ABI = [
     'function getUserInfo(address _user) view returns (uint256 currentPacket, address referrer, uint256 placementId, uint256 matrixBalance, uint256 poolBalance, uint256 totalEarned)',
     'function getPoolInfo() view returns (uint256 poolBalance, uint256 nextDistributionTime, uint256[5] vipCounts, uint256[5] poolShares)',
+    'function getVipInfo(address _user) view returns (uint256 starLevel, uint256 verifiedAt, uint256 expiresAt, uint256 daysLeft, bool isActive, bool antiSybilVerified, uint256 requiredPacket)',
     'function isUserRegistered(address _user) view returns (bool)',
-    'function register(address _referrer)',
+    'function getMatrixNode(uint256 _nodeId) view returns (address user, uint256 parent, uint256 leftChild, uint256 rightChild, uint256 depth, uint256 leftCount, uint256 rightCount)',
     'function activatePacket(uint256 _packetIndex)',
-    'function claimMatrix()',
-    'function claimPool()',
     'function claimAll()',
-    'function donateToPool(uint256 _amount)',
     'function requestVip(uint256 _starLevel)'
   ];
 
@@ -368,138 +383,67 @@
   let userAddress = null;
   let currentChainId = null;
   let currentLang = localStorage.getItem('virusmlm_lang') || 'ru';
+  let userInfo = null;
+  let poolInfo = null;
+  let vipInfo = null;
 
   // ============================================
   // i18n
   // ============================================
   const i18n = {
     ru: {
-      title: "Реальный кабинет — Testnet",
-      subtitle: "Подключение MetaMask к BSC Testnet.",
-      connect: "ПОДКЛЮЧИТЬ METAMASK",
-      connecting: "Подключение...",
-      no_mm: "MetaMask не найден. Установите расширение MetaMask.",
-      wallet_info: "Данные кошелька",
-      address: "Адрес",
-      network: "Сеть",
-      bnb: "Баланс BNB (газ)",
-      usdt: "Баланс USDT",
-      contract_info: "Данные VIRUS MLM (контракт)",
-      packet: "Текущий пакет",
-      placement: "ID в матрице",
-      matrix_bal: "Бонус за команду",
-      pool_bal: "Бонус активности",
-      total_earned: "Всего заработано",
-      referrer: "Спонсор",
-      actions_title: "Действия",
-      approve_title: "1. Approve USDT",
-      approve_amount: "Сумма для approve (USDT)",
-      approve_btn: "APPROVE USDT",
-      approve_hint: "Разрешает контракту списывать USDT. Нужно 1 раз.",
-      register_title: "2. Регистрация",
-      referrer_input: "Адрес спонсора (0x...)",
-      register_btn: "ЗАРЕГИСТРИРОВАТЬСЯ",
-      activate_title: "3. Активация пакета",
-      packet_index: "Пакет (1-5)",
-      activate_btn: "АКТИВИРОВАТЬ ПАКЕТ",
-      claim_title: "4. Вывод средств",
-      claim_matrix_btn: "ВЫВЕСТИ МАТРИЧНЫЙ БАЛАНС",
-      claim_pool_btn: "ВЫВЕСТИ ПУЛ",
-      claim_all_btn: "ВЫВЕСТИ ВСЁ",
-      donate_title: "5. Донат в пул",
-      donate_amount: "Сумма (USDT)",
-      donate_btn: "СДЕЛАТЬ ДОНАТ",
-      vip_title: "6. Запрос VIP",
-      vip_level: "Уровень (1-5)",
-      vip_btn: "ЗАПРОСИТЬ VIP",
-      pool_info: "Пул VIRUS MLM",
-      pool_total: "Баланс пула",
-      next_dist: "Следующее распределение",
-      vip_counts: "VIP по уровням (1-5)",
-      disconnected: "Кошелёк отключён",
-      hint: "💡 Тестовые tUSDT можно получить в <a href='https://testnet.binance.org/faucet-smart' target='_blank'>BSC Testnet Faucet</a>.<br>Сеть: <b>BSC Testnet (Chain ID 97)</b>"
+      vip_status: "СТАТУС VIP",
+      lifetime: "Бессрочно",
+      user_id: "User ID",
+      vip_on_level: "VIP на уровне",
+      my_sponsor: "Мой спонсор",
+      write: "Написать",
+      activate_packet: "АКТИВИРОВАТЬ ПАКЕТ",
+      request_vip: "ЗАПРОСИТЬ VIP",
+      team_fill: "Заполнение команды",
+      pool_title: "Бонус активности",
+      pool_sub: "До следующего распределения",
+      balance_referral: "Всего за приглашения",
+      balance_matrix: "Бонус за команду",
+      balance_pool: "Бонус активности",
+      withdraw_total: "Доступно к выводу:",
+      withdraw: "ВЫВОД",
+      to_wallet: "На кошелёк",
+      to_market: "В маркетинг",
+      products: "Продукты и сервисы",
+      ai_recruiter: "ИИ-рекрутер",
+      ai_soon: "🤖 Скоро — интеллектуальный помощник для рекрутинга",
+      no_sponsor: "Корень системы",
+      already_all_packets: "Все пакеты активированы"
     },
     en: {
-      title: "Real Cabinet — Testnet",
-      subtitle: "MetaMask connection to BSC Testnet.",
-      connect: "CONNECT METAMASK",
-      connecting: "Connecting...",
-      no_mm: "MetaMask not found. Install MetaMask extension.",
-      wallet_info: "Wallet data",
-      address: "Address",
-      network: "Network",
-      bnb: "BNB balance (gas)",
-      usdt: "USDT balance",
-      contract_info: "VIRUS MLM data (contract)",
-      packet: "Current packet",
-      placement: "Matrix ID",
-      matrix_bal: "Team bonus",
-      pool_bal: "Activity bonus",
-      total_earned: "Total earned",
-      referrer: "Sponsor",
-      actions_title: "Actions",
-      approve_title: "1. Approve USDT",
-      approve_amount: "Amount to approve (USDT)",
-      approve_btn: "APPROVE USDT",
-      approve_hint: "Allows contract to spend USDT. Once.",
-      register_title: "2. Registration",
-      referrer_input: "Sponsor address (0x...)",
-      register_btn: "REGISTER",
-      activate_title: "3. Activate packet",
-      packet_index: "Packet (1-5)",
-      activate_btn: "ACTIVATE PACKET",
-      claim_title: "4. Withdraw",
-      claim_matrix_btn: "WITHDRAW MATRIX",
-      claim_pool_btn: "WITHDRAW POOL",
-      claim_all_btn: "WITHDRAW ALL",
-      donate_title: "5. Donate to pool",
-      donate_amount: "Amount (USDT)",
-      donate_btn: "DONATE",
-      vip_title: "6. Request VIP",
-      vip_level: "Level (1-5)",
-      vip_btn: "REQUEST VIP",
-      pool_info: "VIRUS MLM pool",
-      pool_total: "Pool balance",
-      next_dist: "Next distribution",
-      vip_counts: "VIP by level (1-5)",
-      disconnected: "Wallet disconnected",
-      hint: "💡 Test tUSDT can be obtained from <a href='https://testnet.binance.org/faucet-smart' target='_blank'>BSC Testnet Faucet</a>.<br>Network: <b>BSC Testnet (Chain ID 97)</b>"
+      vip_status: "VIP STATUS",
+      lifetime: "Lifetime",
+      user_id: "User ID",
+      vip_on_level: "VIP members",
+      my_sponsor: "My sponsor",
+      write: "Write",
+      activate_packet: "ACTIVATE PACKET",
+      request_vip: "REQUEST VIP",
+      team_fill: "Team filling",
+      pool_title: "Activity Bonus",
+      pool_sub: "Until next distribution",
+      balance_referral: "Total for referrals",
+      balance_matrix: "Team Bonus",
+      balance_pool: "Activity Bonus",
+      withdraw_total: "Available to withdraw:",
+      withdraw: "WITHDRAW",
+      to_wallet: "To wallet",
+      to_market: "To marketing",
+      products: "Products and services",
+      ai_recruiter: "AI recruiter",
+      ai_soon: "🤖 Soon — intelligent recruiting assistant",
+      no_sponsor: "System root",
+      already_all_packets: "All packets activated"
     }
   };
 
   function t(key) { return i18n[currentLang][key] || key; }
-
-  function applyTranslations() {
-    const ids = {
-      'lbl-title': 'title', 'lbl-subtitle': 'subtitle', 'btn-connect': 'connect',
-      'lbl-connecting': 'connecting', 'lbl-no-mm': 'no_mm',
-      'lbl-wallet-info': 'wallet_info', 'lbl-address': 'address', 'lbl-network': 'network',
-      'lbl-bnb': 'bnb', 'lbl-usdt': 'usdt',
-      'lbl-contract-info': 'contract_info', 'lbl-packet': 'packet', 'lbl-placement': 'placement',
-      'lbl-matrix-bal': 'matrix_bal', 'lbl-pool-bal': 'pool_bal',
-      'lbl-total-earned': 'total_earned', 'lbl-referrer': 'referrer',
-      'lbl-actions-title': 'actions_title',
-      'lbl-approve-title': 'approve_title', 'lbl-approve-amount': 'approve_amount',
-      'btn-approve': 'approve_btn', 'lbl-approve-hint': 'approve_hint',
-      'lbl-register-title': 'register_title', 'lbl-referrer-input': 'referrer_input',
-      'btn-register': 'register_btn',
-      'lbl-activate-title': 'activate_title', 'lbl-packet-index': 'packet_index',
-      'btn-activate': 'activate_btn',
-      'lbl-claim-title': 'claim_title',
-      'btn-claim-matrix': 'claim_matrix_btn', 'btn-claim-pool': 'claim_pool_btn',
-      'btn-claim-all': 'claim_all_btn',
-      'lbl-donate-title': 'donate_title', 'lbl-donate-amount': 'donate_amount',
-      'btn-donate': 'donate_btn',
-      'lbl-vip-title': 'vip_title', 'lbl-vip-level': 'vip_level', 'btn-vip': 'vip_btn',
-      'lbl-pool-info': 'pool_info', 'lbl-pool-total': 'pool_total',
-      'lbl-next-dist': 'next_dist', 'lbl-vip-counts': 'vip_counts'
-    };
-    for (const [id, key] of Object.entries(ids)) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = t(key);
-    }
-    document.getElementById('lbl-hint').innerHTML = t('hint');
-  }
 
   function setLang(lang) {
     currentLang = lang;
@@ -507,7 +451,8 @@
     document.querySelectorAll('.lang-menu button').forEach((b) => b.classList.remove('active'));
     document.getElementById('lang-' + lang).classList.add('active');
     document.getElementById('lang-menu').classList.remove('show');
-    applyTranslations();
+    // Перерисовываем данные
+    if (userInfo) renderAll();
   }
 
   function toggleLangMenu() {
@@ -521,393 +466,484 @@
     }
   });
 
-  // ============================================
-  // ALERT
-  // ============================================
   function showAlert(type, message) {
     const box = document.getElementById('alert-box');
-    box.innerHTML = `<div class="alert ${type}">${message}</div>`;
-    setTimeout(() => { box.innerHTML = ''; }, 10000);
+    box.className = 'alert ' + type;
+    box.textContent = message;
+    setTimeout(() => { box.className = 'alert'; }, 5000);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ============================================
-  // ПРОВЕРКА METAMASK
-  // ============================================
-  function checkMetaMask() {
-    if (typeof window.ethereum === 'undefined') {
-      document.getElementById('no-metamask').style.display = 'block';
-      document.getElementById('btn-connect').style.display = 'none';
-      return false;
-    }
-    document.getElementById('btn-connect').style.display = 'block';
-    document.getElementById('no-metamask').style.display = 'none';
-    return true;
+  function formatUSDT(value) {
+    if (!value) return '$0.00';
+    try {
+      const big = BigInt(value);
+      const whole = big / 1000000n;
+      const frac = big % 1000000n;
+      const fracStr = frac.toString().padStart(6, '0').slice(0, 2);
+      return '$' + whole.toString() + '.' + fracStr;
+    } catch { return '$0.00'; }
+  }
+
+  function shorten(addr) {
+    if (!addr) return '—';
+    return addr.slice(0, 6) + '...' + addr.slice(-4);
   }
 
   // ============================================
-  // ПОДКЛЮЧЕНИЕ
+  // ЗАГРУЗКА
   // ============================================
-  async function handleConnect() {
-    if (!checkMetaMask()) return;
-
-    document.getElementById('btn-connect').style.display = 'none';
-    document.getElementById('connecting').style.display = 'block';
+  async function init() {
+    if (!window.ethereum) {
+      document.getElementById('loading').innerHTML = '<div class="alert error" style="display:block;">MetaMask не найден. Установите расширение.</div>';
+      return;
+    }
 
     try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      if (!accounts || accounts.length === 0) throw new Error('No accounts');
-      userAddress = accounts[0];
-
-      currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-
-      if (currentChainId !== BSC_TESTNET.chainId) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: BSC_TESTNET.chainId }]
-          });
-          currentChainId = BSC_TESTNET.chainId;
-        } catch (switchError) {
-          if (switchError.code === 4902) {
-            await window.ethereum.request({
-              method: 'wallet_addEthereumChain',
-              params: [BSC_TESTNET]
-            });
-            currentChainId = BSC_TESTNET.chainId;
-          } else {
-            throw switchError;
-          }
-        }
-      }
-
       provider = new ethers.BrowserProvider(window.ethereum);
-      signer = await provider.getSigner();
-
-      await loadWalletData();
-      await loadContractData();
-      await loadPoolData();
-
-      document.getElementById('connecting').style.display = 'none';
-      document.getElementById('wallet-info').style.display = 'block';
-      document.getElementById('contract-info').style.display = 'block';
-      document.getElementById('actions-card').style.display = 'block';
-      document.getElementById('pool-info').style.display = 'block';
-      document.getElementById('btn-disconnect').style.display = 'flex';
-      showAlert('success', '✅ Кошелёк подключён');
-
-    } catch (error) {
-      document.getElementById('connecting').style.display = 'none';
-      document.getElementById('btn-connect').style.display = 'block';
-      console.error(error);
-      showAlert('error', '❌ ' + (error.message || 'Ошибка подключения'));
-    }
-  }
-
-  // ============================================
-  // ЗАГРУЗКА ДАННЫХ КОШЕЛЬКА
-  // ============================================
-  async function loadWalletData() {
-    if (!provider || !userAddress) return;
-
-    document.getElementById('val-address').textContent = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
-
-    const networkEl = document.getElementById('val-network');
-    if (currentChainId === BSC_TESTNET.chainId) {
-      networkEl.innerHTML = '<span class="network-badge testnet">BSC Testnet</span>';
-    } else if (currentChainId === '0x38') {
-      networkEl.innerHTML = '<span class="network-badge mainnet">BSC Mainnet</span>';
-    } else {
-      networkEl.innerHTML = '<span class="network-badge unknown">Chain ' + parseInt(currentChainId, 16) + '</span>';
-    }
-
-    try {
-      const bnbBalance = await provider.getBalance(userAddress);
-      document.getElementById('val-bnb').textContent = parseFloat(ethers.formatEther(bnbBalance)).toFixed(4) + ' tBNB';
-    } catch (e) {
-      document.getElementById('val-bnb').textContent = '—';
-    }
-
-    try {
-      const usdtContract = new ethers.Contract(USDT_TESTNET, USDT_ABI, provider);
-      const [balance, decimals] = await Promise.all([
-        usdtContract.balanceOf(userAddress),
-        usdtContract.decimals()
-      ]);
-      document.getElementById('val-usdt').textContent = parseFloat(ethers.formatUnits(balance, decimals)).toFixed(2) + ' USDT';
-    } catch (e) {
-      document.getElementById('val-usdt').textContent = '—';
-    }
-  }
-
-  // ============================================
-  // ЗАГРУЗКА ДАННЫХ ИЗ КОНТРАКТА
-  // ============================================
-  async function loadContractData() {
-    if (!provider || !userAddress) return;
-
-    try {
-      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
-      const registered = await virusContract.isUserRegistered(userAddress);
-
-      if (!registered) {
-        document.getElementById('val-packet').textContent = '0 USDT';
-        document.getElementById('val-placement').textContent = '—';
-        document.getElementById('val-matrix-bal').textContent = '0.00 USDT';
-        document.getElementById('val-pool-bal').textContent = '0.00 USDT';
-        document.getElementById('val-total-earned').textContent = '0.00 USDT';
-        document.getElementById('val-referrer').textContent = '—';
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (!accounts || accounts.length === 0) {
+        // Не подключён — редирект
+        window.location.href = 'activation.html';
         return;
       }
 
-      const userInfo = await virusContract.getUserInfo(userAddress);
+      userAddress = accounts[0];
+      currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
 
-      document.getElementById('val-packet').textContent = parseFloat(ethers.formatEther(userInfo[0])).toFixed(0) + ' USDT';
-      document.getElementById('val-placement').textContent = userInfo[2].toString();
-      document.getElementById('val-matrix-bal').textContent = parseFloat(ethers.formatEther(userInfo[3])).toFixed(2) + ' USDT';
-      document.getElementById('val-pool-bal').textContent = parseFloat(ethers.formatEther(userInfo[4])).toFixed(2) + ' USDT';
-      document.getElementById('val-total-earned').textContent = parseFloat(ethers.formatEther(userInfo[5])).toFixed(2) + ' USDT';
+      if (currentChainId !== BSC_TESTNET.chainId) {
+        document.getElementById('loading').innerHTML = '<div class="alert error" style="display:block;">Переключите MetaMask на BSC Testnet</div>';
+        return;
+      }
 
-      document.getElementById('val-referrer').textContent = userInfo[1] === '0x0000000000000000000000000000000000000000' 
-        ? '—' 
-        : userInfo[1].slice(0, 6) + '...' + userInfo[1].slice(-4);
+      signer = await provider.getSigner();
+
+      await loadAllData();
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
 
     } catch (e) {
-      console.error('Contract data error:', e);
+      console.error(e);
+      document.getElementById('loading').innerHTML = '<div class="alert error" style="display:block;">Ошибка: ' + (e.message || e) + '</div>';
     }
   }
 
-  async function loadPoolData() {
-    if (!provider) return;
+  async function loadAllData() {
+    const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
 
+    // Регистрация
+    const registered = await virusContract.isUserRegistered(userAddress);
+    if (!registered) {
+      window.location.href = 'activation.html';
+      return;
+    }
+
+    // Данные пользователя
+    userInfo = await virusContract.getUserInfo(userAddress);
+    poolInfo = await virusContract.getPoolInfo();
+    vipInfo = await virusContract.getVipInfo(userAddress);
+
+    renderAll();
+    startPoolTimer();
+  }
+
+  // ============================================
+  // РЕНДЕР
+  // ============================================
+  function renderAll() {
+    renderVipBlock();
+    renderSponsor();
+    renderPackets();
+    renderMatrix();
+    renderPool();
+    renderBalances();
+    renderWithdraw();
+  }
+
+  function renderVipBlock() {
+    // VIP
+    const starLevel = Number(vipInfo[0]); // starLevel
+    const isActive = vipInfo[4]; // isActive
+    const daysLeft = Number(vipInfo[3]); // daysLeft
+
+    document.getElementById('vip-level-text').textContent = t('vip_status');
+
+    // Звёзды
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) {
+      if (i <= starLevel && isActive) {
+        starsHtml += '<span class="filled">★</span>';
+      } else {
+        starsHtml += '☆';
+      }
+    }
+    document.getElementById('vip-stars').innerHTML = starsHtml;
+
+    // Дни
+    if (isActive && daysLeft > 0) {
+      document.getElementById('vip-duration').textContent = daysLeft + ' дн.';
+    } else if (!isActive) {
+      document.getElementById('vip-duration').textContent = 'Нет VIP';
+    } else {
+      document.getElementById('vip-duration').textContent = 'Истёк';
+    }
+
+    // Адрес
+    document.getElementById('user-address').textContent = shorten(userAddress);
+
+    // VIP на уровне
+    const vipCounts = poolInfo[2];
+    if (starLevel > 0 && isActive) {
+      document.getElementById('vip-on-level').textContent = Number(vipCounts[starLevel - 1]) + ' ID';
+    } else {
+      document.getElementById('vip-on-level').textContent = '—';
+    }
+  }
+
+  function renderSponsor() {
+    const referrer = userInfo[1];
+    if (referrer === '0x0000000000000000000000000000000000000000') {
+      document.getElementById('sponsor-address').textContent = t('no_sponsor');
+    } else {
+      document.getElementById('sponsor-address').textContent = shorten(referrer);
+    }
+  }
+
+  function renderPackets() {
+    const currentPacket = Number(userInfo[0]) / 1e18;
+    document.querySelectorAll('.packet').forEach((p) => {
+      const val = parseInt(p.getAttribute('data-packet'), 10);
+      if (val <= currentPacket) p.classList.add('active');
+      else p.classList.remove('active');
+    });
+
+    // Кнопка активации — disabled, если все пакеты (250)
+    if (currentPacket >= 250) {
+      document.getElementById('btn-activate').disabled = true;
+      document.getElementById('btn-activate').textContent = t('already_all_packets');
+    } else {
+      document.getElementById('btn-activate').disabled = false;
+      document.getElementById('btn-activate').textContent = t('activate_packet');
+    }
+  }
+
+  async function renderMatrix() {
     try {
+      // Получаем узел пользователя (если есть)
       const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
-      const poolInfo = await virusContract.getPoolInfo();
+      const node = await virusContract.getMatrixNode(userInfo[2]); // placementId
 
-      document.getElementById('val-pool-total').textContent = parseFloat(ethers.formatEther(poolInfo[0])).toFixed(2) + ' USDT';
+      if (node && node[0] !== '0x0000000000000000000000000000000000000000') {
+        const leftCount = Number(node[5]);
+        const rightCount = Number(node[6]);
+        const total = leftCount + rightCount;
+        const max = 8190;
+        const percent = Math.min(100, Math.round((total / max) * 10000) / 100);
 
-      const nextTime = Number(poolInfo[1]) * 1000;
-      document.getElementById('val-next-dist').textContent = new Date(nextTime).toLocaleString();
-
-      const vipCounts = poolInfo[2].map(v => v.toString()).join(' / ');
-      document.getElementById('val-vip-counts').textContent = vipCounts;
-
+        document.getElementById('matrix-fill').style.width = Math.min(100, percent) + '%';
+        document.getElementById('matrix-places').textContent = total + ' / ' + max + ' мест';
+        document.getElementById('matrix-percent').textContent = percent + '%';
+      }
     } catch (e) {
-      console.error('Pool data error:', e);
+      console.warn('Matrix render error:', e);
     }
+  }
+
+  function renderPool() {
+    const poolBalance = poolInfo[0];
+    document.getElementById('pool-amount').textContent = formatUSDT(poolBalance);
+  }
+
+  function renderBalances() {
+    const matrixBalance = userInfo[3];
+    const poolBalance = userInfo[4];
+    // Referral — в контракте нет отдельного поля для накоплений (только totalEarned)
+    // Поэтому "Всего за приглашения" = totalEarned
+    const totalEarned = userInfo[5];
+
+    document.getElementById('bal-referral').textContent = formatUSDT(totalEarned);
+    document.getElementById('bal-matrix').textContent = formatUSDT(matrixBalance);
+    document.getElementById('bal-pool').textContent = formatUSDT(poolBalance);
+  }
+
+  function renderWithdraw() {
+    const matrixBalance = BigInt(userInfo[3]);
+    const poolBalance = BigInt(userInfo[4]);
+    const total = matrixBalance + poolBalance;
+
+    // Если total = 0 — выводить нечего
+    document.getElementById('withdraw-total').textContent = formatUSDT(total.toString());
+    document.getElementById('btn-withdraw').disabled = total < 10000000n; // 10 USDT min
+
+    // % распределения по пакету
+    const currentPacket = Number(userInfo[0]) / 1e18;
+    const map = { 50: 50, 100: 60, 150: 70, 200: 80, 250: 90 };
+    const walletPercent = map[currentPacket] || 50;
+    const marketPercent = 100 - walletPercent;
+    document.getElementById('split-wallet').textContent = walletPercent + '%';
+    document.getElementById('split-market').textContent = marketPercent + '%';
   }
 
   // ============================================
-  // TRANSACTIONS
+  // ТАЙМЕР ПУЛА
   // ============================================
-  async function handleApprove() {
-    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
-    const amount = document.getElementById('input-approve').value;
-    const amountWei = ethers.parseEther(amount);
+  let poolTimerInterval = null;
+  function startPoolTimer() {
+    if (poolTimerInterval) clearInterval(poolTimerInterval);
+    const nextTime = Number(poolInfo[1]) * 1000;
+    if (!nextTime) return;
 
-    try {
-      showAlert('info', '🔐 Подтвердите approve в MetaMask');
-      const usdtContract = new ethers.Contract(USDT_TESTNET, USDT_ABI, signer);
-      const tx = await usdtContract.approve(VIRUS_MLM_TESTNET, amountWei);
-      showAlert('info', '⏳ Ожидание подтверждения...');
-      await tx.wait();
-      showAlert('success', '✅ Approve на ' + amount + ' USDT выполнен');
-    } catch (e) {
-      showAlert('error', '❌ Ошибка: ' + (e.reason || e.message));
+    function tick() {
+      const now = Date.now();
+      const diff = Math.max(0, Math.floor((nextTime - now) / 1000));
+      const h = Math.floor(diff / 3600);
+      const m = Math.floor((diff % 3600) / 60);
+      const s = diff % 60;
+      document.getElementById('timer-h').textContent = String(h).padStart(2, '0');
+      document.getElementById('timer-m').textContent = String(m).padStart(2, '0');
+      document.getElementById('timer-s').textContent = String(s).padStart(2, '0');
     }
+    tick();
+    poolTimerInterval = setInterval(tick, 1000);
   }
 
-  async function handleRegister() {
-    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
-    const referrer = document.getElementById('input-referrer').value.trim();
-
-    if (!ethers.isAddress(referrer)) {
-      return showAlert('error', '❌ Некорректный адрес спонсора');
-    }
-
-    try {
-      showAlert('info', '🔐 Подтвердите регистрацию в MetaMask');
-      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
-      const tx = await virusContract.register(referrer);
-      showAlert('info', '⏳ Ожидание подтверждения...');
-      await tx.wait();
-      showAlert('success', '✅ Регистрация успешна!');
-      await loadContractData();
-    } catch (e) {
-      let msg = e.reason || e.message;
-      if (msg.includes('Already registered')) msg = 'Кошелёк уже зарегистрирован';
-      if (msg.includes('Invalid referrer')) msg = 'Неверный адрес спонсора';
-      showAlert('error', '❌ Ошибка: ' + msg);
-    }
-  }
-
+  // ============================================
+  // АКТИВАЦИЯ ПАКЕТА
+  // ============================================
   async function handleActivate() {
-    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
-    const packetIndex = parseInt(document.getElementById('input-packet').value);
+    if (!signer) return showAlert('error', 'Кошелёк не подключён');
+
+    const currentPacket = Number(userInfo[0]) / 1e18;
+    let nextPacket;
+    if (currentPacket === 0) nextPacket = 1;
+    else if (currentPacket === 50) nextPacket = 2;
+    else if (currentPacket === 100) nextPacket = 3;
+    else if (currentPacket === 150) nextPacket = 4;
+    else if (currentPacket === 200) nextPacket = 5;
+    else {
+      showAlert('error', t('already_all_packets'));
+      return;
+    }
+
+    if (!confirm('Активировать пакет ' + nextPacket + '?')) return;
+
+    const btn = document.getElementById('btn-activate');
+    btn.disabled = true;
+    btn.textContent = '...';
 
     try {
-      showAlert('info', '🔐 Подтвердите активацию пакета в MetaMask');
+      showAlert('info', 'Подтвердите активацию в MetaMask');
       const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
-      const tx = await virusContract.activatePacket(packetIndex);
-      showAlert('info', '⏳ Ожидание подтверждения...');
+      const tx = await virusContract.activatePacket(nextPacket);
+      showAlert('info', 'Ожидание подтверждения...');
       await tx.wait();
-      showAlert('success', '✅ Пакет ' + packetIndex + ' активирован!');
-      await loadContractData();
-      await loadWalletData();
+      showAlert('success', 'Пакет ' + nextPacket + ' активирован!');
+      await loadAllData();
     } catch (e) {
       let msg = e.reason || e.message;
-      if (msg.includes('Wrong packet sequence')) msg = 'Неверная последовательность пакетов (активируйте по порядку)';
-      if (msg.includes('transfer amount exceeds allowance')) msg = 'Недостаточно approve (сделайте approve сначала)';
-      if (msg.includes('transfer amount exceeds balance')) msg = 'Недостаточно USDT на балансе';
-      showAlert('error', '❌ Ошибка: ' + msg);
+      if (msg.includes('Wrong packet sequence')) msg = 'Неверная последовательность';
+      if (msg.includes('transfer amount exceeds allowance')) msg = 'Нужен Approve на 750 USDT';
+      if (msg.includes('transfer amount exceeds balance')) msg = 'Недостаточно USDT';
+      showAlert('error', 'Ошибка: ' + msg);
+    } finally {
+      btn.disabled = false;
+      renderPackets();
     }
   }
 
-  async function handleClaimMatrix() {
-    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
-    try {
-      showAlert('info', '🔐 Подтвердите вывод в MetaMask');
-      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
-      const tx = await virusContract.claimMatrix();
-      showAlert('info', '⏳ Ожидание подтверждения...');
-      await tx.wait();
-      showAlert('success', '✅ Матричный баланс выведен!');
-      await loadContractData();
-      await loadWalletData();
-    } catch (e) {
-      let msg = e.reason || e.message;
-      if (msg.includes('Min 10 USDT')) msg = 'Минимум 10 USDT для вывода';
-      showAlert('error', '❌ Ошибка: ' + msg);
-    }
-  }
-
-  async function handleClaimPool() {
-    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
-    try {
-      showAlert('info', '🔐 Подтвердите вывод в MetaMask');
-      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
-      const tx = await virusContract.claimPool();
-      showAlert('info', '⏳ Ожидание подтверждения...');
-      await tx.wait();
-      showAlert('success', '✅ Пул выведен!');
-      await loadContractData();
-      await loadWalletData();
-    } catch (e) {
-      let msg = e.reason || e.message;
-      if (msg.includes('Min 10 USDT')) msg = 'Минимум 10 USDT для вывода';
-      if (msg.includes('VIP not active')) msg = 'Нужен активный VIP для вывода из пула';
-      showAlert('error', '❌ Ошибка: ' + msg);
-    }
-  }
-
+  // ============================================
+  // ВЫВОД
+  // ============================================
   async function handleClaimAll() {
-    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
+    if (!signer) return showAlert('error', 'Кошелёк не подключён');
+
+    const btn = document.getElementById('btn-withdraw');
+    btn.disabled = true;
+    btn.textContent = '...';
+
     try {
-      showAlert('info', '🔐 Подтвердите вывод в MetaMask');
+      showAlert('info', 'Подтвердите вывод в MetaMask');
       const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
       const tx = await virusContract.claimAll();
-      showAlert('info', '⏳ Ожидание подтверждения...');
+      showAlert('info', 'Ожидание подтверждения...');
       await tx.wait();
-      showAlert('success', '✅ Всё выведено!');
-      await loadContractData();
-      await loadWalletData();
+      showAlert('success', 'Средства выведены!');
+      await loadAllData();
     } catch (e) {
       let msg = e.reason || e.message;
-      if (msg.includes('No balance available')) msg = 'Нет баланса для вывода (или минимум 10 USDT)';
-      showAlert('error', '❌ Ошибка: ' + msg);
-    }
-  }
-
-  async function handleDonate() {
-    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
-    const amount = document.getElementById('input-donate').value;
-    const amountWei = ethers.parseEther(amount);
-
-    try {
-      showAlert('info', '🔐 Подтвердите донат в MetaMask');
-      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
-      const tx = await virusContract.donateToPool(amountWei);
-      showAlert('info', '⏳ Ожидание подтверждения...');
-      await tx.wait();
-      showAlert('success', '✅ Донат ' + amount + ' USDT отправлен!');
-      await loadPoolData();
-      await loadWalletData();
-    } catch (e) {
-      let msg = e.reason || e.message;
-      if (msg.includes('transfer amount exceeds allowance')) msg = 'Недостаточно approve (сделайте approve сначала)';
-      if (msg.includes('transfer amount exceeds balance')) msg = 'Недостаточно USDT на балансе';
-      showAlert('error', '❌ Ошибка: ' + msg);
-    }
-  }
-
-  async function handleRequestVip() {
-    if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
-    const level = parseInt(document.getElementById('input-vip-level').value);
-
-    try {
-      showAlert('info', '🔐 Подтвердите запрос VIP в MetaMask');
-      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
-      const tx = await virusContract.requestVip(level);
-      showAlert('info', '⏳ Ожидание подтверждения...');
-      await tx.wait();
-      showAlert('success', '✅ Запрос VIP ' + level + ' отправлен!');
-    } catch (e) {
-      let msg = e.reason || e.message;
-      if (msg.includes('Packet too low')) msg = 'Пакет слишком низкий для этого VIP-уровня';
-      showAlert('error', '❌ Ошибка: ' + msg);
+      if (msg.includes('No balance available')) msg = 'Минимум 10 USDT для вывода';
+      if (msg.includes('VIP not active')) msg = 'Нужен активный VIP (только для пула)';
+      showAlert('error', 'Ошибка: ' + msg);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = t('withdraw');
     }
   }
 
   // ============================================
-  // ОТКЛЮЧЕНИЕ
+  // VIP МОДАЛКА
   // ============================================
-  function handleDisconnect() {
-    provider = null;
-    signer = null;
-    userAddress = null;
-    currentChainId = null;
-    document.getElementById('wallet-info').style.display = 'none';
-    document.getElementById('contract-info').style.display = 'none';
-    document.getElementById('actions-card').style.display = 'none';
-    document.getElementById('pool-info').style.display = 'none';
-    document.getElementById('btn-disconnect').style.display = 'none';
-    document.getElementById('btn-connect').style.display = 'block';
-    showAlert('info', '🔌 ' + t('disconnected'));
+  function openVipModal() {
+    document.getElementById('vip-modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    loadVipModal();
+  }
+
+  function closeVipModal() {
+    document.getElementById('vip-modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  async function loadVipModal() {
+    const body = document.getElementById('vip-modal-body');
+
+    try {
+      // Запрос к API — статус anti-sybil и vip_status
+      const token = localStorage.getItem('virusmlm_token');
+      if (!token) {
+        body.innerHTML = '<div class="alert error" style="display:block;">Нужна авторизация в виртуальном кабинете</div>';
+        return;
+      }
+
+      // Заглушка: показываем текущий VIP-статус из контракта
+      const starLevel = Number(vipInfo[0]);
+      const isActive = vipInfo[4];
+      const daysLeft = Number(vipInfo[3]);
+      const antiSybilVerified = vipInfo[5];
+      const currentPacket = Number(userInfo[0]) / 1e18;
+
+      let html = '';
+
+      // Anti-Sybil статус
+      if (antiSybilVerified) {
+        html += '<div class="vip-step"><div class="vip-step-title done">✅ Anti-Sybil: пройдено</div></div>';
+      } else {
+        html += '<div class="vip-step">';
+        html += '<div class="vip-step-title">1. Anti-Sybil верификация</div>';
+        html += '<p class="vip-status">Отправьте фото с паспортом и кодовым словом на проверку.</p>';
+        html += '<input type="text" id="sybil-proof" placeholder="Ссылка на фото">';
+        html += '<button class="btn btn-blue" style="margin-top:8px;padding:10px;font-size:13px;" onclick="submitSybil()">Отправить на проверку</button>';
+        html += '</div>';
+      }
+
+      // VIP статус
+      if (isActive) {
+        html += '<div class="vip-step">';
+        html += '<div class="vip-step-title done">✅ VIP активен: ' + starLevel + ' ★</div>';
+        html += '<p class="vip-status">Осталось: ' + daysLeft + ' дн.</p>';
+        html += '</div>';
+      } else {
+        html += '<div class="vip-step">';
+        html += '<div class="vip-step-title">2. Запрос VIP</div>';
+
+        // Доступные уровни
+        const maxLevel = Math.floor(currentPacket / 50);
+        if (maxLevel === 0) {
+          html += '<p class="vip-status">❌ Нужен пакет 50 USDT (минимум)</p>';
+        } else {
+          html += '<label style="font-size:12px;font-weight:600;color:#6b7280;">Уровень VIP (доступно: 1-' + maxLevel + ')</label>';
+          html += '<select id="vip-level-select" style="margin-top:6px;margin-bottom:10px;">';
+          for (let i = 1; i <= maxLevel; i++) {
+            html += '<option value="' + i + '">' + i + ' ★ (21%</option>'.replace('21%', ['21%','33%','15%','12%','9%'][i-1]));
+          }
+          html += '</select>';
+
+          html += '<label style="font-size:12px;font-weight:600;color:#6b7280;">Задание</label>';
+          html += '<p class="vip-status">Пройдите задания и приложите доказательство (ссылка).</p>';
+          html += '<input type="text" id="vip-proof" placeholder="Ссылка на скриншот/пост">';
+          html += '<button class="btn btn-orange" style="margin-top:8px;padding:10px;font-size:13px;" onclick="submitVip()">Запросить VIP</button>';
+        }
+
+        html += '</div>';
+      }
+
+      body.innerHTML = html;
+
+    } catch (e) {
+      console.error(e);
+      body.innerHTML = '<div class="alert error" style="display:block;">Ошибка: ' + (e.message || e) + '</div>';
+    }
+  }
+
+  async function submitSybil() {
+    const proofUrl = document.getElementById('sybil-proof').value.trim();
+    if (!proofUrl) return alert('Введите ссылку на фото');
+
+    try {
+      const token = localStorage.getItem('virusmlm_token');
+      const res = await fetch('https://api.virusmlm.com/api/v1/vip/verify-sybil', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ proofUrl })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('✅ Отправлено на проверку админу');
+        loadVipModal();
+      } else {
+        alert('Ошибка: ' + (data.error?.message || 'Unknown'));
+      }
+    } catch (e) {
+      alert('Ошибка: ' + e.message);
+    }
+  }
+
+  async function submitVip() {
+    const starLevel = parseInt(document.getElementById('vip-level-select').value);
+    const proofUrl = document.getElementById('vip-proof').value.trim();
+
+    if (!proofUrl) return alert('Введите ссылку на доказательство');
+
+    try {
+      const token = localStorage.getItem('virusmlm_token');
+      const res = await fetch('https://api.virusmlm.com/api/v1/vip/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ starLevel, proofUrl })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('✅ Заявка на VIP отправлена');
+        loadVipModal();
+      } else {
+        alert('Ошибка: ' + (data.error?.message || 'Unknown'));
+      }
+    } catch (e) {
+      alert('Ошибка: ' + e.message);
+    }
+  }
+
+  function openChat() {
+    // TODO: чат в реальном кабинете
+    alert('Чат будет добавлен позже');
   }
 
   // ============================================
   // СЛУШАТЕЛИ
   // ============================================
-  if (typeof window.ethereum !== 'undefined') {
-    window.ethereum.on('accountsChanged', (accounts) => {
-      if (accounts.length === 0) {
-        handleDisconnect();
-      } else {
-        userAddress = accounts[0];
-        if (provider) {
-          loadWalletData();
-          loadContractData();
-        }
-      }
+  if (window.ethereum) {
+    window.ethereum.on('accountsChanged', () => {
+      window.location.reload();
     });
-
-    window.ethereum.on('chainChanged', (chainId) => {
-      currentChainId = chainId;
-      if (provider) {
-        loadWalletData();
-        loadContractData();
-        loadPoolData();
-      }
+    window.ethereum.on('chainChanged', () => {
+      window.location.reload();
     });
   }
 
   // ============================================
-  // ИНИЦИАЛИЗАЦИЯ
+  // СТАРТ
   // ============================================
   document.querySelectorAll('.lang-menu button').forEach((b) => b.classList.remove('active'));
   document.getElementById('lang-' + currentLang).classList.add('active');
-  applyTranslations();
-  checkMetaMask();
+
+  init();
 
 </script>
 
