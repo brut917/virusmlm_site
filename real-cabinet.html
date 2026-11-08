@@ -345,9 +345,6 @@
 </div>
 
 <script>
-  // ============================================
-  // КОНСТАНТЫ
-  // ============================================
   const BSC_TESTNET = {
     chainId: '0x61',
     chainName: 'BSC Testnet',
@@ -375,9 +372,6 @@
     'function requestVip(uint256 _starLevel)'
   ];
 
-  // ============================================
-  // СОСТОЯНИЕ
-  // ============================================
   let provider = null;
   let signer = null;
   let userAddress = null;
@@ -387,9 +381,6 @@
   let poolInfo = null;
   let vipInfo = null;
 
-  // ============================================
-  // i18n
-  // ============================================
   const i18n = {
     ru: {
       vip_status: "СТАТУС VIP",
@@ -451,7 +442,6 @@
     document.querySelectorAll('.lang-menu button').forEach((b) => b.classList.remove('active'));
     document.getElementById('lang-' + lang).classList.add('active');
     document.getElementById('lang-menu').classList.remove('show');
-    // Перерисовываем данные
     if (userInfo) renderAll();
   }
 
@@ -490,12 +480,9 @@
     return addr.slice(0, 6) + '...' + addr.slice(-4);
   }
 
-  // ============================================
-  // ЗАГРУЗКА
-  // ============================================
   async function init() {
     if (!window.ethereum) {
-      document.getElementById('loading').innerHTML = '<div class="alert error" style="display:block;">MetaMask не найден. Установите расширение.</div>';
+      document.getElementById('loading').innerHTML = '<div class="alert error" style="display:block;">MetaMask не найден.</div>';
       return;
     }
 
@@ -503,7 +490,6 @@
       provider = new ethers.BrowserProvider(window.ethereum);
       const accounts = await window.ethereum.request({ method: 'eth_accounts' });
       if (!accounts || accounts.length === 0) {
-        // Не подключён — редирект
         window.location.href = 'activation.html';
         return;
       }
@@ -517,7 +503,6 @@
       }
 
       signer = await provider.getSigner();
-
       await loadAllData();
 
       document.getElementById('loading').style.display = 'none';
@@ -532,14 +517,12 @@
   async function loadAllData() {
     const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
 
-    // Регистрация
     const registered = await virusContract.isUserRegistered(userAddress);
     if (!registered) {
       window.location.href = 'activation.html';
       return;
     }
 
-    // Данные пользователя
     userInfo = await virusContract.getUserInfo(userAddress);
     poolInfo = await virusContract.getPoolInfo();
     vipInfo = await virusContract.getVipInfo(userAddress);
@@ -548,9 +531,6 @@
     startPoolTimer();
   }
 
-  // ============================================
-  // РЕНДЕР
-  // ============================================
   function renderAll() {
     renderVipBlock();
     renderSponsor();
@@ -562,14 +542,12 @@
   }
 
   function renderVipBlock() {
-    // VIP
-    const starLevel = Number(vipInfo[0]); // starLevel
-    const isActive = vipInfo[4]; // isActive
-    const daysLeft = Number(vipInfo[3]); // daysLeft
+    const starLevel = Number(vipInfo[0]);
+    const isActive = vipInfo[4];
+    const daysLeft = Number(vipInfo[3]);
 
     document.getElementById('vip-level-text').textContent = t('vip_status');
 
-    // Звёзды
     let starsHtml = '';
     for (let i = 1; i <= 5; i++) {
       if (i <= starLevel && isActive) {
@@ -580,7 +558,6 @@
     }
     document.getElementById('vip-stars').innerHTML = starsHtml;
 
-    // Дни
     if (isActive && daysLeft > 0) {
       document.getElementById('vip-duration').textContent = daysLeft + ' дн.';
     } else if (!isActive) {
@@ -589,10 +566,8 @@
       document.getElementById('vip-duration').textContent = 'Истёк';
     }
 
-    // Адрес
     document.getElementById('user-address').textContent = shorten(userAddress);
 
-    // VIP на уровне
     const vipCounts = poolInfo[2];
     if (starLevel > 0 && isActive) {
       document.getElementById('vip-on-level').textContent = Number(vipCounts[starLevel - 1]) + ' ID';
@@ -618,7 +593,6 @@
       else p.classList.remove('active');
     });
 
-    // Кнопка активации — disabled, если все пакеты (250)
     if (currentPacket >= 250) {
       document.getElementById('btn-activate').disabled = true;
       document.getElementById('btn-activate').textContent = t('already_all_packets');
@@ -630,9 +604,8 @@
 
   async function renderMatrix() {
     try {
-      // Получаем узел пользователя (если есть)
       const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
-      const node = await virusContract.getMatrixNode(userInfo[2]); // placementId
+      const node = await virusContract.getMatrixNode(userInfo[2]);
 
       if (node && node[0] !== '0x0000000000000000000000000000000000000000') {
         const leftCount = Number(node[5]);
@@ -651,16 +624,13 @@
   }
 
   function renderPool() {
-    const poolBalance = poolInfo[0];
-    document.getElementById('pool-amount').textContent = formatUSDT(poolBalance);
+    document.getElementById('pool-amount').textContent = formatUSDT(poolInfo[0]);
   }
 
   function renderBalances() {
+    const totalEarned = userInfo[5];
     const matrixBalance = userInfo[3];
     const poolBalance = userInfo[4];
-    // Referral — в контракте нет отдельного поля для накоплений (только totalEarned)
-    // Поэтому "Всего за приглашения" = totalEarned
-    const totalEarned = userInfo[5];
 
     document.getElementById('bal-referral').textContent = formatUSDT(totalEarned);
     document.getElementById('bal-matrix').textContent = formatUSDT(matrixBalance);
@@ -672,11 +642,9 @@
     const poolBalance = BigInt(userInfo[4]);
     const total = matrixBalance + poolBalance;
 
-    // Если total = 0 — выводить нечего
     document.getElementById('withdraw-total').textContent = formatUSDT(total.toString());
-    document.getElementById('btn-withdraw').disabled = total < 10000000n; // 10 USDT min
+    document.getElementById('btn-withdraw').disabled = total < 10000000n;
 
-    // % распределения по пакету
     const currentPacket = Number(userInfo[0]) / 1e18;
     const map = { 50: 50, 100: 60, 150: 70, 200: 80, 250: 90 };
     const walletPercent = map[currentPacket] || 50;
@@ -685,9 +653,6 @@
     document.getElementById('split-market').textContent = marketPercent + '%';
   }
 
-  // ============================================
-  // ТАЙМЕР ПУЛА
-  // ============================================
   let poolTimerInterval = null;
   function startPoolTimer() {
     if (poolTimerInterval) clearInterval(poolTimerInterval);
@@ -708,9 +673,6 @@
     poolTimerInterval = setInterval(tick, 1000);
   }
 
-  // ============================================
-  // АКТИВАЦИЯ ПАКЕТА
-  // ============================================
   async function handleActivate() {
     if (!signer) return showAlert('error', 'Кошелёк не подключён');
 
@@ -752,9 +714,6 @@
     }
   }
 
-  // ============================================
-  // ВЫВОД
-  // ============================================
   async function handleClaimAll() {
     if (!signer) return showAlert('error', 'Кошелёк не подключён');
 
@@ -781,9 +740,6 @@
     }
   }
 
-  // ============================================
-  // VIP МОДАЛКА
-  // ============================================
   function openVipModal() {
     document.getElementById('vip-modal').classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -799,14 +755,12 @@
     const body = document.getElementById('vip-modal-body');
 
     try {
-      // Запрос к API — статус anti-sybil и vip_status
       const token = localStorage.getItem('virusmlm_token');
       if (!token) {
         body.innerHTML = '<div class="alert error" style="display:block;">Нужна авторизация в виртуальном кабинете</div>';
         return;
       }
 
-      // Заглушка: показываем текущий VIP-статус из контракта
       const starLevel = Number(vipInfo[0]);
       const isActive = vipInfo[4];
       const daysLeft = Number(vipInfo[3]);
@@ -815,7 +769,6 @@
 
       let html = '';
 
-      // Anti-Sybil статус
       if (antiSybilVerified) {
         html += '<div class="vip-step"><div class="vip-step-title done">✅ Anti-Sybil: пройдено</div></div>';
       } else {
@@ -827,7 +780,6 @@
         html += '</div>';
       }
 
-      // VIP статус
       if (isActive) {
         html += '<div class="vip-step">';
         html += '<div class="vip-step-title done">✅ VIP активен: ' + starLevel + ' ★</div>';
@@ -837,15 +789,15 @@
         html += '<div class="vip-step">';
         html += '<div class="vip-step-title">2. Запрос VIP</div>';
 
-        // Доступные уровни
         const maxLevel = Math.floor(currentPacket / 50);
         if (maxLevel === 0) {
           html += '<p class="vip-status">❌ Нужен пакет 50 USDT (минимум)</p>';
         } else {
           html += '<label style="font-size:12px;font-weight:600;color:#6b7280;">Уровень VIP (доступно: 1-' + maxLevel + ')</label>';
           html += '<select id="vip-level-select" style="margin-top:6px;margin-bottom:10px;">';
+          const percents = ['21%', '33%', '15%', '12%', '9%'];
           for (let i = 1; i <= maxLevel; i++) {
-            html += '<option value="' + i + '">' + i + ' ★ (21%</option>'.replace('21%', ['21%','33%','15%','12%','9%'][i-1]));
+            html += '<option value="' + i + '">' + i + ' ★ (' + percents[i - 1] + ')</option>';
           }
           html += '</select>';
 
@@ -921,25 +873,14 @@
   }
 
   function openChat() {
-    // TODO: чат в реальном кабинете
     alert('Чат будет добавлен позже');
   }
 
-  // ============================================
-  // СЛУШАТЕЛИ
-  // ============================================
   if (window.ethereum) {
-    window.ethereum.on('accountsChanged', () => {
-      window.location.reload();
-    });
-    window.ethereum.on('chainChanged', () => {
-      window.location.reload();
-    });
+    window.ethereum.on('accountsChanged', () => { window.location.reload(); });
+    window.ethereum.on('chainChanged', () => { window.location.reload(); });
   }
 
-  // ============================================
-  // СТАРТ
-  // ============================================
   document.querySelectorAll('.lang-menu button').forEach((b) => b.classList.remove('active'));
   document.getElementById('lang-' + currentLang).classList.add('active');
 
