@@ -65,27 +65,24 @@
   .container { max-width: 560px; margin: 0 auto; padding: 40px 20px; }
 
   .card { background: #ffffff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-  .card-title { font-size: 14px; color: #2196f3; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
-  .card-title .num {
-    background: #2196f3; color: #fff; width: 28px; height: 28px;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; flex-shrink: 0;
-  }
-  .card-title.disabled { color: #9ca3af; }
-  .card-title.disabled .num { background: #e5e7eb; color: #9ca3af; }
+  .card-title { font-size: 14px; color: #6b7280; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px; }
+  .card-title .num { background: #e5e7eb; color: #9ca3af; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .card-title.active { color: #2196f3; }
+  .card-title.active .num { background: #2196f3; color: #fff; }
   .card-title.done { color: #059669; }
-  .card-title.done .num { background: #059669; }
+  .card-title.done .num { background: #059669; color: #fff; }
 
-  .card-desc { font-size: 12px; color: #6b7280; margin-bottom: 12px; line-height: 1.5; }
+  .card-desc { font-size: 12px; color: #6b7280; margin-bottom: 12px; line-height: 1.6; }
+  .card-desc b { color: #1a1a1a; }
 
   .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
-  .btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; box-shadow: none; }
-  .btn-blue { background: #2196f3; color: #fff; }
-  .btn-blue:hover:not(:disabled) { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
+  .btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; box-shadow: none; opacity: 0.6; }
   .btn-green { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #fff; }
   .btn-green:hover:not(:disabled) { box-shadow: 0 0 25px rgba(46,125,50,0.6); }
   .btn-orange { background: #f59e0b; color: #fff; }
   .btn-orange:hover:not(:disabled) { background: #d97706; }
+  .btn-blue { background: #2196f3; color: #fff; }
+  .btn-blue:hover:not(:disabled) { box-shadow: 0 0 20px rgba(33,150,243,0.5); }
 
   .form-group { margin-bottom: 12px; }
   .form-group label { display: block; font-size: 12px; color: #6b7280; font-weight: 600; margin-bottom: 6px; }
@@ -146,8 +143,8 @@
     <div id="alert-box"></div>
 
     <!-- ШАГ 1: Подключение -->
-    <div class="card" id="card-step-1">
-      <div class="card-title" id="lbl-step-1">
+    <div class="card">
+      <div class="card-title active" id="lbl-step-1">
         <span class="num">1</span>
         <span id="lbl-step-1-text">Подключить MetaMask</span>
       </div>
@@ -184,8 +181,8 @@
     </div>
 
     <!-- ШАГ 2: Approve -->
-    <div class="card" id="card-step-2" style="display:none;">
-      <div class="card-title disabled" id="lbl-step-2">
+    <div class="card">
+      <div class="card-title" id="lbl-step-2">
         <span class="num">2</span>
         <span id="lbl-step-2-text">Approve 750 USDT</span>
       </div>
@@ -195,21 +192,21 @@
 
       <div class="form-group">
         <label id="lbl-approve-amount">Сумма для approve (USDT)</label>
-        <input type="number" id="input-approve" value="750" min="1" readonly>
+        <input type="number" id="input-approve" value="750" readonly disabled>
       </div>
       <button class="btn btn-orange" id="btn-approve" onclick="handleApprove()" disabled>
         APPROVE 750 USDT
       </button>
     </div>
 
-    <!-- ШАГ 3: Register -->
-    <div class="card" id="card-step-3" style="display:none;">
-      <div class="card-title disabled" id="lbl-step-3">
+    <!-- ШАГ 3: Пакет 0 -->
+    <div class="card">
+      <div class="card-title" id="lbl-step-3">
         <span class="num">3</span>
-        <span id="lbl-step-3-text">Регистрация</span>
+        <span id="lbl-step-3-text">Активировать пакет 0</span>
       </div>
       <div class="card-desc" id="lbl-step-3-desc">
-        Укажите адрес кошелька вашего спонсора. Это <b>бесплатно</b> (только газ). Сразу после подтверждения вы перейдёте в реальный кабинет.
+        Укажите адрес кошелька вашего спонсора. Активация <b>бесплатна</b> (только газ). Сразу после подтверждения вы перейдёте в реальный кабинет.
       </div>
 
       <div class="form-group">
@@ -217,7 +214,7 @@
         <input type="text" id="input-referrer" placeholder="0x..." disabled>
       </div>
       <button class="btn btn-blue" id="btn-register" onclick="handleRegister()" disabled>
-        ЗАРЕГИСТРИРОВАТЬСЯ
+        АКТИВИРОВАТЬ ПАКЕТ 0
       </button>
     </div>
 
@@ -270,10 +267,10 @@
       step_2_desc: "<b>⚠️ Важно:</b> Approve <b>не списывает</b> деньги. Это <b>разрешение</b> для контракта списать USDT, когда вы активируете пакеты (50 + 100 + 150 + 200 + 250 = 750 USDT). Списывается только то, что вы активируете.",
       approve_amount: "Сумма для approve (USDT)",
       approve_btn: "APPROVE 750 USDT",
-      step_3: "Регистрация",
-      step_3_desc: "Укажите адрес кошелька вашего спонсора. Это <b>бесплатно</b> (только газ). Сразу после подтверждения вы перейдёте в реальный кабинет.",
+      step_3: "Активировать пакет 0",
+      step_3_desc: "Укажите адрес кошелька вашего спонсора. Активация <b>бесплатна</b> (только газ). Сразу после подтверждения вы перейдёте в реальный кабинет.",
       referrer_input: "Адрес кошелька спонсора (0x...)",
-      register_btn: "ЗАРЕГИСТРИРОВАТЬСЯ"
+      register_btn: "АКТИВИРОВАТЬ ПАКЕТ 0"
     },
     en: {
       back: "← Back",
@@ -289,10 +286,10 @@
       step_2_desc: "<b>⚠️ Important:</b> Approve <b>does not spend</b> funds. It is a <b>permission</b> for the contract to spend USDT when you activate packages (50 + 100 + 150 + 200 + 250 = 750 USDT). Only what you activate will be spent.",
       approve_amount: "Amount to approve (USDT)",
       approve_btn: "APPROVE 750 USDT",
-      step_3: "Registration",
-      step_3_desc: "Enter your sponsor's wallet address. It's <b>free</b> (only gas). After confirmation you will be redirected to the real cabinet.",
+      step_3: "Activate packet 0",
+      step_3_desc: "Enter your sponsor's wallet address. Activation is <b>free</b> (only gas). After confirmation you will be redirected to the real cabinet.",
       referrer_input: "Sponsor's wallet address (0x...)",
-      register_btn: "REGISTER"
+      register_btn: "ACTIVATE PACKET 0"
     }
   };
 
@@ -357,7 +354,18 @@
     return true;
   }
 
-  // ============ ШАГ 1: ПОДКЛЮЧЕНИЕ ============
+  function activateStep(stepNum) {
+    const title = document.getElementById('lbl-step-' + stepNum);
+    title.classList.remove('disabled');
+    title.classList.add('active');
+  }
+
+  function doneStep(stepNum) {
+    const title = document.getElementById('lbl-step-' + stepNum);
+    title.classList.remove('active');
+    title.classList.add('done');
+  }
+
   async function handleConnect() {
     if (!checkMetaMask()) return;
 
@@ -400,15 +408,12 @@
 
       document.getElementById('connecting').style.display = 'none';
       document.getElementById('wallet-info').style.display = 'block';
-      document.getElementById('card-step-1').classList.add('done');
+      btn.textContent = t('connect');
+      doneStep(1);
 
       // Активируем шаг 2
-      document.getElementById('card-step-2').style.display = 'block';
-      document.getElementById('lbl-step-2').classList.remove('disabled');
+      activateStep(2);
       document.getElementById('btn-approve').disabled = false;
-
-      // Сразу разрешаем ввод спонсора (но кнопка активна только после approve)
-      document.getElementById('input-referrer').disabled = false;
 
       showAlert('success', '✅ Кошелёк подключён. Шаг 2: Approve 750 USDT.');
 
@@ -444,7 +449,6 @@
     }
   }
 
-  // ============ ШАГ 2: APPROVE ============
   async function handleApprove() {
     if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
 
@@ -459,14 +463,14 @@
       const tx = await usdtContract.approve(VIRUS_MLM_TESTNET, amountWei);
       showAlert('info', '⏳ Ожидание подтверждения...');
       await tx.wait();
-      showAlert('success', '✅ Approve 750 USDT выполнен. Шаг 3: Регистрация.');
+      showAlert('success', '✅ Approve 750 USDT выполнен. Шаг 3: Активация пакета 0.');
+      doneStep(2);
+      btn.textContent = t('approve_btn');
 
       // Активируем шаг 3
-      document.getElementById('card-step-3').style.display = 'block';
-      document.getElementById('lbl-step-3').classList.remove('disabled');
+      activateStep(3);
+      document.getElementById('input-referrer').disabled = false;
       document.getElementById('btn-register').disabled = false;
-      document.getElementById('card-step-2').classList.add('done');
-      btn.textContent = t('approve_btn');
 
     } catch (e) {
       btn.disabled = false;
@@ -475,7 +479,6 @@
     }
   }
 
-  // ============ ШАГ 3: REGISTER ============
   async function handleRegister() {
     if (!signer) return showAlert('error', '❌ Кошелёк не подключён');
 
@@ -488,10 +491,9 @@
 
     const btn = document.getElementById('btn-register');
     btn.disabled = true;
-    btn.textContent = 'РЕГИСТРАЦИЯ...';
+    btn.textContent = 'АКТИВАЦИЯ...';
 
     try {
-      // Проверяем, не зарегистрирован ли уже
       const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
       const registered = await virusContract.isUserRegistered(userAddress);
       if (registered) {
@@ -500,12 +502,13 @@
         return;
       }
 
-      showAlert('info', '🔐 Подтвердите регистрацию в MetaMask');
+      showAlert('info', '🔐 Подтвердите активацию пакета 0 в MetaMask');
       const virusContractWithSigner = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
       const tx = await virusContractWithSigner.register(referrer);
       showAlert('info', '⏳ Ожидание подтверждения...');
       await tx.wait();
-      showAlert('success', '✅ Регистрация успешна! Переход в реальный кабинет...');
+      showAlert('success', '✅ Пакет 0 активирован! Переход в реальный кабинет...');
+      doneStep(3);
 
       setTimeout(() => { window.location.href = 'real-cabinet.html'; }, 2000);
 
@@ -519,7 +522,6 @@
     }
   }
 
-  // ============ ИНИЦИАЛИЗАЦИЯ ============
   document.querySelectorAll('.lang-menu button').forEach((b) => b.classList.remove('active'));
   document.getElementById('lang-' + currentLang).classList.add('active');
   applyTranslations();
