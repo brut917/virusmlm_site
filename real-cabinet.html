@@ -140,6 +140,7 @@
 
     <div id="alert-box"></div>
 
+    <!-- БЛОК 1: Подключение -->
     <div class="card" style="text-align:center;">
       <div style="font-size: 40px; margin-bottom: 8px;">🦊</div>
       <div class="card-title" id="lbl-title">Реальный кабинет — Testnet</div>
@@ -160,6 +161,7 @@
       </div>
     </div>
 
+    <!-- БЛОК 2: Данные кошелька -->
     <div class="card" id="wallet-info" style="display:none;">
       <div class="card-title" id="lbl-wallet-info">Данные кошелька</div>
       <div class="info-row">
@@ -177,6 +179,52 @@
       <div class="info-row">
         <span class="info-label" id="lbl-usdt">Баланс USDT</span>
         <span class="info-value green" id="val-usdt">—</span>
+      </div>
+    </div>
+
+    <!-- БЛОК 3: Данные VIRUS MLM (контракт) -->
+    <div class="card" id="contract-info" style="display:none;">
+      <div class="card-title" id="lbl-contract-info">Данные VIRUS MLM (контракт)</div>
+      <div class="info-row">
+        <span class="info-label" id="lbl-packet">Текущий пакет</span>
+        <span class="info-value" id="val-packet">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label" id="lbl-placement">ID в матрице</span>
+        <span class="info-value" id="val-placement">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label" id="lbl-matrix-bal">Бонус за команду</span>
+        <span class="info-value green" id="val-matrix-bal">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label" id="lbl-pool-bal">Бонус активности</span>
+        <span class="info-value green" id="val-pool-bal">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label" id="lbl-total-earned">Всего заработано</span>
+        <span class="info-value green" id="val-total-earned">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label" id="lbl-referrer">Спонсор</span>
+        <span class="info-value" id="val-referrer">—</span>
+      </div>
+    </div>
+
+    <!-- БЛОК 4: Пул -->
+    <div class="card" id="pool-info" style="display:none;">
+      <div class="card-title" id="lbl-pool-info">Пул VIRUS MLM</div>
+      <div class="info-row">
+        <span class="info-label" id="lbl-pool-total">Баланс пула</span>
+        <span class="info-value green" id="val-pool-total">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label" id="lbl-next-dist">Следующее распределение</span>
+        <span class="info-value" id="val-next-dist">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label" id="lbl-vip-counts">VIP по уровням (1-5)</span>
+        <span class="info-value" id="val-vip-counts">—</span>
       </div>
     </div>
 
@@ -200,12 +248,20 @@
     blockExplorerUrls: ['https://testnet.bscscan.com/']
   };
 
-  // USDT в BSC Testnet (стандартный)
+  // USDT в BSC Testnet (твой контракт)
   const USDT_TESTNET = '0x3a0C8fF4D3aB0Eaa69dA925C026fB2C2172eB517';
   const USDT_ABI = [
     'function balanceOf(address owner) view returns (uint256)',
     'function decimals() view returns (uint8)',
     'function symbol() view returns (string)'
+  ];
+
+  // VIRUS MLM Testnet контракт
+  const VIRUS_MLM_TESTNET = '0xDCf607BaCF0e34e7fF141Eb94b9D2B9A54727a61';
+  const VIRUS_MLM_ABI = [
+    'function getUserInfo(address _user) view returns (uint256 currentPacket, address referrer, uint256 placementId, uint256 matrixBalance, uint256 poolBalance, uint256 totalEarned)',
+    'function getPoolInfo() view returns (uint256 poolBalance, uint256 nextDistributionTime, uint256[5] vipCounts, uint256[5] poolShares)',
+    'function isUserRegistered(address _user) view returns (bool)'
   ];
 
   // ============================================
@@ -232,10 +288,20 @@
       network: "Сеть",
       bnb: "Баланс BNB (газ)",
       usdt: "Баланс USDT",
+      contract_info: "Данные VIRUS MLM (контракт)",
+      packet: "Текущий пакет",
+      placement: "ID в матрице",
+      matrix_bal: "Бонус за команду",
+      pool_bal: "Бонус активности",
+      total_earned: "Всего заработано",
+      referrer: "Спонсор",
+      pool_info: "Пул VIRUS MLM",
+      pool_total: "Баланс пула",
+      next_dist: "Следующее распределение",
+      vip_counts: "VIP по уровням (1-5)",
       disconnected: "Кошелёк отключён",
-      wrong_network: "Неверная сеть. Переключите MetaMask на BSC Testnet (Chain ID 97).",
-      switch_network: "Переключить сеть",
       no_usdt: "USDT-контракт недоступен",
+      not_registered: "Кошелёк не зарегистрирован в контракте",
       hint: "💡 Тестовые tUSDT можно получить в <a href='https://testnet.binance.org/faucet-smart' target='_blank'>BSC Testnet Faucet</a>.<br>Сеть: <b>BSC Testnet (Chain ID 97)</b>"
     },
     en: {
@@ -249,10 +315,20 @@
       network: "Network",
       bnb: "BNB balance (gas)",
       usdt: "USDT balance",
+      contract_info: "VIRUS MLM data (contract)",
+      packet: "Current packet",
+      placement: "Matrix ID",
+      matrix_bal: "Team bonus",
+      pool_bal: "Activity bonus",
+      total_earned: "Total earned",
+      referrer: "Sponsor",
+      pool_info: "VIRUS MLM pool",
+      pool_total: "Pool balance",
+      next_dist: "Next distribution",
+      vip_counts: "VIP by level (1-5)",
       disconnected: "Wallet disconnected",
-      wrong_network: "Wrong network. Switch MetaMask to BSC Testnet (Chain ID 97).",
-      switch_network: "Switch network",
       no_usdt: "USDT contract unavailable",
+      not_registered: "Wallet not registered in contract",
       hint: "💡 Test tUSDT can be obtained from <a href='https://testnet.binance.org/faucet-smart' target='_blank'>BSC Testnet Faucet</a>.<br>Network: <b>BSC Testnet (Chain ID 97)</b>"
     }
   };
@@ -270,6 +346,17 @@
     document.getElementById('lbl-network').textContent = t('network');
     document.getElementById('lbl-bnb').textContent = t('bnb');
     document.getElementById('lbl-usdt').textContent = t('usdt');
+    document.getElementById('lbl-contract-info').textContent = t('contract_info');
+    document.getElementById('lbl-packet').textContent = t('packet');
+    document.getElementById('lbl-placement').textContent = t('placement');
+    document.getElementById('lbl-matrix-bal').textContent = t('matrix_bal');
+    document.getElementById('lbl-pool-bal').textContent = t('pool_bal');
+    document.getElementById('lbl-total-earned').textContent = t('total_earned');
+    document.getElementById('lbl-referrer').textContent = t('referrer');
+    document.getElementById('lbl-pool-info').textContent = t('pool_info');
+    document.getElementById('lbl-pool-total').textContent = t('pool_total');
+    document.getElementById('lbl-next-dist').textContent = t('next_dist');
+    document.getElementById('lbl-vip-counts').textContent = t('vip_counts');
     document.getElementById('lbl-hint').innerHTML = t('hint');
   }
 
@@ -326,19 +413,13 @@
     document.getElementById('connecting').style.display = 'block';
 
     try {
-      // Запрос доступа к аккаунту
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      if (!accounts || accounts.length === 0) {
-        throw new Error('No accounts');
-      }
+      if (!accounts || accounts.length === 0) throw new Error('No accounts');
       userAddress = accounts[0];
 
-      // Получаем chainId
       currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
 
-      // Проверяем сеть
       if (currentChainId !== BSC_TESTNET.chainId) {
-        // Пробуем переключить
         try {
           await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
@@ -346,7 +427,6 @@
           });
           currentChainId = BSC_TESTNET.chainId;
         } catch (switchError) {
-          // Если сети нет — добавляем
           if (switchError.code === 4902) {
             await window.ethereum.request({
               method: 'wallet_addEthereumChain',
@@ -359,15 +439,17 @@
         }
       }
 
-      // Создаём provider (ethers v6)
       provider = new ethers.BrowserProvider(window.ethereum);
       signer = await provider.getSigner();
 
-      // Загружаем данные
       await loadWalletData();
+      await loadContractData();
+      await loadPoolData();
 
       document.getElementById('connecting').style.display = 'none';
       document.getElementById('wallet-info').style.display = 'block';
+      document.getElementById('contract-info').style.display = 'block';
+      document.getElementById('pool-info').style.display = 'block';
       document.getElementById('btn-disconnect').style.display = 'flex';
       showAlert('success', '✅ Кошелёк подключён');
 
@@ -385,10 +467,8 @@
   async function loadWalletData() {
     if (!provider || !userAddress) return;
 
-    // Адрес
     document.getElementById('val-address').textContent = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
 
-    // Сеть
     const networkEl = document.getElementById('val-network');
     if (currentChainId === BSC_TESTNET.chainId) {
       networkEl.innerHTML = '<span class="network-badge testnet">BSC Testnet</span>';
@@ -398,27 +478,97 @@
       networkEl.innerHTML = '<span class="network-badge unknown">Chain ' + parseInt(currentChainId, 16) + '</span>';
     }
 
-    // Баланс BNB
     try {
       const bnbBalance = await provider.getBalance(userAddress);
-      const bnbFormatted = ethers.formatEther(bnbBalance);
-      document.getElementById('val-bnb').textContent = parseFloat(bnbFormatted).toFixed(4) + ' tBNB';
+      document.getElementById('val-bnb').textContent = parseFloat(ethers.formatEther(bnbBalance)).toFixed(4) + ' tBNB';
     } catch (e) {
       document.getElementById('val-bnb').textContent = '—';
     }
 
-    // Баланс USDT
     try {
       const usdtContract = new ethers.Contract(USDT_TESTNET, USDT_ABI, provider);
       const [balance, decimals] = await Promise.all([
         usdtContract.balanceOf(userAddress),
         usdtContract.decimals()
       ]);
-      const formatted = ethers.formatUnits(balance, decimals);
-      document.getElementById('val-usdt').textContent = parseFloat(formatted).toFixed(2) + ' USDT';
+      document.getElementById('val-usdt').textContent = parseFloat(ethers.formatUnits(balance, decimals)).toFixed(2) + ' USDT';
     } catch (e) {
       console.warn('USDT balance error:', e);
       document.getElementById('val-usdt').textContent = t('no_usdt');
+    }
+  }
+
+  // ============================================
+  // ЗАГРУЗКА ДАННЫХ ИЗ КОНТРАКТА VIRUS MLM
+  // ============================================
+  async function loadContractData() {
+    if (!provider || !userAddress) return;
+
+    try {
+      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
+      const registered = await virusContract.isUserRegistered(userAddress);
+
+      if (!registered) {
+        document.getElementById('val-packet').textContent = '0 USDT';
+        document.getElementById('val-placement').textContent = '—';
+        document.getElementById('val-matrix-bal').textContent = '0.00 USDT';
+        document.getElementById('val-pool-bal').textContent = '0.00 USDT';
+        document.getElementById('val-total-earned').textContent = '0.00 USDT';
+        document.getElementById('val-referrer').textContent = '—';
+        return;
+      }
+
+      const userInfo = await virusContract.getUserInfo(userAddress);
+      // userInfo: currentPacket, referrer, placementId, matrixBalance, poolBalance, totalEarned
+
+      const packet = parseFloat(ethers.formatEther(userInfo[0]));
+      document.getElementById('val-packet').textContent = packet.toFixed(0) + ' USDT';
+
+      document.getElementById('val-placement').textContent = userInfo[2].toString();
+
+      document.getElementById('val-matrix-bal').textContent = parseFloat(ethers.formatEther(userInfo[3])).toFixed(2) + ' USDT';
+      document.getElementById('val-pool-bal').textContent = parseFloat(ethers.formatEther(userInfo[4])).toFixed(2) + ' USDT';
+      document.getElementById('val-total-earned').textContent = parseFloat(ethers.formatEther(userInfo[5])).toFixed(2) + ' USDT';
+
+      document.getElementById('val-referrer').textContent = userInfo[1] === '0x0000000000000000000000000000000000000000' 
+        ? '—' 
+        : userInfo[1].slice(0, 6) + '...' + userInfo[1].slice(-4);
+
+    } catch (e) {
+      console.error('Contract data error:', e);
+      document.getElementById('val-packet').textContent = '—';
+      document.getElementById('val-placement').textContent = '—';
+      document.getElementById('val-matrix-bal').textContent = '—';
+      document.getElementById('val-pool-bal').textContent = '—';
+      document.getElementById('val-total-earned').textContent = '—';
+      document.getElementById('val-referrer').textContent = '—';
+    }
+  }
+
+  // ============================================
+  // ЗАГРУЗКА ДАННЫХ ПУЛА
+  // ============================================
+  async function loadPoolData() {
+    if (!provider) return;
+
+    try {
+      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
+      const poolInfo = await virusContract.getPoolInfo();
+      // poolInfo: poolBalance, nextDistributionTime, vipCounts[5], poolShares[5]
+
+      document.getElementById('val-pool-total').textContent = parseFloat(ethers.formatEther(poolInfo[0])).toFixed(2) + ' USDT';
+
+      const nextTime = Number(poolInfo[1]) * 1000;
+      document.getElementById('val-next-dist').textContent = new Date(nextTime).toLocaleString();
+
+      const vipCounts = poolInfo[2].map(v => v.toString()).join(' / ');
+      document.getElementById('val-vip-counts').textContent = vipCounts;
+
+    } catch (e) {
+      console.error('Pool data error:', e);
+      document.getElementById('val-pool-total').textContent = '—';
+      document.getElementById('val-next-dist').textContent = '—';
+      document.getElementById('val-vip-counts').textContent = '—';
     }
   }
 
@@ -431,6 +581,8 @@
     userAddress = null;
     currentChainId = null;
     document.getElementById('wallet-info').style.display = 'none';
+    document.getElementById('contract-info').style.display = 'none';
+    document.getElementById('pool-info').style.display = 'none';
     document.getElementById('btn-disconnect').style.display = 'none';
     document.getElementById('btn-connect').style.display = 'block';
     showAlert('info', '🔌 ' + t('disconnected'));
@@ -445,13 +597,20 @@
         handleDisconnect();
       } else {
         userAddress = accounts[0];
-        if (provider) loadWalletData();
+        if (provider) {
+          loadWalletData();
+          loadContractData();
+        }
       }
     });
 
     window.ethereum.on('chainChanged', (chainId) => {
       currentChainId = chainId;
-      if (provider) loadWalletData();
+      if (provider) {
+        loadWalletData();
+        loadContractData();
+        loadPoolData();
+      }
     });
   }
 
