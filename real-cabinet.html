@@ -138,20 +138,13 @@
   .modal-title { font-weight: 700; font-size: 16px; }
   .modal-close { background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; line-height: 1; padding: 0; }
   .modal-body { flex: 1; padding: 20px; overflow-y: auto; background: #f9fafb; display: flex; flex-direction: column; gap: 14px; }
-  .modal-footer { padding: 12px 20px; background: #fff; border-top: 1px solid #e5e7eb; display: flex; gap: 8px; }
 
   .vip-step { background: #ffffff; border-radius: 8px; padding: 14px; border: 1px solid #e5e7eb; }
   .vip-step-title { font-size: 12px; font-weight: 700; color: #2196f3; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
   .vip-step-title.done { color: #059669; }
-  .vip-step-title.pending { color: #d97706; }
-  .vip-step-title.rejected { color: #dc2626; }
   .vip-step input, .vip-step select, .vip-step textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; outline: none; font-family: inherit; }
   .vip-step input:focus, .vip-step select:focus, .vip-step textarea:focus { border-color: #2196f3; }
-  .vip-step textarea { min-height: 60px; resize: vertical; }
   .vip-status { font-size: 13px; color: #6b7280; padding: 8px 0; }
-
-  .form-group { margin-bottom: 12px; }
-  .form-group label { display: block; font-size: 12px; color: #6b7280; font-weight: 600; margin-bottom: 6px; }
 </style>
 </head>
 <body>
@@ -255,9 +248,9 @@
       </div>
     </div>
 
-    <!-- БЛОК 6: Пул -->
+    <!-- БЛОК 6: Баланс пула -->
     <div class="pool-card">
-      <div class="pool-title">Бонус активности</div>
+      <div class="pool-title">БАЛАНС ПУЛА</div>
       <div class="pool-amount" id="pool-amount">$0.00</div>
       <div class="pool-sub">До следующего распределения</div>
       <div class="timer">
@@ -304,7 +297,15 @@
       </div>
     </div>
 
-    <!-- БЛОК 10: Продукты -->
+    <!-- БЛОК 10: ИИ-рекрутер (был 11, теперь 10) -->
+    <div class="card">
+      <div class="card-title">ИИ-рекрутер</div>
+      <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;">
+        🤖 Скоро — интеллектуальный помощник для рекрутинга
+      </div>
+    </div>
+
+    <!-- БЛОК 11: Продукты и сервисы (был 10, теперь 11) -->
     <div class="card">
       <div class="card-title">Продукты и сервисы</div>
       <div class="products-grid">
@@ -314,14 +315,6 @@
         <div class="product-card"><div class="product-icon">💰</div><div class="product-name">Обменник</div></div>
         <div class="product-card"><div class="product-icon">📊</div><div class="product-name">Налоги</div></div>
         <div class="product-card"><div class="product-icon">🎯</div><div class="product-name">Развлечения</div></div>
-      </div>
-    </div>
-
-    <!-- БЛОК 11: ИИ-рекрутер -->
-    <div class="card">
-      <div class="card-title">ИИ-рекрутер</div>
-      <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;">
-        🤖 Скоро — интеллектуальный помощник для рекрутинга
       </div>
     </div>
 
@@ -380,61 +373,6 @@
   let userInfo = null;
   let poolInfo = null;
   let vipInfo = null;
-
-  const i18n = {
-    ru: {
-      vip_status: "СТАТУС VIP",
-      lifetime: "Бессрочно",
-      user_id: "User ID",
-      vip_on_level: "VIP на уровне",
-      my_sponsor: "Мой спонсор",
-      write: "Написать",
-      activate_packet: "АКТИВИРОВАТЬ ПАКЕТ",
-      request_vip: "ЗАПРОСИТЬ VIP",
-      team_fill: "Заполнение команды",
-      pool_title: "Бонус активности",
-      pool_sub: "До следующего распределения",
-      balance_referral: "Всего за приглашения",
-      balance_matrix: "Бонус за команду",
-      balance_pool: "Бонус активности",
-      withdraw_total: "Доступно к выводу:",
-      withdraw: "ВЫВОД",
-      to_wallet: "На кошелёк",
-      to_market: "В маркетинг",
-      products: "Продукты и сервисы",
-      ai_recruiter: "ИИ-рекрутер",
-      ai_soon: "🤖 Скоро — интеллектуальный помощник для рекрутинга",
-      no_sponsor: "Корень системы",
-      already_all_packets: "Все пакеты активированы"
-    },
-    en: {
-      vip_status: "VIP STATUS",
-      lifetime: "Lifetime",
-      user_id: "User ID",
-      vip_on_level: "VIP members",
-      my_sponsor: "My sponsor",
-      write: "Write",
-      activate_packet: "ACTIVATE PACKET",
-      request_vip: "REQUEST VIP",
-      team_fill: "Team filling",
-      pool_title: "Activity Bonus",
-      pool_sub: "Until next distribution",
-      balance_referral: "Total for referrals",
-      balance_matrix: "Team Bonus",
-      balance_pool: "Activity Bonus",
-      withdraw_total: "Available to withdraw:",
-      withdraw: "WITHDRAW",
-      to_wallet: "To wallet",
-      to_market: "To marketing",
-      products: "Products and services",
-      ai_recruiter: "AI recruiter",
-      ai_soon: "🤖 Soon — intelligent recruiting assistant",
-      no_sponsor: "System root",
-      already_all_packets: "All packets activated"
-    }
-  };
-
-  function t(key) { return i18n[currentLang][key] || key; }
 
   function setLang(lang) {
     currentLang = lang;
@@ -546,7 +484,7 @@
     const isActive = vipInfo[4];
     const daysLeft = Number(vipInfo[3]);
 
-    document.getElementById('vip-level-text').textContent = t('vip_status');
+    document.getElementById('vip-level-text').textContent = 'СТАТУС VIP';
 
     let starsHtml = '';
     for (let i = 1; i <= 5; i++) {
@@ -579,7 +517,7 @@
   function renderSponsor() {
     const referrer = userInfo[1];
     if (referrer === '0x0000000000000000000000000000000000000000') {
-      document.getElementById('sponsor-address').textContent = t('no_sponsor');
+      document.getElementById('sponsor-address').textContent = 'Корень системы';
     } else {
       document.getElementById('sponsor-address').textContent = shorten(referrer);
     }
@@ -595,10 +533,10 @@
 
     if (currentPacket >= 250) {
       document.getElementById('btn-activate').disabled = true;
-      document.getElementById('btn-activate').textContent = t('already_all_packets');
+      document.getElementById('btn-activate').textContent = 'Все пакеты активированы';
     } else {
       document.getElementById('btn-activate').disabled = false;
-      document.getElementById('btn-activate').textContent = t('activate_packet');
+      document.getElementById('btn-activate').textContent = 'АКТИВИРОВАТЬ ПАКЕТ';
     }
   }
 
@@ -614,12 +552,26 @@
         const max = 8190;
         const percent = Math.min(100, Math.round((total / max) * 10000) / 100);
 
-        document.getElementById('matrix-fill').style.width = Math.min(100, percent) + '%';
+        // Минимум 1% для видимости
+        const widthPercent = (percent > 0 && percent < 1) ? 1 : Math.min(100, percent);
+
+        document.getElementById('matrix-fill').style.width = widthPercent + '%';
         document.getElementById('matrix-places').textContent = total + ' / ' + max + ' мест';
         document.getElementById('matrix-percent').textContent = percent + '%';
+      } else {
+        // Нет узла в матрице — показываем 1%, если пакет > 0 (пользователь "в системе")
+        const currentPacket = Number(userInfo[0]) / 1e18;
+        if (currentPacket > 0) {
+          document.getElementById('matrix-fill').style.width = '1%';
+        }
       }
     } catch (e) {
       console.warn('Matrix render error:', e);
+      // При ошибке всё равно показываем 1% (чтобы прогресс был виден)
+      const currentPacket = Number(userInfo[0]) / 1e18;
+      if (currentPacket > 0) {
+        document.getElementById('matrix-fill').style.width = '1%';
+      }
     }
   }
 
@@ -684,7 +636,7 @@
     else if (currentPacket === 150) nextPacket = 4;
     else if (currentPacket === 200) nextPacket = 5;
     else {
-      showAlert('error', t('already_all_packets'));
+      showAlert('error', 'Все пакеты активированы');
       return;
     }
 
@@ -736,7 +688,7 @@
       showAlert('error', 'Ошибка: ' + msg);
     } finally {
       btn.disabled = false;
-      btn.textContent = t('withdraw');
+      btn.textContent = 'ВЫВОД';
     }
   }
 
