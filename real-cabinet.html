@@ -86,6 +86,11 @@
   .info-value.green { color: #059669; }
   .info-value.red { color: #dc2626; }
 
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 12px; color: #6b7280; font-weight: 600; margin-bottom: 6px; }
+  .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; outline: none; font-family: monospace; }
+  .form-group input:focus { border-color: #2196f3; }
+
   .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; line-height: 1.5; }
   .alert.error { background: #7f1d1d; color: #fecaca; }
   .alert.success { background: #14532d; color: #bbf7d0; }
@@ -211,7 +216,22 @@
       </div>
     </div>
 
-    <!-- БЛОК 4: Пул -->
+    <!-- БЛОК 4: Регистрация -->
+    <div class="card" id="register-card" style="display:none;">
+      <div class="card-title" id="lbl-register-title">Регистрация в контракте</div>
+      <div class="form-group">
+        <label id="lbl-referrer-input">Адрес спонсора (0x...)</label>
+        <input type="text" id="input-referrer" placeholder="0x..." value="0x1362Da98D3302457f947A986082140ed721DA330">
+      </div>
+      <button class="btn btn-blue" id="btn-register" onclick="handleRegister()">
+        ЗАРЕГИСТРИРОВАТЬСЯ
+      </button>
+      <div class="hint" id="lbl-register-hint" style="margin-top: 8px;">
+        Транзакция только за газ. Спонсор по умолчанию — ROOT Testnet.
+      </div>
+    </div>
+
+    <!-- БЛОК 5: Пул -->
     <div class="card" id="pool-info" style="display:none;">
       <div class="card-title" id="lbl-pool-info">Пул VIRUS MLM</div>
       <div class="info-row">
@@ -248,7 +268,7 @@
     blockExplorerUrls: ['https://testnet.bscscan.com/']
   };
 
-  // USDT в BSC Testnet (твой контракт)
+  // USDT в BSC Testnet
   const USDT_TESTNET = '0x3a0C8fF4D3aB0Eaa69dA925C026fB2C2172eB517';
   const USDT_ABI = [
     'function balanceOf(address owner) view returns (uint256)',
@@ -258,10 +278,14 @@
 
   // VIRUS MLM Testnet контракт
   const VIRUS_MLM_TESTNET = '0xDCf607BaCF0e34e7fF141Eb94b9D2B9A54727a61';
+
+  // ABI с write-функциями (register)
   const VIRUS_MLM_ABI = [
     'function getUserInfo(address _user) view returns (uint256 currentPacket, address referrer, uint256 placementId, uint256 matrixBalance, uint256 poolBalance, uint256 totalEarned)',
     'function getPoolInfo() view returns (uint256 poolBalance, uint256 nextDistributionTime, uint256[5] vipCounts, uint256[5] poolShares)',
-    'function isUserRegistered(address _user) view returns (bool)'
+    'function isUserRegistered(address _user) view returns (bool)',
+    'function register(address _referrer)',
+    'function activatePacket(uint256 _packetIndex)'
   ];
 
   // ============================================
@@ -295,13 +319,21 @@
       pool_bal: "Бонус активности",
       total_earned: "Всего заработано",
       referrer: "Спонсор",
+      register_title: "Регистрация в контракте",
+      referrer_input: "Адрес спонсора (0x...)",
+      register_btn: "ЗАРЕГИСТРИРОВАТЬСЯ",
+      register_hint: "Транзакция только за газ. Спонсор по умолчанию — ROOT Testnet.",
       pool_info: "Пул VIRUS MLM",
       pool_total: "Баланс пула",
       next_dist: "Следующее распределение",
       vip_counts: "VIP по уровням (1-5)",
       disconnected: "Кошелёк отключён",
       no_usdt: "USDT-контракт недоступен",
-      not_registered: "Кошелёк не зарегистрирован в контракте",
+      already_registered: "✅ Кошелёк уже зарегистрирован",
+      register_sending: "Отправка транзакции...",
+      register_confirm: "Подтвердите транзакцию в MetaMask",
+      register_success: "✅ Регистрация успешна!",
+      register_error: "❌ Ошибка регистрации: ",
       hint: "💡 Тестовые tUSDT можно получить в <a href='https://testnet.binance.org/faucet-smart' target='_blank'>BSC Testnet Faucet</a>.<br>Сеть: <b>BSC Testnet (Chain ID 97)</b>"
     },
     en: {
@@ -322,13 +354,21 @@
       pool_bal: "Activity bonus",
       total_earned: "Total earned",
       referrer: "Sponsor",
+      register_title: "Registration in contract",
+      referrer_input: "Sponsor address (0x...)",
+      register_btn: "REGISTER",
+      register_hint: "Gas-only transaction. Default sponsor — Testnet ROOT.",
       pool_info: "VIRUS MLM pool",
       pool_total: "Pool balance",
       next_dist: "Next distribution",
       vip_counts: "VIP by level (1-5)",
       disconnected: "Wallet disconnected",
       no_usdt: "USDT contract unavailable",
-      not_registered: "Wallet not registered in contract",
+      already_registered: "✅ Wallet already registered",
+      register_sending: "Sending transaction...",
+      register_confirm: "Confirm transaction in MetaMask",
+      register_success: "✅ Registration successful!",
+      register_error: "❌ Registration error: ",
       hint: "💡 Test tUSDT can be obtained from <a href='https://testnet.binance.org/faucet-smart' target='_blank'>BSC Testnet Faucet</a>.<br>Network: <b>BSC Testnet (Chain ID 97)</b>"
     }
   };
@@ -353,6 +393,10 @@
     document.getElementById('lbl-pool-bal').textContent = t('pool_bal');
     document.getElementById('lbl-total-earned').textContent = t('total_earned');
     document.getElementById('lbl-referrer').textContent = t('referrer');
+    document.getElementById('lbl-register-title').textContent = t('register_title');
+    document.getElementById('lbl-referrer-input').textContent = t('referrer_input');
+    document.getElementById('btn-register').textContent = t('register_btn');
+    document.getElementById('lbl-register-hint').textContent = t('register_hint');
     document.getElementById('lbl-pool-info').textContent = t('pool_info');
     document.getElementById('lbl-pool-total').textContent = t('pool_total');
     document.getElementById('lbl-next-dist').textContent = t('next_dist');
@@ -386,7 +430,7 @@
   function showAlert(type, message) {
     const box = document.getElementById('alert-box');
     box.innerHTML = `<div class="alert ${type}">${message}</div>`;
-    setTimeout(() => { box.innerHTML = ''; }, 6000);
+    setTimeout(() => { box.innerHTML = ''; }, 8000);
   }
 
   // ============================================
@@ -515,17 +559,17 @@
         document.getElementById('val-pool-bal').textContent = '0.00 USDT';
         document.getElementById('val-total-earned').textContent = '0.00 USDT';
         document.getElementById('val-referrer').textContent = '—';
+        document.getElementById('register-card').style.display = 'block';
         return;
       }
 
+      document.getElementById('register-card').style.display = 'none';
+
       const userInfo = await virusContract.getUserInfo(userAddress);
-      // userInfo: currentPacket, referrer, placementId, matrixBalance, poolBalance, totalEarned
 
       const packet = parseFloat(ethers.formatEther(userInfo[0]));
       document.getElementById('val-packet').textContent = packet.toFixed(0) + ' USDT';
-
       document.getElementById('val-placement').textContent = userInfo[2].toString();
-
       document.getElementById('val-matrix-bal').textContent = parseFloat(ethers.formatEther(userInfo[3])).toFixed(2) + ' USDT';
       document.getElementById('val-pool-bal').textContent = parseFloat(ethers.formatEther(userInfo[4])).toFixed(2) + ' USDT';
       document.getElementById('val-total-earned').textContent = parseFloat(ethers.formatEther(userInfo[5])).toFixed(2) + ' USDT';
@@ -536,12 +580,6 @@
 
     } catch (e) {
       console.error('Contract data error:', e);
-      document.getElementById('val-packet').textContent = '—';
-      document.getElementById('val-placement').textContent = '—';
-      document.getElementById('val-matrix-bal').textContent = '—';
-      document.getElementById('val-pool-bal').textContent = '—';
-      document.getElementById('val-total-earned').textContent = '—';
-      document.getElementById('val-referrer').textContent = '—';
     }
   }
 
@@ -554,7 +592,6 @@
     try {
       const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, provider);
       const poolInfo = await virusContract.getPoolInfo();
-      // poolInfo: poolBalance, nextDistributionTime, vipCounts[5], poolShares[5]
 
       document.getElementById('val-pool-total').textContent = parseFloat(ethers.formatEther(poolInfo[0])).toFixed(2) + ' USDT';
 
@@ -573,6 +610,60 @@
   }
 
   // ============================================
+  // ТРАНЗАКЦИЯ: REGISTER
+  // ============================================
+  async function handleRegister() {
+    if (!signer || !userAddress) {
+      showAlert('error', '❌ Кошелёк не подключён');
+      return;
+    }
+
+    const referrerInput = document.getElementById('input-referrer');
+    const referrer = referrerInput.value.trim();
+
+    // Валидация адреса
+    if (!ethers.isAddress(referrer)) {
+      showAlert('error', '❌ Некорректный адрес спонсора');
+      return;
+    }
+
+    const btn = document.getElementById('btn-register');
+    btn.disabled = true;
+    btn.textContent = t('register_sending');
+
+    try {
+      const virusContract = new ethers.Contract(VIRUS_MLM_TESTNET, VIRUS_MLM_ABI, signer);
+
+      showAlert('info', '🔐 ' + t('register_confirm'));
+
+      const tx = await virusContract.register(referrer);
+
+      showAlert('info', '⏳ Транзакция отправлена. Ожидание подтверждения...');
+
+      await tx.wait();
+
+      showAlert('success', t('register_success') + ' TX: ' + tx.hash.slice(0, 10) + '...');
+
+      // Перезагружаем данные
+      await loadContractData();
+      await loadPoolData();
+
+      btn.textContent = t('register_btn');
+      btn.disabled = false;
+
+    } catch (error) {
+      console.error('Register error:', error);
+      let errMsg = error.message || 'Unknown error';
+      if (error.reason) errMsg = error.reason;
+      if (errMsg.includes('Already registered')) errMsg = 'Кошелёк уже зарегистрирован';
+      if (errMsg.includes('Invalid referrer')) errMsg = 'Неверный адрес спонсора (не зарегистрирован в контракте)';
+      showAlert('error', t('register_error') + errMsg);
+      btn.textContent = t('register_btn');
+      btn.disabled = false;
+    }
+  }
+
+  // ============================================
   // ОТКЛЮЧЕНИЕ
   // ============================================
   function handleDisconnect() {
@@ -582,6 +673,7 @@
     currentChainId = null;
     document.getElementById('wallet-info').style.display = 'none';
     document.getElementById('contract-info').style.display = 'none';
+    document.getElementById('register-card').style.display = 'none';
     document.getElementById('pool-info').style.display = 'none';
     document.getElementById('btn-disconnect').style.display = 'none';
     document.getElementById('btn-connect').style.display = 'block';
