@@ -565,14 +565,18 @@
     document.getElementById('pool-amount').textContent = formatUSDT(poolInfo[0]);
   }
 
-  function renderBalances() {
-    const totalEarned = userInfo[5];
-    const matrixBalance = userInfo[3];
-    const poolBalance = userInfo[4];
+    function renderBalances() {
+    const totalEarned = BigInt(userInfo[5]);
+    const matrixBalance = BigInt(userInfo[3]);
+    const poolBalance = BigInt(userInfo[4]);
 
-    document.getElementById('bal-referral').textContent = formatUSDT(totalEarned);
-    document.getElementById('bal-matrix').textContent = formatUSDT(matrixBalance);
-    document.getElementById('bal-pool').textContent = formatUSDT(poolBalance);
+    // Вычисляем чистые реферальные: (Всего заработано) - (Текущий матричный баланс + Баланс пула)
+    let refBalance = totalEarned - (matrixBalance + poolBalance);
+    if (refBalance < 0n) refBalance = 0n; // Защита от отрицательных значений
+
+    document.getElementById('bal-referral').textContent = formatUSDT(refBalance.toString());
+    document.getElementById('bal-matrix').textContent = formatUSDT(matrixBalance.toString());
+    document.getElementById('bal-pool').textContent = formatUSDT(poolBalance.toString());
   }
 
   function renderWithdraw() {
