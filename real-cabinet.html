@@ -73,9 +73,6 @@
   .matrix-label { display: flex; justify-content: space-between; font-size: 11px; color: #6b7280; margin-top: 8px; }
   .matrix-label .gold { color: #ffc107; font-weight: 700; }
 
-  .ref-link { background: #ffffff; border: 2px solid #2196f3; border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #2196f3; font-family: monospace; word-break: break-all; }
-  .ref-link button { background: #2196f3; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; flex-shrink: 0; font-size: 14px; }
-
   .balance-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
   .balance-row.thick { border-bottom: 3px solid #e5e7eb; padding-bottom: 16px; margin-bottom: 4px; }
   .balance-row:last-child { border-bottom: none; }
@@ -183,7 +180,7 @@
 
   <div id="loading" class="loading">
     <div class="spinner"></div>
-    <div style="margin-top:12px;">Загрузка...</div>
+    <div style="margin-top:12px;">Подключение к сети и загрузка данных...</div>
   </div>
 
   <div id="content" style="display:none;">
@@ -297,7 +294,7 @@
       </div>
     </div>
 
-    <!-- БЛОК 10: ИИ-рекрутер (был 11, теперь 10) -->
+    <!-- БЛОК 10: ИИ-рекрутер -->
     <div class="card">
       <div class="card-title">ИИ-рекрутер</div>
       <div style="text-align:center;padding:20px 0;color:#9ca3af;font-size:13px;">
@@ -305,16 +302,14 @@
       </div>
     </div>
 
-    <!-- БЛОК 11: Продукты и сервисы (был 10, теперь 11) -->
+    <!-- БЛОК 11: Продукты -->
     <div class="card">
       <div class="card-title">Продукты и сервисы</div>
       <div class="products-grid">
         <div class="product-card"><div class="product-icon">🔍</div><div class="product-name">Аудит кошелька</div></div>
-        <div class="product-card"><div class="product-icon">🤖</div><div class="product-name">ИИ-рекрутер</div></div>
         <div class="product-card"><div class="product-icon">🎮</div><div class="product-name">Игры</div></div>
         <div class="product-card"><div class="product-icon">💰</div><div class="product-name">Обменник</div></div>
         <div class="product-card"><div class="product-icon">📊</div><div class="product-name">Налоги</div></div>
-        <div class="product-card"><div class="product-icon">🎯</div><div class="product-name">Развлечения</div></div>
       </div>
     </div>
 
@@ -352,6 +347,7 @@
     'function decimals() view returns (uint8)'
   ];
 
+  // ВАЖНО: Адрес контракта должен быть актуальным!
   const VIRUS_MLM_TESTNET = '0x8191Fa04b1B117f56752C8C40b159727363e38aa';
 
   const VIRUS_MLM_ABI = [
@@ -406,10 +402,11 @@
     if (!value) return '$0.00';
     try {
       const big = BigInt(value);
-      const whole = big / 1000000n;
-      const frac = big % 1000000n;
-      const fracStr = frac.toString().padStart(6, '0').slice(0, 2);
-      return '$' + whole.toString() + '.' + fracStr;
+      const whole = big / 1000000n; // Делим на 1e6, если контракт отдает в микро USDT, но тут 1e18 в контракте! 
+      // ВНИМАНИЕ: В твоем контракте сумма в wei (1e18). Но мы делим на 1e6 в старой версии. 
+      // Судя по скрину $1,158.71 (там было 1158*1e18). Функция форматирования должна быть:
+      const eth = Number(value) / 1e18;
+      return '$' + eth.toFixed(2);
     } catch { return '$0.00'; }
   }
 
@@ -551,27 +548,16 @@
         const total = leftCount + rightCount;
         const max = 8190;
         const percent = Math.min(100, Math.round((total / max) * 10000) / 100);
-
-        // Минимум 1% для видимости
         const widthPercent = (percent > 0 && percent < 1) ? 1 : Math.min(100, percent);
 
         document.getElementById('matrix-fill').style.width = widthPercent + '%';
         document.getElementById('matrix-places').textContent = total + ' / ' + max + ' мест';
         document.getElementById('matrix-percent').textContent = percent + '%';
       } else {
-        // Нет узла в матрице — показываем 1%, если пакет > 0 (пользователь "в системе")
-        const currentPacket = Number(userInfo[0]) / 1e18;
-        if (currentPacket > 0) {
-          document.getElementById('matrix-fill').style.width = '1%';
-        }
+         document.getElementById('matrix-fill').style.width = '1%';
       }
     } catch (e) {
       console.warn('Matrix render error:', e);
-      // При ошибке всё равно показываем 1% (чтобы прогресс был виден)
-      const currentPacket = Number(userInfo[0]) / 1e18;
-      if (currentPacket > 0) {
-        document.getElementById('matrix-fill').style.width = '1%';
-      }
     }
   }
 
@@ -595,7 +581,7 @@
     const total = matrixBalance + poolBalance;
 
     document.getElementById('withdraw-total').textContent = formatUSDT(total.toString());
-    document.getElementById('btn-withdraw').disabled = total < 10000000n;
+    document.getElementById('btn-withdraw').disabled = total < 10000000000000000000n; // 10 USDT = 10 * 1e18
 
     const currentPacket = Number(userInfo[0]) / 1e18;
     const map = { 50: 50, 100: 60, 150: 70, 200: 80, 250: 90 };
@@ -688,7 +674,7 @@
       showAlert('error', 'Ошибка: ' + msg);
     } finally {
       btn.disabled = false;
-      btn.textContent = 'ВЫВОД';
+      document.getElementById('btn-withdraw').textContent = 'ВЫВОД';
     }
   }
 
