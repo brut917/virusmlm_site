@@ -114,7 +114,7 @@
   .sponsor-info { display: flex; flex-direction: column; gap: 4px; }
   .sponsor-virid { font-size: 15px; font-weight: 700; color: #ffc107; font-family: monospace; }
 
-  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
   .product-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px 8px; text-align: center; }
   .product-icon { font-size: 24px; margin-bottom: 6px; }
   .product-name { font-size: 11px; color: #4b5563; font-weight: 600; }
@@ -180,7 +180,7 @@
 
   <div id="loading" class="loading">
     <div class="spinner"></div>
-    <div style="margin-top:12px;">Подключение к сети и загрузка данных...</div>
+    <div style="margin-top:12px;">Загрузка данных...</div>
   </div>
 
   <div id="content" style="display:none;">
@@ -302,7 +302,7 @@
       </div>
     </div>
 
-    <!-- БЛОК 11: Продукты -->
+    <!-- БЛОК 11: Продукты (2х2) -->
     <div class="card">
       <div class="card-title">Продукты и сервисы</div>
       <div class="products-grid">
@@ -347,7 +347,6 @@
     'function decimals() view returns (uint8)'
   ];
 
-  // ВАЖНО: Адрес контракта должен быть актуальным!
   const VIRUS_MLM_TESTNET = '0x9aE8cb4c0915c9d44B004707A79EF79D7B2aB065';
 
   const VIRUS_MLM_ABI = [
@@ -401,10 +400,6 @@
   function formatUSDT(value) {
     if (!value) return '$0.00';
     try {
-      const big = BigInt(value);
-      const whole = big / 1000000n; // Делим на 1e6, если контракт отдает в микро USDT, но тут 1e18 в контракте! 
-      // ВНИМАНИЕ: В твоем контракте сумма в wei (1e18). Но мы делим на 1e6 в старой версии. 
-      // Судя по скрину $1,158.71 (там было 1158*1e18). Функция форматирования должна быть:
       const eth = Number(value) / 1e18;
       return '$' + eth.toFixed(2);
     } catch { return '$0.00'; }
@@ -565,14 +560,14 @@
     document.getElementById('pool-amount').textContent = formatUSDT(poolInfo[0]);
   }
 
-    function renderBalances() {
+  function renderBalances() {
     const totalEarned = BigInt(userInfo[5]);
     const matrixBalance = BigInt(userInfo[3]);
     const poolBalance = BigInt(userInfo[4]);
 
     // Вычисляем чистые реферальные: (Всего заработано) - (Текущий матричный баланс + Баланс пула)
     let refBalance = totalEarned - (matrixBalance + poolBalance);
-    if (refBalance < 0n) refBalance = 0n; // Защита от отрицательных значений
+    if (refBalance < 0n) refBalance = 0n;
 
     document.getElementById('bal-referral').textContent = formatUSDT(refBalance.toString());
     document.getElementById('bal-matrix').textContent = formatUSDT(matrixBalance.toString());
