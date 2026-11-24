@@ -795,7 +795,7 @@
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ starLevel, proofUrl })
+        body: JSON.stringify({ walletAddress: userAddress, starLevel, proofUrl })
       });
       const data = await res.json();
       if (data.success) {
