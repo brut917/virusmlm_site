@@ -142,6 +142,27 @@
   .vip-step input, .vip-step select, .vip-step textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; outline: none; font-family: inherit; }
   .vip-step input:focus, .vip-step select:focus, .vip-step textarea:focus { border-color: #2196f3; }
   .vip-status { font-size: 13px; color: #6b7280; padding: 8px 0; }
+
+  /* Стили для чата (из cabinet.html) */
+  .modal-input-row { display: flex; gap: 8px; flex-wrap: wrap; box-sizing: border-box; }
+  .modal-input { flex: 1 1 180px; min-width: 0; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 20px; font-size: 14px; outline: none; box-sizing: border-box; }
+  .modal-input:focus { border-color: #2196f3; }
+  .modal-send { flex: 0 0 auto; background: #2196f3; color: #fff; border: none; border-radius: 20px; padding: 10px 20px; font-weight: 700; cursor: pointer; font-size: 14px; box-sizing: border-box; }
+  .modal-send:hover { background: #1976d2; }
+  .modal-broadcast { background: #4b5563; color: #fff; border: none; border-radius: 8px; padding: 10px; font-weight: 700; cursor: pointer; font-size: 13px; text-transform: uppercase; }
+  .modal-broadcast:hover { background: #374151; }
+  .msg-bubble { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+  .msg-bubble.my { align-self: flex-end; background: #2196f3; color: #fff; border-bottom-right-radius: 2px; }
+  .msg-bubble.their { align-self: flex-start; background: #ffffff; color: #1a1a1a; border-bottom-left-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+  .msg-bubble.admin { align-self: flex-start; background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; border-radius: 4px; }
+  .msg-time { font-size: 10px; opacity: 0.7; margin-top: 4px; display: block; }
+  .ref-item { padding: 12px 16px; background: #ffffff; border-radius: 8px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .ref-item:hover { border-color: #2196f3; background: #f0f7ff; }
+  .ref-virid { font-weight: 700; color: #2196f3; font-family: monospace; }
+  .ref-packet { font-size: 12px; color: #6b7280; }
+  .ref-unread-dot { width: 10px; height: 10px; background: #ff1744; border-radius: 50%; box-shadow: 0 0 5px rgba(255,23,68,0.5); }
+  .welcome-msg { text-align: center; color: #6b7280; font-size: 13px; padding: 20px; line-height: 1.5; background: #f3f4f6; border-radius: 8px; margin-bottom: 10px; }
+  .modal-footer { padding: 12px 16px; background: #ffffff; border-top: 1px solid #e5e7eb; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; }
 </style>
 </head>
 <body>
@@ -208,7 +229,7 @@
         <div class="sponsor-info">
           <div class="sponsor-virid" id="sponsor-address">—</div>
         </div>
-        <button class="btn btn-blue" style="width:auto;padding:8px 14px;font-size:12px;" onclick="openChat()">Написать</button>
+        <button class="btn btn-blue" style="width:auto;padding:8px 14px;font-size:12px;" onclick="openReferralList()">Написать</button>
       </div>
     </div>
 
@@ -319,15 +340,34 @@
 
 </div>
 
-<!-- МОДАЛЬНОЕ ОКНО: VIP -->
-<div class="modal-overlay" id="vip-modal">
+<!-- МОДАЛЬНОЕ ОКНО: СПИСОК ЧАТОВ -->
+<div class="modal-overlay" id="ref-list-modal">
   <div class="modal-content">
     <div class="modal-header">
-      <div class="modal-title" id="vip-modal-title">Запрос VIP</div>
-      <button class="modal-close" onclick="closeVipModal()">×</button>
+      <div class="modal-title">Выберите чат</div>
+      <button class="modal-close" onclick="closeRefList()">×</button>
     </div>
-    <div class="modal-body" id="vip-modal-body">
-      <div class="loading"><span class="spinner"></span> Загрузка...</div>
+    <div class="modal-body" id="ref-list-body">
+      <!-- Список чатов будет здесь -->
+    </div>
+  </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО: ЧАТ -->
+<div class="modal-overlay" id="chat-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="chat-title">Чат</div>
+      <button class="modal-close" onclick="closeChatModal()">×</button>
+    </div>
+    <div class="modal-body" id="chat-body">
+      <!-- Сообщения будут здесь -->
+    </div>
+    <div class="modal-footer">
+      <div class="modal-input-row" id="chat-input-row">
+        <input type="text" class="modal-input" id="chat-input" placeholder="Написать сообщение..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+        <button class="modal-send" onclick="sendChatMessage()">➤</button>
+      </div>
     </div>
   </div>
 </div>
@@ -368,6 +408,8 @@
   let userInfo = null;
   let poolInfo = null;
   let vipInfo = null;
+  let currentPartnerId = null;
+  let isAdminChat = false;
 
   function setLang(lang) {
     currentLang = lang;
@@ -459,6 +501,7 @@
 
     renderAll();
     startPoolTimer();
+    checkAdminUnread(); // Проверка непрочитанных от админа
   }
 
   function renderAll() {
@@ -565,7 +608,6 @@
     const matrixBalance = BigInt(userInfo[3]);
     const poolBalance = BigInt(userInfo[4]);
 
-    // Вычисляем чистые реферальные: (Всего заработано) - (Текущий матричный баланс + Баланс пула)
     let refBalance = totalEarned - (matrixBalance + poolBalance);
     if (refBalance < 0n) refBalance = 0n;
 
@@ -580,7 +622,7 @@
     const total = matrixBalance + poolBalance;
 
     document.getElementById('withdraw-total').textContent = formatUSDT(total.toString());
-    document.getElementById('btn-withdraw').disabled = total < 10000000000000000000n; // 10 USDT = 10 * 1e18
+    document.getElementById('btn-withdraw').disabled = total < 10000000000000000000n;
 
     const currentPacket = Number(userInfo[0]) / 1e18;
     const map = { 50: 50, 100: 60, 150: 70, 200: 80, 250: 90 };
@@ -809,8 +851,271 @@
     }
   }
 
-  function openChat() {
-    alert('Чат будет добавлен позже');
+  // ==========================================
+  // ЧАТ (СПИСОК И МОДАЛЬНОЕ ОКНО)
+  // ==========================================
+  
+  function openReferralList() {
+    document.getElementById('ref-list-modal').classList.add('active');
+    loadChatList();
+  }
+
+  function closeRefList() {
+    document.getElementById('ref-list-modal').classList.remove('active');
+  }
+
+  async function loadChatList() {
+    const body = document.getElementById('ref-list-body');
+    body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Загрузка...</div>';
+
+    try {
+      const token = localStorage.getItem('virusmlm_token');
+      // Получаем данные о спонсоре и рефералах
+      const meRes = await fetch('https://api.virusmlm.com/api/v1/user/me', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const meData = await meRes.json();
+      const me = meData.data;
+
+      const refsRes = await fetch('https://api.virusmlm.com/api/v1/user/referrals', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const refsData = await refsRes.json();
+      const refs = refsData.data.items;
+
+      // Проверяем непрочитанные от админа
+      const adminUnreadRes = await fetch('https://api.virusmlm.com/api/v1/messages/admin/unread-count', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const adminUnreadData = await adminUnreadRes.json();
+      const adminUnread = adminUnreadData.data?.unreadCount || 0;
+
+      let html = `<div class="welcome-msg">Здесь вы можете писать своим партнёрам по команде и спонсору.</div>`;
+
+      // --- Блок Администрации ---
+      html += `<div class="ref-item" id="ref-item-admin" onclick="openAdminChatModal()">
+        <div>
+          <div class="ref-virid" style="color: #b28704;">Администрация</div>
+          <div class="ref-packet">Только для чтения</div>
+        </div>
+        <div style="display:flex; align-items:center;">
+          <div id="admin-unread-dot" class="ref-unread-dot" style="margin-right: 10px; display:${adminUnread > 0 ? 'block' : 'none'};"></div>
+          <div style="color:#2196f3;">→</div>
+        </div>
+      </div>`;
+
+      // --- Спонсор ---
+      if (me.referrerVirId) {
+        html += `<div class="ref-item" id="ref-item-sponsor" onclick="openChatModal(${me.referrerId}, '${me.referrerVirId}')">
+          <div>
+            <div class="ref-virid">${me.referrerVirId}</div>
+            <div class="ref-packet">Спонсор</div>
+          </div>
+          <div style="display:flex; align-items:center;">
+            <div style="color:#2196f3;">→</div>
+          </div>
+        </div>`;
+      }
+
+      // --- Рефералы ---
+      refs.forEach(ref => {
+        html += `<div class="ref-item" id="ref-item-${ref.userId}" onclick="openChatModal(${ref.userId}, '${ref.virId}')">
+          <div>
+            <div class="ref-virid">${ref.virId}</div>
+            <div class="ref-packet">Реферал (пакет ${ref.currentPacket})</div>
+          </div>
+          <div style="display:flex; align-items:center;">
+            <div style="color:#2196f3;">→</div>
+          </div>
+        </div>`;
+      });
+
+      body.innerHTML = html;
+
+    } catch (e) {
+      body.innerHTML = '<div style="text-align:center;color:red;padding:20px;">Ошибка загрузки списка</div>';
+    }
+  }
+
+  // Открытие чата с участником
+  function openChatModal(partnerId, partnerName) {
+    if (!partnerId) return alert('Нет спонсора');
+    
+    isAdminChat = false;
+    currentPartnerId = partnerId;
+    
+    document.getElementById('ref-list-modal').classList.remove('active');
+    document.getElementById('chat-title').textContent = 'Чат с ' + partnerName;
+    document.getElementById('chat-modal').classList.add('active');
+    document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Загрузка...</div>';
+    
+    // Показываем поле ввода
+    document.getElementById('chat-input-row').style.display = 'flex';
+    
+    loadChatHistory(partnerId);
+  }
+
+  // Открытие чата с Администрацией (только чтение)
+  async function openAdminChatModal() {
+    isAdminChat = true;
+    currentPartnerId = 'admin';
+    
+    document.getElementById('ref-list-modal').classList.remove('active');
+    document.getElementById('chat-title').textContent = 'Администрация';
+    document.getElementById('chat-modal').classList.add('active');
+    document.getElementById('chat-body').innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Загрузка...</div>';
+    
+    // Скрываем поле ввода
+    document.getElementById('chat-input-row').style.display = 'none';
+
+    try {
+      const token = localStorage.getItem('virusmlm_token');
+      const res = await fetch('https://api.virusmlm.com/api/v1/messages/admin/messages', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json();
+      
+      const body = document.getElementById('chat-body');
+      if (!data.success || data.data.length === 0) {
+        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Нет сообщений от администрации</div>';
+      } else {
+        body.innerHTML = data.data.map(msg => {
+          const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          return `
+            <div class="msg-bubble admin">
+              ${escapeHtml(msg.text)}
+              <span class="msg-time">${time}</span>
+            </div>
+          `;
+        }).join('');
+        body.scrollTop = body.scrollHeight;
+      }
+
+      // Помечаем как прочитанные
+      await fetch('https://api.virusmlm.com/api/v1/messages/admin/mark-read', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      
+      // Скрываем красную точку
+      const dot = document.getElementById('admin-unread-dot');
+      if (dot) dot.style.display = 'none';
+
+    } catch (e) {
+      document.getElementById('chat-body').innerHTML = '<div style="color:red;text-align:center;padding:20px;">Ошибка загрузки</div>';
+    }
+  }
+
+  // Загрузка истории обычного чата
+  async function loadChatHistory(partnerId) {
+    try {
+      const token = localStorage.getItem('virusmlm_token');
+      const res = await fetch('https://api.virusmlm.com/api/v1/messages/chat/' + partnerId, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json();
+      
+      const body = document.getElementById('chat-body');
+      if (!data.success || data.data.length === 0) {
+        body.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;">Нет сообщений. Напишите первым!</div>';
+        return;
+      }
+
+      const myId = getMyIdFromToken();
+      body.innerHTML = data.data.map(msg => {
+        const isMine = Number(msg.sender_id) === Number(myId);
+        const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return `
+          <div class="msg-bubble ${isMine ? 'my' : 'their'}">
+            ${escapeHtml(msg.text)}
+            <span class="msg-time">${time}</span>
+          </div>
+        `;
+      }).join('');
+
+      body.scrollTop = body.scrollHeight;
+    } catch (e) {
+      document.getElementById('chat-body').innerHTML = '<div style="color:red;text-align:center;padding:20px;">Ошибка загрузки</div>';
+    }
+  }
+
+  // Отправка сообщения
+  async function sendChatMessage() {
+    if (isAdminChat) return;
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text || !currentPartnerId) return;
+
+    input.value = '';
+    input.disabled = true;
+
+    try {
+      const token = localStorage.getItem('virusmlm_token');
+      const res = await fetch('https://api.virusmlm.com/api/v1/messages/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ receiverId: currentPartnerId, text })
+      });
+      const data = await res.json();
+      if (data.success) {
+        await loadChatHistory(currentPartnerId);
+      } else {
+        alert('Ошибка отправки');
+      }
+    } catch (e) {
+      alert('Ошибка сети');
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
+  }
+
+  function closeChatModal() {
+    document.getElementById('chat-modal').classList.remove('active');
+    isAdminChat = false;
+    currentPartnerId = null;
+    checkAdminUnread(); // Обновляем точку
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function getMyIdFromToken() {
+    const token = localStorage.getItem('virusmlm_token');
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.userId;
+    } catch { return null; }
+  }
+
+  // Проверка непрочитанных от админа (для красной точки)
+  async function checkAdminUnread() {
+    try {
+      const token = localStorage.getItem('virusmlm_token');
+      if (!token) return;
+      const res = await fetch('https://api.virusmlm.com/api/v1/messages/admin/unread-count', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json();
+      if (data.success && data.data.unreadCount > 0) {
+        const btn = document.querySelector('button[onclick="openReferralList()"]');
+        if (btn && !btn.querySelector('.badge')) {
+          const dot = document.createElement('span');
+          dot.className = 'ref-unread-dot';
+          dot.style.position = 'absolute';
+          dot.style.top = '-5px';
+          dot.style.right = '-5px';
+          btn.style.position = 'relative';
+          btn.appendChild(dot);
+        }
+      }
+    } catch (e) {}
   }
 
   if (window.ethereum) {
